@@ -1,26 +1,3 @@
-{{- define "apm.mcp.server" }}
-    - name: {{ index . "name" }}
-      registry: {{ index . "registry" }}
-      transport: {{ index . "transport" }}
-{{- if hasKey . "url" }}
-      url: {{ index . "url" }}
-{{- end }}
-{{- if hasKey . "headers" }}
-      headers:
-{{- range $key, $value := index . "headers" }}
-        {{ $key }}: "{{ $value }}"
-{{- end }}
-{{- end }}
-{{- if hasKey . "command" }}
-      command: {{ index . "command" }}
-{{- end }}
-{{- if hasKey . "args" }}
-      args:
-{{- range $arg := index . "args" }}
-        - "{{ $arg }}"
-{{- end }}
-{{- end }}
-{{ end -}}
 name: development
 version: 1.0.0
 description: APM project for development
@@ -36,10 +13,10 @@ dependencies:
     - anthropics/claude-plugins-official/plugins/skill-creator
   mcp:
 {{ range .apm.mcp.shared }}
-{{ template "apm.mcp.server" . }}
+{{ template "apm/mcp-server.yml.tmpl" . }}
 {{ end -}}
 {{ if .work -}}
 {{ range .apm.mcp.work }}
-{{ template "apm.mcp.server" . }}
+{{ template "apm/mcp-server.yml.tmpl" . }}
 {{ end -}}
 {{ end -}}

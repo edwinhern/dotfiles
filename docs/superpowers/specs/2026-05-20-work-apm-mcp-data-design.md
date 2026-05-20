@@ -24,6 +24,7 @@ Render work-only APM MCP servers from source data so the work laptop can use Fig
 - Personal machines should render only shared MCP servers.
 - Work machines should render shared and work MCP servers.
 - The MCP server list should be generated from data rather than hand-maintained inside the template.
+- The reusable MCP server YAML snippet should live in `home/.chezmoitemplates/apm/mcp-server.yml.tmpl` and be injected with `{{ template "apm/mcp-server.yml.tmpl" . }}`.
 
 The rendered target remains `~/.apm/apm.yml` because chezmoi strips the `.tmpl` suffix when applying source state.
 

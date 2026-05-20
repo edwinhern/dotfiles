@@ -13,6 +13,7 @@
 ## File Structure
 
 - Create `home/.chezmoidata/apm.yaml`: shared and work MCP server declarations.
+- Create `home/.chezmoitemplates/apm/mcp-server.yml.tmpl`: reusable MCP server YAML snippet.
 - Modify `home/dot_apm/apm.yml.tmpl`: render MCP servers from `.apm.mcp.shared` and `.apm.mcp.work`.
 - Create `tests/template/apm-config.bats`: template rendering tests for personal and work APM manifests.
 
@@ -42,6 +43,7 @@ Expected: FAIL because the current work render still depends on `.atlassian_reso
 **Files:**
 
 - Create: `home/.chezmoidata/apm.yaml`
+- Create: `home/.chezmoitemplates/apm/mcp-server.yml.tmpl`
 - Modify: `home/dot_apm/apm.yml.tmpl`
 - Test: `tests/template/apm-config.bats`
 
@@ -51,7 +53,7 @@ Create `home/.chezmoidata/apm.yaml` with shared `grep` and work `figma`, `atlass
 
 - [ ] **Step 2: Render MCP servers from data**
 
-Update `home/dot_apm/apm.yml.tmpl` so it keeps the APM manifest header and dependencies, defines a small `apm.mcp.server` template, renders all `.apm.mcp.shared` servers, and renders `.apm.mcp.work` servers only when `.work` is true. Use `hasKey` before optional fields such as `url`, `headers`, `command`, and `args` to avoid missing-key render failures.
+Create `home/.chezmoitemplates/apm/mcp-server.yml.tmpl` with the reusable MCP server YAML snippet. Update `home/dot_apm/apm.yml.tmpl` so it keeps the APM manifest header and dependencies, injects the snippet with `{{ template "apm/mcp-server.yml.tmpl" . }}`, renders all `.apm.mcp.shared` servers, and renders `.apm.mcp.work` servers only when `.work` is true. Use `hasKey` before optional fields such as `url`, `headers`, `command`, and `args` to avoid missing-key render failures.
 
 - [ ] **Step 3: Verify APM template tests pass**
 
@@ -70,6 +72,7 @@ Expected: PASS, existing tests.
 **Files:**
 
 - Verify: `home/.chezmoidata/apm.yaml`
+- Verify: `home/.chezmoitemplates/apm/mcp-server.yml.tmpl`
 - Verify: `home/dot_apm/apm.yml.tmpl`
 - Verify: `tests/template/apm-config.bats`
 - Verify: `docs/superpowers/specs/2026-05-20-work-apm-mcp-data-design.md`
@@ -90,7 +93,7 @@ Expected output does not include `atlassian_resource_url` or `${input:figma-toke
 
 - [ ] **Step 3: Commit implementation**
 
-Run: `git add docs/superpowers/plans/2026-05-20-work-apm-mcp-data.md home/.chezmoidata/apm.yaml home/dot_apm/apm.yml.tmpl tests/template/apm-config.bats && git diff --cached --check && git commit -m "feat: render work APM MCP servers from data"`
+Run: `git add docs/superpowers/plans/2026-05-20-work-apm-mcp-data.md docs/superpowers/specs/2026-05-20-work-apm-mcp-data-design.md home/.chezmoidata/apm.yaml home/.chezmoitemplates/apm/mcp-server.yml.tmpl home/dot_apm/apm.yml.tmpl tests/template/apm-config.bats && git diff --cached --check && git commit -m "feat: render work APM MCP servers from data"`
 
 - [ ] **Step 4: Push and create PR**
 
