@@ -17,6 +17,7 @@ packages:
           - gh
           - git-delta
           - mise
+          - mas
           - starship
           - tmux
           - ripgrep
@@ -46,8 +47,7 @@ packages:
 
       personal:
         taps: []
-        formulas:
-          - mas
+        formulas: []
         casks:
           - aldente
           - claude-code
@@ -63,5 +63,10 @@ packages:
       work:
         taps: []
         formulas: []
-        casks: []
-        mas: []
+        casks:
+          - microsoft-office
+          - microsoft-teams
+          - slack
+        mas:
+          - name: Be Focused - Pomodoro Timer
+            id: 973134470
