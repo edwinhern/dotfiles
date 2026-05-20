@@ -42,13 +42,14 @@ function macos_defaults_main() {
   defaults write com.apple.dock autohide-delay -float 0
   defaults write com.apple.dock show-recents -bool false
 
+  # TODO: We should make a function that focuses on setting this dotfiles because one is going to be for work and one is going to be for personal, meaning that some apps are going to be added that are personal and some are going to be added that are work. And in a sense, I kind of want to append it based on like if conditions. If it's a personal, we're going to add these apps. It's work, we're going to add these apps and we should consider to add them in specific areas. for, yeah.
   if command -v dockutil >/dev/null 2>&1; then
     dockutil --no-restart --remove all >/dev/null 2>&1 || true
     for app in \
       "/System/Applications/Apps.app" \
       "/System/Applications/System Settings.app" \
       "/System/Applications/Utilities/Activity Monitor.app" \
-      "/Applications/Brave Browser.app" \
+      "/Applications/Google Chrome.app" \
       "/Applications/Visual Studio Code.app" \
       "/Applications/Ghostty.app" \
       "/Applications/Discord.app" \
@@ -56,7 +57,6 @@ function macos_defaults_main() {
       "/System/Applications/Mail.app" \
       "/System/Applications/Notes.app" \
       "/System/Applications/Reminders.app" \
-      "/Applications/CleanShot X.app" \
       "/Applications/superwhisper.app"; do
       [ -d "${app}" ] && dockutil --no-restart --add "${app}" >/dev/null
     done
@@ -76,8 +76,8 @@ function macos_defaults_main() {
   defaults write -g AppleShowScrollBars -string Always
 
   if ! defaults read com.apple.LaunchServices/com.apple.launchservices.secure 2>/dev/null |
-    grep -q '"LSHandlerRoleAll" = "com\.brave\.browser"'; then
-    open -a "Brave Browser" --args --make-default-browser
+    grep -q '"LSHandlerRoleAll" = "com\.google\.chrome"'; then
+    open -a "Google Chrome" --args --make-default-browser
   fi
 
   log_info "[defaults] macOS defaults applied."

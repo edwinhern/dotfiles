@@ -35,5 +35,5 @@ COMMAND
   assert_file_contains "$COMMAND_LOG" "defaults write NSGlobalDomain AppleShowAllExtensions -bool true"
   assert_file_contains "$COMMAND_LOG" "killall Finder"
   assert_file_contains "$COMMAND_LOG" "dockutil --no-restart --remove all"
-  assert_file_contains "$COMMAND_LOG" "open -a Brave Browser --args --make-default-browser"
+  assert_file_contains "$COMMAND_LOG" "open -a Google Chrome --args --make-default-browser"
 }

@@ -9,7 +9,8 @@ packages:
   darwin:
     homebrew:
       shared:
-        taps: []
+        taps:
+          - anomalyco/tap # For Opencode
         formulas:
           - dockutil
           - fastfetch
@@ -29,12 +30,13 @@ packages:
           - ghostscript
           - tectonic
           - mermaid-cli
+          - anomalyco/tap/opencode
         casks:
           # fonts
           - font-monaspace
           - font-jetbrains-mono-nerd-font
           # apps
-          - brave-browser
+          - google-chrome
           - ghostty
           - raycast
           - rectangle
@@ -43,11 +45,9 @@ packages:
         mas: []
 
       personal:
-        taps:
-          - anomalyco/tap # For Opencode
+        taps: []
         formulas:
           - mas
-          - anomalyco/tap/opencode
         casks:
           - aldente
           - claude-code
