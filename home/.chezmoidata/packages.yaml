@@ -9,13 +9,15 @@ packages:
   darwin:
     homebrew:
       shared:
-        taps: []
+        taps:
+          - anomalyco/tap # For Opencode
         formulas:
           - dockutil
           - fastfetch
           - gh
           - git-delta
           - mise
+          - mas
           - starship
           - tmux
           - ripgrep
@@ -29,12 +31,13 @@ packages:
           - ghostscript
           - tectonic
           - mermaid-cli
+          - anomalyco/tap/opencode
         casks:
           # fonts
           - font-monaspace
           - font-jetbrains-mono-nerd-font
           # apps
-          - brave-browser
+          - google-chrome
           - ghostty
           - raycast
           - rectangle
@@ -43,11 +46,8 @@ packages:
         mas: []
 
       personal:
-        taps:
-          - anomalyco/tap # For Opencode
-        formulas:
-          - mas
-          - anomalyco/tap/opencode
+        taps: []
+        formulas: []
         casks:
           - aldente
           - claude-code
@@ -63,5 +63,10 @@ packages:
       work:
         taps: []
         formulas: []
-        casks: []
-        mas: []
+        casks:
+          - microsoft-office
+          - microsoft-teams
+          - slack
+        mas:
+          - name: Be Focused - Pomodoro Timer
+            id: 973134470

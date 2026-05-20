@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
 {{ if eq .chezmoi.os "darwin" }}
+{{ if .work -}}
+export DOTFILES_CONTEXT="work"
+{{ else -}}
+export DOTFILES_CONTEXT="personal"
+{{ end -}}
 {{ template "lib/common/log.sh" . }}
 {{ template "lib/darwin/defaults.sh" . }}
 {{ end }}
