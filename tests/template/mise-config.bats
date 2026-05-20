@@ -1,0 +1,30 @@
+#!/usr/bin/env bats
+# @file tests/template/mise-config.bats
+# @brief Template rendering tests for home/dot_config/mise/config.toml.tmpl.
+
+load '../test_helpers/load.bash'
+
+SOURCE_DIR="$DOTFILES_ROOT/home"
+MISE_TEMPLATE="$DOTFILES_ROOT/home/dot_config/mise/config.toml.tmpl"
+PERSONAL_DATA='{"chezmoi":{"os":"darwin"},"personal":true,"work":false}'
+WORK_DATA='{"chezmoi":{"os":"darwin"},"personal":false,"work":true}'
+
+render_mise_template() {
+  local data="$1"
+
+  mise exec -- chezmoi execute-template --source "$SOURCE_DIR" --override-data "$data" <"$MISE_TEMPLATE"
+}
+
+@test "mise config installs APM for personal hosts" {
+  run render_mise_template "$PERSONAL_DATA"
+
+  assert_success
+  assert_output --partial '"github:microsoft/apm" = "latest"'
+}
+
+@test "mise config installs APM for work hosts" {
+  run render_mise_template "$WORK_DATA"
+
+  assert_success
+  assert_output --partial '"github:microsoft/apm" = "latest"'
+}
