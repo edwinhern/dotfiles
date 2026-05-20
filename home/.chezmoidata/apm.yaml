@@ -6,6 +6,8 @@ apm:
         transport: http
         url: https://mcp.grep.app
 
+    personal: []
+
     work:
       - name: figma
         registry: false

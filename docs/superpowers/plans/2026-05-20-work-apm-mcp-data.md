@@ -4,7 +4,7 @@
 
 **Goal:** Render shared and work APM MCP servers from chezmoi data while keeping work tokens and Atlassian resource URLs as shell environment placeholders.
 
-**Architecture:** `home/.chezmoidata/apm.yaml` owns the MCP server list. `home/dot_apm/apm.yml.tmpl` remains a template and renders shared servers for all machines plus work servers only when `.work` is true.
+**Architecture:** `home/.chezmoidata/apm.yaml` owns the MCP server list. `home/dot_apm/apm.yml.tmpl` remains a template and builds a `shared`/`personal`/`work` group list like the package installer before rendering MCP servers.
 
 **Tech Stack:** chezmoi templates, YAML source data, APM manifest syntax, Bats template tests, mise checks.
 
@@ -14,7 +14,7 @@
 
 - Create `home/.chezmoidata/apm.yaml`: shared and work MCP server declarations.
 - Create `home/.chezmoitemplates/apm/mcp-server.yml.tmpl`: reusable MCP server YAML snippet.
-- Modify `home/dot_apm/apm.yml.tmpl`: render MCP servers from `.apm.mcp.shared` and `.apm.mcp.work`.
+- Modify `home/dot_apm/apm.yml.tmpl`: render MCP servers from the active `.apm.mcp` groups.
 - Create `tests/template/apm-config.bats`: template rendering tests for personal and work APM manifests.
 
 ### Task 1: APM MCP Render Tests
@@ -53,7 +53,7 @@ Create `home/.chezmoidata/apm.yaml` with shared `grep` and work `figma`, `atlass
 
 - [ ] **Step 2: Render MCP servers from data**
 
-Create `home/.chezmoitemplates/apm/mcp-server.yml.tmpl` with the reusable MCP server YAML snippet. Update `home/dot_apm/apm.yml.tmpl` so it keeps the APM manifest header and dependencies, injects the snippet with `{{ template "apm/mcp-server.yml.tmpl" . }}`, renders all `.apm.mcp.shared` servers, and renders `.apm.mcp.work` servers only when `.work` is true. Use `hasKey` before optional fields such as `url`, `headers`, `command`, and `args` to avoid missing-key render failures.
+Create `home/.chezmoitemplates/apm/mcp-server.yml.tmpl` with the reusable MCP server YAML snippet flush-left. Update `home/dot_apm/apm.yml.tmpl` so it keeps the APM manifest header and dependencies, builds a group list starting with `shared`, appends `personal` or `work` when active, indexes each group from `.apm.mcp`, and injects the snippet with `{{ includeTemplate "apm/mcp-server.yml.tmpl" . | trim | indent 4 }}`. Use `hasKey` before optional fields such as `url`, `headers`, `command`, and `args` to avoid missing-key render failures.
 
 - [ ] **Step 3: Verify APM template tests pass**
 

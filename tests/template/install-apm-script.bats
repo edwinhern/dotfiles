@@ -60,6 +60,8 @@ DARWIN_DATA='{"chezmoi":{"os":"darwin"}}'
   run mise exec -- chezmoi execute-template --source "$SOURCE_DIR" --override-data "$DARWIN_DATA" <"$TMPL"
   assert_success
   assert_output --partial '# apm.yml:'
+  assert_output --partial '# apm data:'
+  assert_output --partial '# apm mcp template:'
   assert_output --partial '# apm.lock.yaml:'
   assert_output --partial '# agents:'
 }

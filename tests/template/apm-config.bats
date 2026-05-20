@@ -21,6 +21,7 @@ render_apm_template() {
   assert_success
   assert_output --partial '    - name: grep'
   assert_output --partial '      registry: false'
+  assert_output --partial '      url: https://mcp.grep.app'
   refute_output --partial 'name: figma'
   refute_output --partial 'name: atlassian-jira'
   refute_output --partial 'name: atlassian-knowledge'
@@ -35,9 +36,14 @@ render_apm_template() {
   assert_success
   assert_output --partial '    - name: grep'
   assert_output --partial '    - name: figma'
-  assert_output --partial 'Authorization: "Bearer ${FIGMA_TOKEN}"'
+  assert_output --partial '      url: https://mcp.figma.com/mcp'
+  assert_output --partial '      headers:'
+  assert_output --partial '        Authorization: "Bearer ${FIGMA_TOKEN}"'
   assert_output --partial '    - name: atlassian-jira'
   assert_output --partial '    - name: atlassian-knowledge'
+  assert_output --partial '      command: npx'
+  assert_output --partial '      args:'
+  assert_output --partial '        - "-y"'
   assert_output --partial '"${ATLASSIAN_JIRA_RESOURCE_URL}"'
   assert_output --partial '"${ATLASSIAN_KNOWLEDGE_RESOURCE_URL}"'
   refute_output --partial '${input:figma-token}'

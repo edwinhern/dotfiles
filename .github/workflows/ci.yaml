@@ -38,7 +38,7 @@ jobs:
       - name: Render apm.yml from template
         run: |
           mkdir -p "$HOME/.apm"
-          mise exec -- chezmoi execute-template < home/dot_apm/apm.yml.tmpl > "$HOME/.apm/apm.yml"
+          mise exec -- chezmoi execute-template --source home < home/dot_apm/apm.yml.tmpl > "$HOME/.apm/apm.yml"
           cp home/dot_apm/apm.lock.yaml "$HOME/.apm/apm.lock.yaml"
           cp -r home/dot_apm/dot_apm "$HOME/.apm/.apm"
       - name: Dry-run apm install

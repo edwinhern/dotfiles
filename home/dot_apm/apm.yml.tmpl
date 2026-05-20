@@ -1,3 +1,6 @@
+{{- $groups := list "shared" -}}
+{{- if .personal }}{{ $groups = append $groups "personal" }}{{ end -}}
+{{- if .work     }}{{ $groups = append $groups "work"     }}{{ end -}}
 name: development
 version: 1.0.0
 description: APM project for development
@@ -12,11 +15,9 @@ dependencies:
     - obra/superpowers
     - anthropics/claude-plugins-official/plugins/skill-creator
   mcp:
-{{ range .apm.mcp.shared }}
-{{ template "apm/mcp-server.yml.tmpl" . }}
-{{ end -}}
-{{ if .work -}}
-{{ range .apm.mcp.work }}
-{{ template "apm/mcp-server.yml.tmpl" . }}
+{{ range $groups -}}
+{{- $servers := index $.apm.mcp . -}}
+{{ range $servers -}}
+{{ includeTemplate "apm/mcp-server.yml.tmpl" . | trim | indent 4 }}
 {{ end -}}
 {{ end -}}
