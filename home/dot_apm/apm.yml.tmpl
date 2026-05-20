@@ -1,3 +1,26 @@
+{{- define "apm.mcp.server" }}
+    - name: {{ index . "name" }}
+      registry: {{ index . "registry" }}
+      transport: {{ index . "transport" }}
+{{- if hasKey . "url" }}
+      url: {{ index . "url" }}
+{{- end }}
+{{- if hasKey . "headers" }}
+      headers:
+{{- range $key, $value := index . "headers" }}
+        {{ $key }}: "{{ $value }}"
+{{- end }}
+{{- end }}
+{{- if hasKey . "command" }}
+      command: {{ index . "command" }}
+{{- end }}
+{{- if hasKey . "args" }}
+      args:
+{{- range $arg := index . "args" }}
+        - "{{ $arg }}"
+{{- end }}
+{{- end }}
+{{ end -}}
 name: development
 version: 1.0.0
 description: APM project for development
@@ -12,26 +35,11 @@ dependencies:
     - obra/superpowers
     - anthropics/claude-plugins-official/plugins/skill-creator
   mcp:
-    - name: grep
-      registry: false
-      transport: http
-      url: https://mcp.grep.app
-{{ if .work }}
-    - name: figma
-      registry: false
-      transport: http
-      url: https://mcp.figma.com/mcp
-      headers:
-        Authorization: "Bearer ${input:figma-token}"
-
-    - name: atlassian
-      registry: false
-      transport: stdio
-      command: npx
-      args:
-        - "-y"
-        - "mcp-remote"
-        - "https://mcp.atlassian.com/v1/mcp"
-        - "--resource"
-        - "{{ .atlassian_resource_url }}"
-{{ end }}
+{{ range .apm.mcp.shared }}
+{{ template "apm.mcp.server" . }}
+{{ end -}}
+{{ if .work -}}
+{{ range .apm.mcp.work }}
+{{ template "apm.mcp.server" . }}
+{{ end -}}
+{{ end -}}
