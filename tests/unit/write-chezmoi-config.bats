@@ -40,14 +40,14 @@ teardown() {
   assert_output --partial 'work: true'
 }
 
-@test "rendered yaml includes stub hostname, git identity, atlassian URL" {
+@test "rendered yaml includes stub hostname and git identity only" {
   run "$SCRIPT" personal
   assert_success
   run cat "$HOME/.config/chezmoi/chezmoi.yaml"
   assert_output --partial 'hostname: ci-runner'
   assert_output --partial 'name: CI Bot'
   assert_output --partial 'email: ci@example.com'
-  assert_output --partial 'atlassian_resource_url:'
+  refute_output --partial 'atlassian_resource_url:'
 }
 
 @test "invalid context: exits non-zero with error message on stderr" {

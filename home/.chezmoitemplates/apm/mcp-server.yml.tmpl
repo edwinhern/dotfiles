@@ -1,0 +1,21 @@
+- name: {{ index . "name" }}
+  registry: {{ index . "registry" }}
+  transport: {{ index . "transport" }}
+{{- if hasKey . "url" }}
+  url: {{ index . "url" }}
+{{- end }}
+{{- if hasKey . "headers" }}
+  headers:
+{{- range $key, $value := index . "headers" }}
+    {{ $key }}: "{{ $value }}"
+{{- end }}
+{{- end }}
+{{- if hasKey . "command" }}
+  command: {{ index . "command" }}
+{{- end }}
+{{- if hasKey . "args" }}
+  args:
+{{- range $arg := index . "args" }}
+    - "{{ $arg }}"
+{{- end }}
+{{- end }}

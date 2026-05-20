@@ -1,3 +1,6 @@
+{{- $groups := list "shared" -}}
+{{- if .personal }}{{ $groups = append $groups "personal" }}{{ end -}}
+{{- if .work     }}{{ $groups = append $groups "work"     }}{{ end -}}
 name: development
 version: 1.0.0
 description: APM project for development
@@ -12,26 +15,9 @@ dependencies:
     - obra/superpowers
     - anthropics/claude-plugins-official/plugins/skill-creator
   mcp:
-    - name: grep
-      registry: false
-      transport: http
-      url: https://mcp.grep.app
-{{ if .work }}
-    - name: figma
-      registry: false
-      transport: http
-      url: https://mcp.figma.com/mcp
-      headers:
-        Authorization: "Bearer ${input:figma-token}"
-
-    - name: atlassian
-      registry: false
-      transport: stdio
-      command: npx
-      args:
-        - "-y"
-        - "mcp-remote"
-        - "https://mcp.atlassian.com/v1/mcp"
-        - "--resource"
-        - "{{ .atlassian_resource_url }}"
-{{ end }}
+{{ range $groups -}}
+{{- $servers := index $.apm.mcp . -}}
+{{ range $servers -}}
+{{ includeTemplate "apm/mcp-server.yml.tmpl" . | trim | indent 4 }}
+{{ end -}}
+{{ end -}}
