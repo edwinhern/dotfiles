@@ -12,10 +12,12 @@ author: Edwin Hernandez
 includes: auto
 dependencies:
   apm:
-    - obra/superpowers
-    - JuliusBrussee/caveman
-    - schpet/linear-cli
-    - anthropics/claude-plugins-official/plugins/skill-creator
+{{ range $groups }}
+{{- $dependencies := index $.apm.dependencies . }}
+{{ range $dependencies }}
+    - {{ . }}
+{{ end }}
+{{ end -}}
   mcp:
 {{ range $groups -}}
 {{- $servers := index $.apm.mcp . -}}

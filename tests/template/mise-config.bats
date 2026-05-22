@@ -35,3 +35,10 @@ render_mise_template() {
   assert_success
   assert_output --partial '"github:microsoft/apm" = "latest"'
 }
+
+@test "mise config does not install Linear CLI for work hosts" {
+  run render_mise_template "$WORK_DATA"
+
+  assert_success
+  refute_output --partial '"npm:@schpet/linear-cli" = "latest"'
+}

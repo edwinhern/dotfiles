@@ -30,39 +30,41 @@ Do not choose the next issue. Do not merge PRs, close issues, delete branches, d
    Run `gh repo view --json nameWithOwner -q .nameWithOwner`.
    Continue only if it returns `edwinhern/dotfiles`.
 
-2. Verify local tools:
-   Run `linear --version`.
-   If `linear` is not on `PATH`, run `mise exec -- linear --version`.
-   Use `linear` for later Linear commands when it works directly. Otherwise use `mise exec -- linear`.
-   Run `jq --version`.
-
-3. Check for local changes:
+2. Check for local changes:
    Run `git status --short --branch`.
    If there are modified, staged, or untracked files, stop and report them before switching branches.
 
-4. Sync `main`:
+3. Sync `main`:
    Run `git switch main`.
    Run `git pull --ff-only`.
 
-5. Verify the PR:
+4. Verify the PR:
    Run `gh pr view <PR> --repo edwinhern/dotfiles --json number,title,state,mergedAt,mergeCommit,headRefName,body,url`.
    Require `state` to be `MERGED` and `mergeCommit.oid` to be present.
 
-6. Extract Linear issue IDs:
+5. Extract Linear issue IDs:
    Run `gh pr view <PR> --repo edwinhern/dotfiles --json title,headRefName,body -q '[.headRefName,.title,.body] | join("\n")' | rg -o 'DOT-[0-9]+' | sort -u`.
    If no `DOT-*` issue ID is found, report that the PR did not link a Linear issue and stop.
 
-7. Verify each Linear issue:
+6. Verify each Linear issue:
+   Linear CLI is intentionally installed only on personal hosts. If neither `linear` nor `mise exec -- linear` is available, report the verified GitHub/local checks and ask the user to rerun this cleanup from a personal host.
+
    Run the command below with the extracted issue IDs as arguments, for example `bash -s DOT-7 <<'BASH'`.
 
    ```bash
    bash -s DOT-7 <<'BASH'
    set -euo pipefail
 
-   linear_cmd=(linear)
-   if ! command -v linear >/dev/null 2>&1; then
+   if command -v linear >/dev/null 2>&1; then
+     linear_cmd=(linear)
+   elif mise exec -- linear --version >/dev/null 2>&1; then
      linear_cmd=(mise exec -- linear)
+   else
+     printf '%s\n' "Linear CLI unavailable. It is intentionally installed only on personal hosts; rerun cleanup from a personal host." >&2
+     exit 1
    fi
+
+   jq --version >/dev/null
 
    for identifier in "$@"; do
      "${linear_cmd[@]}" issue query \
@@ -90,11 +92,11 @@ Do not choose the next issue. Do not merge PRs, close issues, delete branches, d
 
    Require each linked Linear issue to print state type `completed`.
 
-8. Verify CI for the merge commit:
+7. Verify CI for the merge commit:
    Run `gh run list --repo edwinhern/dotfiles --branch main --commit <MERGE_SHA> --workflow CI --json databaseId,displayTitle,workflowName,status,conclusion,headSha,url --limit 1`.
    Require one `CI` workflow run for `<MERGE_SHA>` and require it to have `status` `completed` and `conclusion` `success`.
 
-9. Verify final local state:
+8. Verify final local state:
    Run `git status --short --branch`.
    Require the output to show `main` tracking `origin/main` with no file changes.
 

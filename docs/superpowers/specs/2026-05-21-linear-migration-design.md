@@ -193,9 +193,10 @@ Implementation should update repo guidance and automation around Linear:
 - Update `AGENTS.md` so Linear replaces GitHub Issues and GitHub Projects as the work tracking source of truth.
 - Update the post-merge cleanup skill so it verifies Linear issue status instead of GitHub Project item status.
 - Add Linear CLI to the personal mise config and cover it with a template test.
+- Render APM dependencies from `home/.chezmoidata/apm.yaml` so shared packages stay shared and `schpet/linear-cli` stays personal-only.
 - Remove or de-emphasize GitHub issue/project commands from the active planning workflow.
 
-Install `npm:@schpet/linear-cli` through mise for personal hosts so CLI-backed workflows can use `linear` or `mise exec -- linear`. Do not add a Homebrew tap or formula for Linear.
+Install `npm:@schpet/linear-cli` through mise for personal hosts so CLI-backed workflows can use `linear` or `mise exec -- linear`. Install the APM `schpet/linear-cli` skill dependency only for personal hosts. Do not add a Homebrew tap or formula for Linear.
 
 ## Migration And Cutover
 
@@ -216,7 +217,7 @@ GitHub should remain responsible for code, pull requests, CI, releases, and old 
 
 ## Error Handling
 
-If an agent process cannot run `linear`, retry through `mise exec -- linear`. If that fails, run `mise install` for the current config and retry.
+If an agent process cannot run `linear`, retry through `mise exec -- linear`. If that fails on a non-personal host, stop and rerun the Linear-dependent workflow from a personal host because Linear CLI is intentionally personal-only.
 
 If importer data is broadly wrong, use Linear's importer rollback window before doing manual repair.
 

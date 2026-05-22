@@ -16,6 +16,9 @@
 - Modify `.agents/skills/post-merge-cleanup/SKILL.md`: keep the existing post-merge cleanup skill but change issue verification from GitHub Issues and GitHub Project status to Linear `DOT-*` issue status.
 - Modify `home/dot_config/mise/config.toml.tmpl`: install `npm:@schpet/linear-cli` for personal hosts.
 - Modify `tests/template/mise-config.bats`: verify the personal mise config installs Linear CLI.
+- Modify `home/.chezmoidata/apm.yaml`: keep shared APM dependencies shared and keep `schpet/linear-cli` personal-only.
+- Modify `home/dot_apm/apm.yml.tmpl`: render APM dependencies from data like MCP servers.
+- Modify `tests/template/apm-config.bats`: verify work APM config excludes the personal Linear CLI dependency.
 - Modify Linear workspace data: set native priority and state on imported open Linear issues.
 - Modify GitHub remote data: close migrated open GitHub issues with migration comments and close the GitHub Project named `dotfiles` after Linear is verified.
 
@@ -185,28 +188,38 @@ Expected: one commit containing only `AGENTS.md`.
 
 **Files:**
 
+- Modify: `home/.chezmoidata/apm.yaml`
+- Modify: `home/dot_apm/apm.yml.tmpl`
 - Modify: `home/dot_config/mise/config.toml.tmpl`
+- Modify: `tests/template/apm-config.bats`
 - Modify: `tests/template/mise-config.bats`
 
 - [ ] **Step 1: Install Linear CLI through mise for personal hosts**
 
 Add `"npm:@schpet/linear-cli" = "latest"` to the personal package block in `home/dot_config/mise/config.toml.tmpl`.
 
-- [ ] **Step 2: Keep Linear out of Homebrew package data**
+- [ ] **Step 2: Render APM dependencies from data**
+
+In `home/.chezmoidata/apm.yaml`, keep `obra/superpowers`, `JuliusBrussee/caveman`, and `anthropics/claude-plugins-official/plugins/skill-creator` in shared APM dependencies. Keep `schpet/linear-cli` in personal APM dependencies. Keep work APM dependencies empty.
+
+Update `home/dot_apm/apm.yml.tmpl` so `dependencies.apm` renders from active shared/personal/work groups, like `dependencies.mcp`.
+
+- [ ] **Step 3: Keep Linear out of Homebrew package data**
 
 Do not add `schpet/tap`, `schpet/tap/linear`, `linear`, or `schpet/tap/linear` to `home/.chezmoidata/packages.yaml`.
 
-- [ ] **Step 3: Verify mise config renders Linear CLI**
+- [ ] **Step 4: Verify APM and mise config render Linear CLI in the right context**
 
 Run:
 
 ```bash
+mise exec -- bats tests/template/apm-config.bats
 mise exec -- bats tests/template/mise-config.bats
 ```
 
-Expected: the personal mise template test asserts `"npm:@schpet/linear-cli" = "latest"`.
+Expected: the personal mise template test asserts `"npm:@schpet/linear-cli" = "latest"`; the work APM template test refutes `schpet/linear-cli` while keeping shared APM dependencies.
 
-- [ ] **Step 4: Run formatting and lint checks**
+- [ ] **Step 5: Run formatting and lint checks**
 
 Run:
 
@@ -216,12 +229,12 @@ mise lint
 
 Expected: Prettier reports all matched files use Prettier code style and taplo completes without errors.
 
-- [ ] **Step 5: Commit the Linear CLI package change if commits are approved for this execution**
+- [ ] **Step 6: Commit the Linear CLI package change if commits are approved for this execution**
 
 Run only when the user has explicitly approved commits:
 
 ```bash
-git add home/dot_config/mise/config.toml.tmpl tests/template/mise-config.bats
+git add home/.chezmoidata/apm.yaml home/dot_apm/apm.yml.tmpl home/dot_config/mise/config.toml.tmpl tests/template/apm-config.bats tests/template/mise-config.bats
 git commit -m "feat: add Linear CLI package"
 ```
 
@@ -270,39 +283,41 @@ Do not choose the next issue. Do not merge PRs, close issues, delete branches, d
    Run `gh repo view --json nameWithOwner -q .nameWithOwner`.
    Continue only if it returns `edwinhern/dotfiles`.
 
-2. Verify local tools:
-   Run `linear --version`.
-   If `linear` is not on `PATH`, run `mise exec -- linear --version`.
-   Use `linear` for later Linear commands when it works directly. Otherwise use `mise exec -- linear`.
-   Run `jq --version`.
-
-3. Check for local changes:
+2. Check for local changes:
    Run `git status --short --branch`.
    If there are modified, staged, or untracked files, stop and report them before switching branches.
 
-4. Sync `main`:
+3. Sync `main`:
    Run `git switch main`.
    Run `git pull --ff-only`.
 
-5. Verify the PR:
+4. Verify the PR:
    Run `gh pr view <PR> --repo edwinhern/dotfiles --json number,title,state,mergedAt,mergeCommit,headRefName,body,url`.
    Require `state` to be `MERGED` and `mergeCommit.oid` to be present.
 
-6. Extract Linear issue IDs:
+5. Extract Linear issue IDs:
    Run `gh pr view <PR> --repo edwinhern/dotfiles --json title,headRefName,body -q '[.headRefName,.title,.body] | join("\n")' | rg -o 'DOT-[0-9]+' | sort -u`.
    If no `DOT-*` issue ID is found, report that the PR did not link a Linear issue and stop.
 
-7. Verify each Linear issue:
+6. Verify each Linear issue:
+   Linear CLI is intentionally installed only on personal hosts. If neither `linear` nor `mise exec -- linear` is available, report the verified GitHub/local checks and ask the user to rerun this cleanup from a personal host.
+
    Run the command below with the extracted issue IDs as arguments, for example `bash -s DOT-7 <<'BASH'`.
 
    ```bash
    bash -s DOT-7 <<'BASH'
    set -euo pipefail
 
-   linear_cmd=(linear)
-   if ! command -v linear >/dev/null 2>&1; then
+   if command -v linear >/dev/null 2>&1; then
+     linear_cmd=(linear)
+   elif mise exec -- linear --version >/dev/null 2>&1; then
      linear_cmd=(mise exec -- linear)
+   else
+     printf '%s\n' "Linear CLI unavailable. It is intentionally installed only on personal hosts; rerun cleanup from a personal host." >&2
+     exit 1
    fi
+
+   jq --version >/dev/null
 
    for identifier in "$@"; do
      "${linear_cmd[@]}" issue query \
@@ -330,11 +345,11 @@ Do not choose the next issue. Do not merge PRs, close issues, delete branches, d
 
    Require each linked Linear issue to print state type `completed`.
 
-8. Verify CI for the merge commit:
+7. Verify CI for the merge commit:
    Run `gh run list --repo edwinhern/dotfiles --branch main --commit <MERGE_SHA> --workflow CI --json databaseId,displayTitle,workflowName,status,conclusion,headSha,url --limit 1`.
    Require one `CI` workflow run for `<MERGE_SHA>` and require it to have `status` `completed` and `conclusion` `success`.
 
-9. Verify final local state:
+8. Verify final local state:
    Run `git status --short --branch`.
    Require the output to show `main` tracking `origin/main` with no file changes.
 
