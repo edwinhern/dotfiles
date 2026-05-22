@@ -37,16 +37,28 @@ jobs:
           context: ${{ matrix.context }}
       - name: Render apm.yml from template
         run: |
-          apm_project="$RUNNER_TEMP/apm-project"
-          mkdir -p "$apm_project"
-          mise exec -- chezmoi execute-template --source home < home/dot_apm/apm.yml.tmpl > "$apm_project/apm.yml"
-          cp -r home/dot_apm/dot_apm "$apm_project/.apm"
-          echo "APM_PROJECT=$apm_project" >> "$GITHUB_ENV"
+          apm_source="$RUNNER_TEMP/apm-source"
+          mkdir -p "$apm_source"
+          mise exec -- chezmoi execute-template --source home < home/dot_apm/apm.yml.tmpl > "$apm_source/apm.yml"
+          cp -r home/dot_apm/dot_apm "$apm_source/.apm"
+          echo "APM_SOURCE=$apm_source" >> "$GITHUB_ENV"
       - name: Audit APM project
         run: |
-          cd "$APM_PROJECT"
-          mise exec -- apm install --parallel-downloads 0
-          mise exec -- apm audit --ci --no-drift --no-policy
+          for attempt in 1 2 3; do
+            apm_project="$(mktemp -d)"
+            cp "$APM_SOURCE/apm.yml" "$apm_project/apm.yml"
+            cp -r "$APM_SOURCE/.apm" "$apm_project/.apm"
+
+            if (cd "$apm_project" && mise exec -- apm install --parallel-downloads 0 && mise exec -- apm audit --ci --no-drift --no-policy); then
+              exit 0
+            fi
+
+            if [ "$attempt" -lt 3 ]; then
+              sleep $((attempt * 5))
+            fi
+          done
+
+          exit 1
 
   actions_lint:
     name: Lint GitHub Actions workflows
