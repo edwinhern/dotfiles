@@ -22,6 +22,13 @@ render_mise_template() {
   assert_output --partial '"github:microsoft/apm" = "latest"'
 }
 
+@test "mise config installs Linear CLI for personal hosts" {
+  run render_mise_template "$PERSONAL_DATA"
+
+  assert_success
+  assert_output --partial '"npm:@schpet/linear-cli" = "latest"'
+}
+
 @test "mise config installs APM for work hosts" {
   run render_mise_template "$WORK_DATA"
 

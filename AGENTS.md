@@ -15,30 +15,34 @@
 
 ## Planning Workflow
 
-- GitHub Issues are the source of truth for features, bugs, enhancements, cleanup work, research, and follow-up tasks.
-- The GitHub Project named `dotfiles` is the visual Kanban board for those issues.
-- Use the simple board flow: `Todo`, `In Progress`, `Done`. Treat `Todo` as the backlog lane.
+- Linear is the source of truth for features, bugs, enhancements, cleanup work, research, and follow-up tasks.
+- Use the Linear team `dotfiles` with key `DOT` for this repository.
+- Use Linear workflow states: `Backlog`, `Todo`, `In Progress`, `In Review`, and `Done`.
+- Treat `Backlog` as the backlog lane and `Todo` as ready but not active.
+- Do not use GitHub Issues or GitHub Projects for new work after the Linear cutover.
 - Do not use `docs/` as the issue tracker, roadmap, or long-lived backlog.
-- Superpowers specs and plans live under `docs/superpowers/` and should be linked from the related GitHub issue.
+- Superpowers specs and plans live under `docs/superpowers/` and should be linked from the related Linear issue description or a Linear comment.
 
 ## Task Selection
 
-- Use the `dotfiles` project `Priority` field to choose the next task: `High`, then `Normal`, then `Low`.
+- Use Linear native priority to choose the next task: `High`, then `Medium`, then `Low`.
+- Use `Urgent` only for security, broken reproducibility, or a blocked daily workflow that needs immediate attention.
 - `High` means security, reproducibility, broken workflow, or work that unlocks important follow-up work.
-- `Normal` means useful cleanup, maintenance, or decision work with clear value but no current breakage.
+- `Medium` means useful cleanup, maintenance, or decision work with clear value but no current breakage.
 - `Low` means speculative, optional, or only worth doing when current pain appears.
 - If priority is missing, set or ask for the priority before implementation starts.
 - When priorities tie, prefer security and reproducibility work first, then blockers, then the smallest clear issue.
 - Do not add story points unless the user explicitly asks for them.
-- When starting work, move the selected issue to `In Progress` and link the relevant Superpowers spec or plan before code changes.
+- When starting work, move the selected Linear issue to `In Progress` and link the relevant Superpowers spec or plan before code changes.
 
 ## Agent Work Tracking
 
-- When new work is discovered, create or update a GitHub issue instead of adding a backlog item under `docs/`.
+- When new work is discovered, create or update a Linear issue instead of adding a backlog item under `docs/`.
 - Keep issues small enough to close with one PR or a short linked PR series.
-- Link the relevant Superpowers spec or plan from the issue before implementation starts.
-- Track active work by moving the issue in the `dotfiles` project instead of editing a progress document.
-- Link PRs to issues with closing keywords in the PR body, such as `Closes #123` or `Fixes #123`.
+- Link the relevant Superpowers spec or plan from the Linear issue before implementation starts.
+- Track active work by moving the Linear issue through the team workflow instead of editing a progress document.
+- Link PRs to Linear issues by including the issue ID in the branch, PR title, or PR body.
+- Use Linear closing keywords in PR text, such as `Fixes DOT-123`, when merge should move the Linear issue to `Done`.
 - If a thought is not ready for an issue, keep it in the current conversation or a Superpowers spec until it becomes actionable.
 
 ## Git / PR Workflow
