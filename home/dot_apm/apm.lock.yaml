@@ -1,53 +1,110 @@
-lockfile_version: "1"
-generated_at: "2026-05-14T17:42:51.224921+00:00"
-apm_version: 0.12.4
+lockfile_version: '1'
+generated_at: '2026-05-22T00:10:28.438888+00:00'
+apm_version: 0.13.0
 dependencies:
-  - repo_url: anthropics/claude-plugins-official
-    host: github.com
-    resolved_commit: 1a2f18b05cf5652fd25403e8d229fc884fb84103
-    virtual_path: plugins/skill-creator
-    is_virtual: true
-    package_type: marketplace_plugin
-    deployed_files:
-      - .agents/skills/skill-creator
-      - .claude/skills/skill-creator
-    content_hash: sha256:b986e60575912a9ce24029693f967138b018220eadc863a2a2662da20dffadbd
-  - repo_url: obra/superpowers
-    host: github.com
-    resolved_commit: f2cbfbefebbfef77321e4c9abc9e949826bea9d7
-    package_type: marketplace_plugin
-    deployed_files:
-      - .agents/skills/brainstorming
-      - .agents/skills/dispatching-parallel-agents
-      - .agents/skills/executing-plans
-      - .agents/skills/finishing-a-development-branch
-      - .agents/skills/receiving-code-review
-      - .agents/skills/requesting-code-review
-      - .agents/skills/subagent-driven-development
-      - .agents/skills/systematic-debugging
-      - .agents/skills/test-driven-development
-      - .agents/skills/using-git-worktrees
-      - .agents/skills/using-superpowers
-      - .agents/skills/verification-before-completion
-      - .agents/skills/writing-plans
-      - .agents/skills/writing-skills
-      - .claude/skills/brainstorming
-      - .claude/skills/dispatching-parallel-agents
-      - .claude/skills/executing-plans
-      - .claude/skills/finishing-a-development-branch
-      - .claude/skills/receiving-code-review
-      - .claude/skills/requesting-code-review
-      - .claude/skills/subagent-driven-development
-      - .claude/skills/systematic-debugging
-      - .claude/skills/test-driven-development
-      - .claude/skills/using-git-worktrees
-      - .claude/skills/using-superpowers
-      - .claude/skills/verification-before-completion
-      - .claude/skills/writing-plans
-      - .claude/skills/writing-skills
-      - .copilot/hooks/superpowers-hooks-cursor.json
-      - .copilot/hooks/superpowers-hooks.json
-    deployed_file_hashes:
-      .copilot/hooks/superpowers-hooks-cursor.json: sha256:53d8ceb3ff5d8bb1c4f283f238cc868b8c1af22e40a3ac30f6d6e4173effefbd
-      .copilot/hooks/superpowers-hooks.json: sha256:01616c57b96cc234cc984e77d2fc241dfd0e0bfacda54fe54589cd669a0d998e
-    content_hash: sha256:fb4f87bfef928a6d68f5d5aaa29e3eba011961c5f03bbf171c3c348d8d161abb
+- repo_url: JuliusBrussee/caveman
+  host: github.com
+  resolved_commit: 655b7d9c5431f822264b7732e9901c5578ac84cf
+  package_type: marketplace_plugin
+  deployed_files:
+  - .agents/skills/cavecrew
+  - .agents/skills/caveman
+  - .agents/skills/caveman-commit
+  - .agents/skills/caveman-compress
+  - .agents/skills/caveman-help
+  - .agents/skills/caveman-review
+  - .agents/skills/caveman-stats
+  - .claude/agents/cavecrew-builder.md
+  - .claude/agents/cavecrew-investigator.md
+  - .claude/agents/cavecrew-reviewer.md
+  - .claude/skills/cavecrew
+  - .claude/skills/caveman
+  - .claude/skills/caveman-commit
+  - .claude/skills/caveman-compress
+  - .claude/skills/caveman-help
+  - .claude/skills/caveman-review
+  - .claude/skills/caveman-stats
+  - .github/agents/cavecrew-builder.agent.md
+  - .github/agents/cavecrew-investigator.agent.md
+  - .github/agents/cavecrew-reviewer.agent.md
+  - .github/hooks/caveman-hooks.json
+  - .opencode/agents/cavecrew-builder.md
+  - .opencode/agents/cavecrew-investigator.md
+  - .opencode/agents/cavecrew-reviewer.md
+  deployed_file_hashes:
+    .claude/agents/cavecrew-builder.md: sha256:135af639b287ed7534b66d01390c4dc48d98683af52232728a0e87db9c558b3e
+    .claude/agents/cavecrew-investigator.md: sha256:f1ce01150aeeec7de98d487f41693d27eba1bc9d4cc67f4c774675bb21c24fc2
+    .claude/agents/cavecrew-reviewer.md: sha256:ae45346edae2cdb97018a38ebdcb79b162c59875cac2921d976a7d7540e4df70
+    .github/agents/cavecrew-builder.agent.md: sha256:135af639b287ed7534b66d01390c4dc48d98683af52232728a0e87db9c558b3e
+    .github/agents/cavecrew-investigator.agent.md: sha256:f1ce01150aeeec7de98d487f41693d27eba1bc9d4cc67f4c774675bb21c24fc2
+    .github/agents/cavecrew-reviewer.agent.md: sha256:ae45346edae2cdb97018a38ebdcb79b162c59875cac2921d976a7d7540e4df70
+    .github/hooks/caveman-hooks.json: sha256:50be9153df6e5b4c8ef9f442ee5bad5828a4b41c509d6a79d7f14b8bf14b0393
+    .opencode/agents/cavecrew-builder.md: sha256:135af639b287ed7534b66d01390c4dc48d98683af52232728a0e87db9c558b3e
+    .opencode/agents/cavecrew-investigator.md: sha256:f1ce01150aeeec7de98d487f41693d27eba1bc9d4cc67f4c774675bb21c24fc2
+    .opencode/agents/cavecrew-reviewer.md: sha256:ae45346edae2cdb97018a38ebdcb79b162c59875cac2921d976a7d7540e4df70
+  content_hash: sha256:5e7ef27b7a87174ef72bb26df9888e57d22ca585d11f13f06ec3426e2d4ae220
+- repo_url: anthropics/claude-plugins-official
+  host: github.com
+  resolved_commit: 1a2f18b05cf5652fd25403e8d229fc884fb84103
+  virtual_path: plugins/skill-creator
+  is_virtual: true
+  package_type: marketplace_plugin
+  deployed_files:
+  - .agents/skills/skill-creator
+  - .claude/skills/skill-creator
+  content_hash: sha256:b986e60575912a9ce24029693f967138b018220eadc863a2a2662da20dffadbd
+- repo_url: obra/superpowers
+  host: github.com
+  resolved_commit: f2cbfbefebbfef77321e4c9abc9e949826bea9d7
+  package_type: marketplace_plugin
+  deployed_files:
+  - .agents/skills/brainstorming
+  - .agents/skills/dispatching-parallel-agents
+  - .agents/skills/executing-plans
+  - .agents/skills/finishing-a-development-branch
+  - .agents/skills/receiving-code-review
+  - .agents/skills/requesting-code-review
+  - .agents/skills/subagent-driven-development
+  - .agents/skills/systematic-debugging
+  - .agents/skills/test-driven-development
+  - .agents/skills/using-git-worktrees
+  - .agents/skills/using-superpowers
+  - .agents/skills/verification-before-completion
+  - .agents/skills/writing-plans
+  - .agents/skills/writing-skills
+  - .claude/skills/brainstorming
+  - .claude/skills/dispatching-parallel-agents
+  - .claude/skills/executing-plans
+  - .claude/skills/finishing-a-development-branch
+  - .claude/skills/receiving-code-review
+  - .claude/skills/requesting-code-review
+  - .claude/skills/subagent-driven-development
+  - .claude/skills/systematic-debugging
+  - .claude/skills/test-driven-development
+  - .claude/skills/using-git-worktrees
+  - .claude/skills/using-superpowers
+  - .claude/skills/verification-before-completion
+  - .claude/skills/writing-plans
+  - .claude/skills/writing-skills
+  - .github/hooks/superpowers-hooks-cursor.json
+  - .github/hooks/superpowers-hooks.json
+  deployed_file_hashes:
+    .github/hooks/superpowers-hooks-cursor.json: sha256:53d8ceb3ff5d8bb1c4f283f238cc868b8c1af22e40a3ac30f6d6e4173effefbd
+    .github/hooks/superpowers-hooks.json: sha256:01616c57b96cc234cc984e77d2fc241dfd0e0bfacda54fe54589cd669a0d998e
+  content_hash: sha256:fb4f87bfef928a6d68f5d5aaa29e3eba011961c5f03bbf171c3c348d8d161abb
+- repo_url: schpet/linear-cli
+  host: github.com
+  resolved_commit: fc85b919cdb62a668eecea6ea5484aad9da8f655
+  package_type: marketplace_plugin
+  deployed_files:
+  - .agents/skills/linear-cli
+  - .claude/skills/linear-cli
+  content_hash: sha256:b795020e9c2b2bb9182156e9876db51565e34a059da16e3a43fcf94d98d7d83a
+mcp_servers:
+- grep
+mcp_configs:
+  grep:
+    name: grep
+    transport: http
+    registry: false
+    url: https://mcp.grep.app
