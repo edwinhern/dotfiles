@@ -49,7 +49,7 @@ jobs:
           cp "$HOME/.apm/apm.yml" "$apm_project/apm.yml"
           cp "$HOME/.apm/apm.lock.yaml" "$apm_project/apm.lock.yaml"
           cp -r "$HOME/.apm/.apm" "$apm_project/.apm"
-          mise exec -- sh -c "cd \"${apm_project}\" && apm install && apm audit --ci --no-drift --no-policy"
+          mise exec -- sh -c "cd \"${apm_project}\" && apm install --frozen --parallel-downloads 0 && apm audit --ci --no-drift --no-policy"
 
   actions_lint:
     name: Lint GitHub Actions workflows
