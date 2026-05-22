@@ -37,19 +37,16 @@ jobs:
           context: ${{ matrix.context }}
       - name: Render apm.yml from template
         run: |
-          mkdir -p "$HOME/.apm"
-          mise exec -- chezmoi execute-template --source home < home/dot_apm/apm.yml.tmpl > "$HOME/.apm/apm.yml"
-          cp home/dot_apm/apm.lock.yaml "$HOME/.apm/apm.lock.yaml"
-          cp -r home/dot_apm/dot_apm "$HOME/.apm/.apm"
-      - name: Dry-run apm install
-        run: mise exec -- apm install --dry-run --global
+          apm_project="$RUNNER_TEMP/apm-project"
+          mkdir -p "$apm_project"
+          mise exec -- chezmoi execute-template --source home < home/dot_apm/apm.yml.tmpl > "$apm_project/apm.yml"
+          cp -r home/dot_apm/dot_apm "$apm_project/.apm"
+          echo "APM_PROJECT=$apm_project" >> "$GITHUB_ENV"
       - name: Audit APM project
         run: |
-          apm_project="$(mktemp -d)"
-          cp "$HOME/.apm/apm.yml" "$apm_project/apm.yml"
-          cp "$HOME/.apm/apm.lock.yaml" "$apm_project/apm.lock.yaml"
-          cp -r "$HOME/.apm/.apm" "$apm_project/.apm"
-          mise exec -- sh -c "cd \"${apm_project}\" && apm install --frozen --parallel-downloads 0 && apm audit --ci --no-drift --no-policy"
+          cd "$APM_PROJECT"
+          mise exec -- apm install --parallel-downloads 0
+          mise exec -- apm audit --ci --no-drift --no-policy
 
   actions_lint:
     name: Lint GitHub Actions workflows

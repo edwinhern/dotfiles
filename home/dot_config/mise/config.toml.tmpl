@@ -1,18 +1,13 @@
 [tools]
-"github:microsoft/apm" = "latest"
-node   = "lts"
-pnpm = "latest"
-python = "latest"
-
-{{ if .personal -}}
-biome = "latest"
-"npm:@schpet/linear-cli" = "latest"
-uv   = "latest"
-{{- end }}
-
-{{ if .work -}}
-redis = "latest"
-{{- end }}
+{{ $groups := list "shared" -}}
+{{ if .personal }}{{ $groups = append $groups "personal" }}{{ end -}}
+{{ if .work }}{{ $groups = append $groups "work" }}{{ end -}}
+{{ range $groups -}}
+{{ $tools := index $.mise.tools . -}}
+{{ range $tools -}}
+"{{ .name }}" = "{{ .version }}"
+{{ end -}}
+{{ end }}
 
 [settings]
 idiomatic_version_file_enable_tools = ["node", "python", "pnpm"]
