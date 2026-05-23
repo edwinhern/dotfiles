@@ -44,21 +44,12 @@ jobs:
           echo "APM_SOURCE=$apm_source" >> "$GITHUB_ENV"
       - name: Audit APM project
         run: |
-          for attempt in 1 2 3; do
-            apm_project="$(mktemp -d)"
-            cp "$APM_SOURCE/apm.yml" "$apm_project/apm.yml"
-            cp -r "$APM_SOURCE/.apm" "$apm_project/.apm"
-
-            if (cd "$apm_project" && mise exec -- apm install --parallel-downloads 0 && mise exec -- apm audit --ci --no-drift --no-policy); then
-              exit 0
-            fi
-
-            if [ "$attempt" -lt 3 ]; then
-              sleep $((attempt * 5))
-            fi
-          done
-
-          exit 1
+          apm_project="$(mktemp -d)"
+          cp "$APM_SOURCE/apm.yml" "$apm_project/apm.yml"
+          cp -r "$APM_SOURCE/.apm" "$apm_project/.apm"
+          cd "$apm_project"
+          mise exec -- apm install --parallel-downloads 0
+          mise exec -- apm audit --ci --no-drift --no-policy
 
   actions_lint:
     name: Lint GitHub Actions workflows
