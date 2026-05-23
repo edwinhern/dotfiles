@@ -45,6 +45,16 @@
 - Use Linear closing keywords in PR text, such as `Fixes DOT-123`, when merge should move the Linear issue to `Done`.
 - If a thought is not ready for an issue, keep it in the current conversation or a Superpowers spec until it becomes actionable.
 
+## Linear / GitHub PR Flow
+
+- Start branch work from a Linear `DOT-*` issue.
+- If no issue exists, create one in the Linear `dotfiles` team, set priority, and keep it in `Backlog` or `Todo` until work starts.
+- When work starts, assign yourself and move the issue to `In Progress`.
+- Prefer Linear's generated branch name from `linear issue start DOT-123` or Copy git branch name, such as `feature/dot-123-short-title`.
+- Open the PR from that branch so Linear links it by branch name. The PR title or body may also include the same `DOT-*` ID.
+- Use `Fixes DOT-123` in the PR body only when merge should move the issue to `Done`. Use `Refs DOT-123` when merge should not close it.
+- After opening the PR, verify the Linear issue shows the GitHub PR attachment and the PR references the correct `DOT-*` issue.
+
 ## Git / PR Workflow
 
 - After pushing to GitHub, always check the GitHub Actions CI results. If CI fails, investigate the failure, fix the issue, push again, and repeat until all CI checks pass.
