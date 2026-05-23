@@ -10,7 +10,7 @@ Create a repo-local OpenCode skill that verifies post-merge cleanup for `edwinhe
 
 ## Location
 
-The skill lives at `.opencode/skills/post-merge-cleanup/SKILL.md`.
+The skill lives at `.agents/skills/post-merge-cleanup/SKILL.md`.
 
 It is not stored under `home/`, so chezmoi will not apply it to the user's global home config. It is meant only for this repository.
 
@@ -28,9 +28,9 @@ The skill verifies these checks with fresh commands:
 2. Local checkout has no uncommitted changes before switching branches.
 3. Local `main` is checked out and fast-forwarded with `git pull --ff-only`.
 4. Requested PR is `MERGED` and has a merge commit SHA.
-5. PR closing issue references are present and closed.
-6. Project `6` is titled `dotfiles`, and each closing issue is looked up in the project with a server-side issue-number query.
-7. Closing issue project items in the `dotfiles` project are present and `Done`.
+5. PR links at least one Linear `DOT-*` issue.
+6. Each linked Linear issue is fetched with `linear issue query` or `mise exec -- linear`, then checked with `jq`.
+7. Linked Linear issues are in a completed workflow state.
 8. The latest `CI` workflow run on `main` for the merge commit completed with `success`.
 9. Final git status is clean.
 
@@ -44,4 +44,4 @@ The skill verifies these checks with fresh commands:
 
 ## Verification
 
-Use a recent merged PR, such as `#28`, to verify the command sequence. The skill is complete when it can guide an agent to confirm the PR, linked issue, project item, `main` CI, and clean git state without changing repo files.
+Use a recent merged PR, such as `#28`, to verify the command sequence. The skill is complete when it can guide an agent to confirm the PR, linked Linear issue, `main` CI, and clean git state without changing repo files.

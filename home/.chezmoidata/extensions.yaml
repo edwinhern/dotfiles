@@ -21,6 +21,7 @@ vscode:
     - yoavbls.pretty-ts-errors
 
   personal:
+    - LeonardSSH.vscord
     # python
     - charliermarsh.ruff
     - ms-python.debugpy

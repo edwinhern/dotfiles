@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 # apm.yml:       {{ include "dot_apm/apm.yml.tmpl" | sha256sum }}
-# apm.lock.yaml: {{ include "dot_apm/apm.lock.yaml" | sha256sum }}
 
 {{ if eq .chezmoi.os "darwin" }}
 {{ template "lib/common/log.sh" . }}

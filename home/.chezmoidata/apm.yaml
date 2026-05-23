@@ -1,4 +1,15 @@
 apm:
+  dependencies:
+    shared:
+      - obra/superpowers
+      - JuliusBrussee/caveman
+      - anthropics/claude-plugins-official/plugins/skill-creator
+
+    personal:
+      - schpet/linear-cli
+
+    work: []
+
   mcp:
     shared:
       - name: grep

@@ -1,0 +1,23 @@
+mise:
+  tools:
+    shared:
+      - name: github:microsoft/apm
+        version: latest
+      - name: node
+        version: lts
+      - name: pnpm
+        version: latest
+      - name: python
+        version: latest
+
+    personal:
+      - name: biome
+        version: latest
+      - name: npm:@schpet/linear-cli
+        version: latest
+      - name: uv
+        version: latest
+
+    work:
+      - name: redis
+        version: latest

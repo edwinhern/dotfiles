@@ -22,9 +22,31 @@ render_mise_template() {
   assert_output --partial '"github:microsoft/apm" = "latest"'
 }
 
+@test "mise config renders tools from mise data groups" {
+  [ -f "$DOTFILES_ROOT/home/.chezmoidata/mise.yaml" ]
+
+  template_content="$(<"$MISE_TEMPLATE")"
+
+  [[ "$template_content" == *'$.mise.tools'* ]]
+}
+
+@test "mise config installs Linear CLI for personal hosts" {
+  run render_mise_template "$PERSONAL_DATA"
+
+  assert_success
+  assert_output --partial '"npm:@schpet/linear-cli" = "latest"'
+}
+
 @test "mise config installs APM for work hosts" {
   run render_mise_template "$WORK_DATA"
 
   assert_success
   assert_output --partial '"github:microsoft/apm" = "latest"'
+}
+
+@test "mise config does not install Linear CLI for work hosts" {
+  run render_mise_template "$WORK_DATA"
+
+  assert_success
+  refute_output --partial '"npm:@schpet/linear-cli" = "latest"'
 }
