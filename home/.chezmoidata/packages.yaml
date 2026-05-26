@@ -37,7 +37,7 @@ packages:
           - font-monaspace
           - font-jetbrains-mono-nerd-font
           # apps
-          - google-chrome
+          - brave-browser
           - ghostty
           - raycast
           - rectangle

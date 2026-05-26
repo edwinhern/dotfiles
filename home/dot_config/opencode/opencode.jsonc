@@ -72,7 +72,7 @@
       "/private/tmp/**": "allow",
     },
     "bash": {
-      "*": "ask",
+      "*": "allow",
       "opencode": "allow",
       // Git
       "git status *": "allow",
@@ -101,6 +101,7 @@
       "git push * -f": "deny",
       "git push * -f *": "deny",
       "git reset --soft *": "allow",
+      "git reset --hard": "deny",
       "git reset --hard *": "deny",
       "ls *": "allow",
       "cat *": "allow",
