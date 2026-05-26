@@ -29,8 +29,8 @@ function dock_apply_personal_layout() {
   dock_add_app "/System/Applications/Apps.app"
   dock_add_app "/System/Applications/System Settings.app"
   dock_add_app "/System/Applications/Utilities/Activity Monitor.app"
-  dock_add_app "/Applications/Google Chrome.app"
-  dock_add_app "${HOME}/Applications/Chrome Apps.localized/YouTube Music.app"
+  dock_add_app "/Applications/Brave Browser.app"
+  dock_add_app "${HOME}/Applications/Brave Apps.localized/YouTube Music.app"
   dock_add_app "/Applications/Visual Studio Code.app"
   dock_add_app "/Applications/Ghostty.app"
   dock_add_app "/Applications/Discord.app"
@@ -47,8 +47,8 @@ function dock_apply_work_layout() {
   dock_add_app "/System/Applications/Apps.app"
   dock_add_app "/System/Applications/System Settings.app"
   dock_add_app "/System/Applications/Utilities/Activity Monitor.app"
-  dock_add_app "/Applications/Google Chrome.app"
-  dock_add_app "${HOME}/Applications/Chrome Apps.localized/YouTube Music.app"
+  dock_add_app "/Applications/Brave Browser.app"
+  dock_add_app "${HOME}/Applications/Brave Apps.localized/YouTube Music.app"
   dock_add_app "/Applications/Visual Studio Code.app"
   dock_add_app "/Applications/Ghostty.app"
   dock_add_app "/Applications/Microsoft Outlook.app"
@@ -130,8 +130,8 @@ function macos_defaults_main() {
   defaults write -g AppleShowScrollBars -string Always
 
   if ! defaults read com.apple.LaunchServices/com.apple.launchservices.secure 2>/dev/null |
-    grep -q '"LSHandlerRoleAll" = "com\.google\.chrome"'; then
-    open -a "Google Chrome" --args --make-default-browser
+    grep -q '"LSHandlerRoleAll" = "com\.brave\.browser"'; then
+    open -a "Brave Browser" --args --make-default-browser
   fi
 
   log_info "[defaults] macOS defaults applied."
