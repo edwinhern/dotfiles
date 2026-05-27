@@ -55,7 +55,7 @@ capture_dock_layout() {
   assert_success
   assert_file_contains "$DOCK_APPS_LOG" "/Applications/Discord.app"
   assert_file_contains "$DOCK_APPS_LOG" "/System/Applications/Mail.app"
-  assert_file_contains "$DOCK_APPS_LOG" "$HOME/Applications/Chrome Apps.localized/YouTube Music.app"
+  assert_file_contains "$DOCK_APPS_LOG" "$HOME/Applications/Brave Browser Apps.localized/YouTube Music.app"
   assert_file_not_contains "$DOCK_APPS_LOG" "/System/Applications/Music.app"
   assert_file_not_contains "$DOCK_APPS_LOG" "/Applications/Microsoft Outlook.app"
   assert_file_not_contains "$DOCK_APPS_LOG" "/Applications/Microsoft Teams.app"
@@ -69,7 +69,7 @@ capture_dock_layout() {
   assert_file_contains "$DOCK_APPS_LOG" "/Applications/Microsoft Outlook.app"
   assert_file_contains "$DOCK_APPS_LOG" "/Applications/Microsoft Teams.app"
   assert_file_contains "$DOCK_APPS_LOG" "/Applications/Slack.app"
-  assert_file_contains "$DOCK_APPS_LOG" "$HOME/Applications/Chrome Apps.localized/YouTube Music.app"
+  assert_file_contains "$DOCK_APPS_LOG" "$HOME/Applications/Brave Browser Apps.localized/YouTube Music.app"
   assert_file_not_contains "$DOCK_APPS_LOG" "/Applications/Discord.app"
   assert_file_not_contains "$DOCK_APPS_LOG" "/System/Applications/Music.app"
   assert_file_not_contains "$DOCK_APPS_LOG" "/System/Applications/Mail.app"
