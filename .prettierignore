@@ -10,3 +10,4 @@ tests/test_helpers/
 
 # Build artifacts and runtime state.
 .git/
+.worktrees/
