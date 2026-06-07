@@ -30,6 +30,15 @@ render_apm_template() {
   refute_output --partial '${ATLASSIAN_KNOWLEDGE_RESOURCE_URL}'
 }
 
+@test "personal APM config renders personal target" {
+  run render_apm_template "$PERSONAL_DATA"
+
+  assert_success
+  assert_output --partial '  - opencode'
+  refute_output --partial '  - copilot'
+  refute_output --partial '  -opencode:'
+}
+
 @test "personal APM config renders shared and personal APM packages" {
   run render_apm_template "$PERSONAL_DATA"
 
@@ -57,6 +66,15 @@ render_apm_template() {
   assert_output --partial '"${ATLASSIAN_JIRA_RESOURCE_URL}"'
   assert_output --partial '"${ATLASSIAN_KNOWLEDGE_RESOURCE_URL}"'
   refute_output --partial '${input:figma-token}'
+}
+
+@test "work APM config renders work target" {
+  run render_apm_template "$WORK_DATA"
+
+  assert_success
+  assert_output --partial '  - copilot'
+  refute_output --partial '  - opencode'
+  refute_output --partial '  -copilot:'
 }
 
 @test "work APM config renders shared APM packages without personal Linear CLI" {

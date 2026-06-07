@@ -1,4 +1,10 @@
 apm:
+  targets:
+    shared: []
+    personal:
+      - opencode
+    work:
+      - copilot
   dependencies:
     shared:
       - obra/superpowers

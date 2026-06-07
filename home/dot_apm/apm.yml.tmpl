@@ -5,9 +5,11 @@ name: development
 version: 1.0.0
 description: APM project for development
 target:
-  - claude
-  - copilot
-  - opencode
+{{ range $groups -}}
+{{ $targets := index $.apm.targets . -}}
+{{ range $targets }}  - {{ . }}
+{{ end -}}
+{{ end -}}
 author: Edwin Hernandez
 includes: auto
 dependencies:
