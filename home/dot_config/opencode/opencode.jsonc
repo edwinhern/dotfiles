@@ -31,18 +31,10 @@
   "plugin": [
     "@tarquinen/opencode-dcp",
     "@franlol/opencode-md-table-formatter",
-    "opencode-websearch-cited",
     "@mohak34/opencode-notifier",
-    "opencode-mystatus",
     "opencode-supermemory",
     "opencode-wakatime",
   ],
-  "command": {
-    "mystatus": {
-      "description": "Query quota usage for all AI accounts",
-      "template": "Use the mystatus tool to query quota usage. After the tool returns, paste the full tool output into your final response exactly as returned. Do not summarize, explain, omit, or modify anything.",
-    },
-  },
   "mcp": {
     "grep": {
       "type": "remote",
