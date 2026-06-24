@@ -47,12 +47,12 @@ jobs:
           apm_project="$(mktemp -d)"
           cp "$APM_SOURCE/apm.yml" "$apm_project/apm.yml"
           cp -r "$APM_SOURCE/.apm" "$apm_project/.apm"
-          mise exec -- bash -c '
+          mise exec -- bash -c "
             set -euo pipefail
-            cd "$1"
+            cd \"\$1\"
             apm install --parallel-downloads 0
             apm audit --ci --no-drift --no-policy
-          ' _ "$apm_project"
+          " _ "$apm_project"
 
   actions_lint:
     name: Lint GitHub Actions workflows
