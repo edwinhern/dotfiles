@@ -1,47 +1,53 @@
 {
   // Misc Settings
   "breadcrumbs.enabled": true,
-  "explorer.confirmDragAndDrop": true,
   "explorer.compactFolders": false,
+  "explorer.confirmDragAndDrop": true,
+  "extensions.ignoreRecommendations": true,
+  "search.useGlobalIgnoreFiles": true,
   "security.workspace.trust.enabled": true,
   "security.workspace.trust.untrustedFiles": "open",
-  "search.useGlobalIgnoreFiles": true,
   "symbols.hidesExplorerArrows": false,
+
   // Workbench Settings
+  "workbench.activityBar.compact": true,
   "workbench.colorTheme": "Vesper",
   "workbench.iconTheme": "symbols",
   "workbench.sideBar.location": "right",
-  "workbench.activityBar.compact": true,
-  // Git Settings
-  "git.confirmSync": false,
-  "git.autofetch": true,
-  // Terminal Settings
-  "terminal.integrated.cursorStyle": "line",
-  "terminal.external.osxExec": "Ghostty.app",
-  "terminal.explorerKind": "external",
-  "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font', monospace",
-  "terminal.integrated.defaultProfile.osx": "zsh",
+
   // Editor Settings
   "editor.cursorBlinking": "solid",
   "editor.detectIndentation": true,
-  "editor.fontSize": 14,
-  "editor.lineHeight": 0,
-  "editor.minimap.enabled": false,
-  "editor.formatOnSave": true,
   "editor.fontFamily": "'Monaspace Neon', monospace",
-  "editor.inlineSuggest.fontFamily": "'Monaspace Krypton', monospace",
   "editor.fontLigatures": "'calt', 'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss06', 'ss07', 'ss08', 'ss09', 'ss10', 'liga'",
+  "editor.fontSize": 14,
+  "editor.formatOnSave": true,
+  "editor.inlineSuggest.fontFamily": "'Monaspace Krypton', monospace",
+  "editor.lineHeight": 0,
   "editor.linkedEditing": true,
+  "editor.minimap.enabled": false,
+
+  // Git Settings
+  "git.autofetch": true,
+  "git.confirmSync": false,
+
+  // Terminal Settings
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font', monospace",
+  "terminal.external.osxExec": "Ghostty.app",
+  "terminal.explorerKind": "external",
+  "terminal.integrated.cursorStyle": "line",
+
   // Github Copilot Settings
-  "chat.tools.terminal.enableAutoApprove": true,
   "chat.agent.maxRequests": 100,
   "chat.editor.fontSize": 12,
   "chat.editing.confirmEditRequestRemoval": false,
+  "chat.tools.terminal.enableAutoApprove": true,
   "chat.viewSessions.orientation": "stacked",
-  "github.copilot.renameSuggestions.triggerAutomatically": true,
+  "github.copilot.chat.codesearch.enabled": true,
   "github.copilot.editor.enableCodeActions": true,
   "github.copilot.nextEditSuggestions.enabled": true,
-  "github.copilot.chat.codesearch.enabled": true,
+  "github.copilot.renameSuggestions.triggerAutomatically": true,
   "github.copilot.chat.commitMessageGeneration.instructions": [
     {
       "text": "Use conventional commit message format."
@@ -50,8 +56,20 @@
       "text": "Keep the commit message short and concise. Use imperative mood and avoid unnecessary details."
     }
   ],
+
   // Claude Code Settings
   "claudeCode.preferredLocation": "sidebar",
+
   // AI Code Settings
-  "gitlens.gitkraken.mcp.autoEnabled": false
+  "chat.disableAIFeatures": true,
+  "gitlens.gitkraken.mcp.autoEnabled": false,
+  "json.schemaDownload.trustedDomains": {
+    "https://developer.microsoft.com/json-schemas/": true,
+    "https://json-schema.org/": true,
+    "https://json.schemastore.org/": true,
+    "https://opencode.ai": true,
+    "https://r2.better-t-stack.dev": true,
+    "https://raw.githubusercontent.com/devcontainers/spec/": true,
+    "https://raw.githubusercontent.com/microsoft/vscode/": true
+  }
 }

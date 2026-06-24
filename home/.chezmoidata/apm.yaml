@@ -15,6 +15,10 @@ apm:
     personal:
       - schpet/linear-cli
       - tavily-ai/skills
+      - git: JuliusBrussee/skills
+        skills:
+          - grill-me
+          - junior-to-senior
 
     work: []
 

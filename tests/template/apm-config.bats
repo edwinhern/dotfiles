@@ -50,6 +50,13 @@ render_apm_template() {
   assert_output --partial '    - anthropics/claude-plugins-official/plugins/skill-creator'
   assert_output --partial '    - schpet/linear-cli'
   assert_output --partial '    - tavily-ai/skills'
+  assert_output --partial '    - git: JuliusBrussee/skills'
+  assert_output --partial '      skills:'
+  assert_output --partial '        - grill-me'
+  assert_output --partial '        - junior-to-senior'
+  refute_output --partial 'interface-kit'
+  refute_output --partial 'loop-factory'
+  refute_output --partial 'context-canary'
 }
 
 @test "work APM config renders Figma and Jira MCP servers" {
@@ -90,6 +97,9 @@ render_apm_template() {
   assert_output --partial '    - anthropics/claude-plugins-official/plugins/skill-creator'
   refute_output --partial '    - schpet/linear-cli'
   refute_output --partial '    - tavily-ai/skills'
+  refute_output --partial 'JuliusBrussee/skills'
+  refute_output --partial 'grill-me'
+  refute_output --partial 'junior-to-senior'
 }
 
 @test "work APM config does not require legacy atlassian_resource_url data" {

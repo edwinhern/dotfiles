@@ -17,7 +17,17 @@ dependencies:
 {{ range $groups }}
 {{- $dependencies := index $.apm.dependencies . }}
 {{ range $dependencies }}
+{{- if kindIs "map" . }}
+    - git: {{ .git }}
+{{- with .skills }}
+      skills:
+{{- range . }}
+        - {{ . }}
+{{- end }}
+{{- end }}
+{{- else }}
     - {{ . }}
+{{- end }}
 {{ end }}
 {{ end -}}
   mcp:
