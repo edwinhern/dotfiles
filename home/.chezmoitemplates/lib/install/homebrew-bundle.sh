@@ -28,6 +28,9 @@ function homebrew_bundle_main() {
     return 1
   fi
 
+  log_info "[homebrew] Updating Homebrew metadata..."
+  brew update
+
   log_info "[homebrew] Running brew bundle..."
   printf '%s\n' "${HOMEBREW_BUNDLE_CONTENT:-}" | brew bundle --file=/dev/stdin
   log_info "[homebrew] Packages installed."

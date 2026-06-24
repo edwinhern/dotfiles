@@ -14,8 +14,18 @@ setup() {
 
   cat >"$BATS_TEST_TMPDIR/bin/brew" <<'BREW'
 #!/usr/bin/env bash
-printf '%s\n' "$*" >"$BREW_ARGS_FILE"
-cat >"$BREW_STDIN_FILE"
+printf '%s\n' "$*" >>"$BREW_ARGS_FILE"
+
+case "$1" in
+  update)
+    exit "${BREW_UPDATE_EXIT_CODE:-0}"
+    ;;
+  bundle)
+    cat >"$BREW_STDIN_FILE"
+    exit "${BREW_BUNDLE_EXIT_CODE:-0}"
+    ;;
+esac
+
 exit "${BREW_EXIT_CODE:-0}"
 BREW
   chmod +x "$BATS_TEST_TMPDIR/bin/brew"
@@ -28,19 +38,20 @@ BREW
   run bash -c "source '$LOG_LIB' && source '$LIB' && homebrew_bundle_main"
 
   assert_success
+  assert_output --partial "[homebrew] Updating Homebrew metadata..."
   assert_output --partial "[homebrew] Running brew bundle..."
   assert_output --partial "[homebrew] Packages installed."
-  [ "$(<"$BREW_ARGS_FILE")" = "bundle --file=/dev/stdin" ]
+  [ "$(<"$BREW_ARGS_FILE")" = $'update\nbundle --file=/dev/stdin' ]
   [ "$(<"$BREW_STDIN_FILE")" = "$HOMEBREW_BUNDLE_CONTENT" ]
 }
 
 @test "homebrew_bundle_main: fails when brew bundle fails" {
   export HOMEBREW_BUNDLE_CONTENT='brew "git"'
-  export BREW_EXIT_CODE=7
+  export BREW_BUNDLE_EXIT_CODE=7
 
   run bash -c "source '$LOG_LIB' && source '$LIB' && homebrew_bundle_main"
 
   assert_failure 7
   assert_output --partial "[homebrew] Running brew bundle..."
-  [ "$(<"$BREW_ARGS_FILE")" = "bundle --file=/dev/stdin" ]
+  [ "$(<"$BREW_ARGS_FILE")" = $'update\nbundle --file=/dev/stdin' ]
 }
