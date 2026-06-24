@@ -2,7 +2,8 @@ apm:
   targets:
     shared: []
     personal:
-      - opencode
+      - claude
+      - agent-skills
     work:
       - copilot
   dependencies:
@@ -13,6 +14,7 @@ apm:
 
     personal:
       - schpet/linear-cli
+      - tavily-ai/skills
 
     work: []
 
@@ -23,15 +25,17 @@ apm:
         transport: http
         url: https://mcp.grep.app
 
-    personal: []
+    personal:
+      - name: tavily
+        registry: false
+        transport: http
+        url: https://mcp.tavily.com/mcp/
 
     work:
       - name: figma
         registry: false
         transport: http
         url: https://mcp.figma.com/mcp
-        headers:
-          Authorization: "Bearer ${FIGMA_TOKEN}"
 
       - name: atlassian-jira
         registry: false
@@ -43,14 +47,3 @@ apm:
           - "https://mcp.atlassian.com/v1/mcp"
           - "--resource"
           - "${ATLASSIAN_JIRA_RESOURCE_URL}"
-
-      - name: atlassian-knowledge
-        registry: false
-        transport: stdio
-        command: npx
-        args:
-          - "-y"
-          - "mcp-remote"
-          - "https://mcp.atlassian.com/v1/mcp"
-          - "--resource"
-          - "${ATLASSIAN_KNOWLEDGE_RESOURCE_URL}"

@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# uv tools data hash: {{ include ".chezmoidata/uv.yaml" | sha256sum }}
+{{- $groups := list "shared" -}}
+{{- if .personal }}{{ $groups = append $groups "personal" }}{{ end -}}
+{{- if .work }}{{ $groups = append $groups "work" }}{{ end -}}
+{{- $hasTools := false -}}
+{{- range $groups -}}
+{{- $tools := index $.uv.tools . -}}
+{{- if gt (len $tools) 0 -}}{{ $hasTools = true }}{{- end -}}
+{{- end }}
+
+{{ if and (eq .chezmoi.os "darwin") $hasTools }}
+{{ template "lib/common/log.sh" . }}
+UV_TOOLS=(
+{{ range $groups -}}
+{{ $tools := index $.uv.tools . -}}
+{{ if gt (len $tools) 0 }}  # {{ . }}
+{{ range $tools -}}
+  "{{ . }}"
+{{ end -}}
+{{ end -}}
+{{ end }}
+)
+{{ template "lib/install/uv-tools.sh" . }}
+{{ end }}

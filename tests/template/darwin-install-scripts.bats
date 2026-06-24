@@ -8,6 +8,7 @@ SOURCE_DIR="$DOTFILES_ROOT/home"
 DARWIN_DATA='{"chezmoi":{"os":"darwin"},"personal":true,"work":false}'
 WORK_DATA='{"chezmoi":{"os":"darwin"},"personal":false,"work":true}'
 PACKAGE_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_02_install-packages.sh.tmpl"
+UV_TOOLS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_03_install-uv-tools.sh.tmpl"
 
 render_template() {
   mise exec -- chezmoi execute-template --source "$SOURCE_DIR" --override-data "$DARWIN_DATA" <"$1"
@@ -31,6 +32,7 @@ render_template_with_data() {
 @test "darwin install script templates inject shell libraries" {
   assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_02_install-packages.sh.tmpl" '{{ template "lib/install/homebrew-bundle.sh" . }}'
   assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_03_install-mise-tools.sh.tmpl" '{{ template "lib/install/mise.sh" . }}'
+  assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_03_install-uv-tools.sh.tmpl" '{{ template "lib/install/uv-tools.sh" . }}'
   assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_04_install-vscode-extensions.sh.tmpl" '{{ template "lib/install/vscode.sh" . }}'
   assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_05_defaults.sh.tmpl" '{{ template "lib/darwin/defaults.sh" . }}'
 }
@@ -72,4 +74,24 @@ render_template_with_data() {
   refute_output --partial 'brew "gradle"'
   refute_output --partial 'brew "maven"'
   refute_output --partial 'brew "kafka"'
+}
+
+@test "personal uv tools template renders Graphify and Tavily CLI tools" {
+  run render_template_with_data "$UV_TOOLS_TEMPLATE" "$DARWIN_DATA"
+
+  assert_success
+  assert_output --partial 'UV_TOOLS=('
+  assert_output --partial '"graphifyy"'
+  assert_output --partial '"tavily-cli"'
+  assert_output --partial 'uv_tools_install_main'
+}
+
+@test "work uv tools template has no personal uv tools" {
+  run render_template_with_data "$UV_TOOLS_TEMPLATE" "$WORK_DATA"
+
+  assert_success
+  refute_output --partial '"graphifyy"'
+  refute_output --partial '"tavily-cli"'
+  refute_output --partial 'uv tool install --upgrade'
+  refute_output --partial 'uv_tools_install_main'
 }

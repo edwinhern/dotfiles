@@ -34,9 +34,11 @@ render_apm_template() {
   run render_apm_template "$PERSONAL_DATA"
 
   assert_success
-  assert_output --partial '  - opencode'
+  assert_output --partial '  - claude'
+  assert_output --partial '  - agent-skills'
   refute_output --partial '  - copilot'
-  refute_output --partial '  -opencode:'
+  refute_output --partial '  - opencode'
+  refute_output --partial '  -agent-skills:'
 }
 
 @test "personal APM config renders shared and personal APM packages" {
@@ -47,24 +49,24 @@ render_apm_template() {
   assert_output --partial '    - JuliusBrussee/caveman'
   assert_output --partial '    - anthropics/claude-plugins-official/plugins/skill-creator'
   assert_output --partial '    - schpet/linear-cli'
+  assert_output --partial '    - tavily-ai/skills'
 }
 
-@test "work APM config renders Figma and both Atlassian MCP servers" {
+@test "work APM config renders Figma and Jira MCP servers" {
   run render_apm_template "$WORK_DATA"
 
   assert_success
   assert_output --partial '    - name: grep'
   assert_output --partial '    - name: figma'
   assert_output --partial '      url: https://mcp.figma.com/mcp'
-  assert_output --partial '      headers:'
-  assert_output --partial '        Authorization: "Bearer ${FIGMA_TOKEN}"'
   assert_output --partial '    - name: atlassian-jira'
-  assert_output --partial '    - name: atlassian-knowledge'
   assert_output --partial '      command: npx'
   assert_output --partial '      args:'
   assert_output --partial '        - "-y"'
   assert_output --partial '"${ATLASSIAN_JIRA_RESOURCE_URL}"'
-  assert_output --partial '"${ATLASSIAN_KNOWLEDGE_RESOURCE_URL}"'
+  refute_output --partial 'name: atlassian-knowledge'
+  refute_output --partial '${ATLASSIAN_KNOWLEDGE_RESOURCE_URL}'
+  refute_output --partial 'Authorization: "Bearer ${FIGMA_TOKEN}"'
   refute_output --partial '${input:figma-token}'
 }
 
@@ -74,10 +76,12 @@ render_apm_template() {
   assert_success
   assert_output --partial '  - copilot'
   refute_output --partial '  - opencode'
+  refute_output --partial '  - claude'
+  refute_output --partial '  - agent-skills'
   refute_output --partial '  -copilot:'
 }
 
-@test "work APM config renders shared APM packages without personal Linear CLI" {
+@test "work APM config renders shared APM packages without personal packages" {
   run render_apm_template "$WORK_DATA"
 
   assert_success
@@ -85,6 +89,7 @@ render_apm_template() {
   assert_output --partial '    - JuliusBrussee/caveman'
   assert_output --partial '    - anthropics/claude-plugins-official/plugins/skill-creator'
   refute_output --partial '    - schpet/linear-cli'
+  refute_output --partial '    - tavily-ai/skills'
 }
 
 @test "work APM config does not require legacy atlassian_resource_url data" {
