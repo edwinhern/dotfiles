@@ -1,3 +1,19 @@
+{{- $groups := list "shared" -}}
+{{- if .personal -}}
+  {{- $groups = append $groups "personal" -}}
+{{- end -}}
+{{- if .work -}}
+  {{- $groups = append $groups "work" -}}
+{{- end -}}
+{{- $usesCopilot := false -}}
+{{- range $group := $groups -}}
+  {{- range (index $.apm.targets $group) -}}
+    {{- if eq . "copilot" -}}
+      {{- $usesCopilot = true -}}
+    {{- end -}}
+  {{- end -}}
+{{- end }}
+{{- $disableAiFeatures := not $usesCopilot -}}
 {
   // Misc Settings
   "breadcrumbs.enabled": true,
@@ -61,7 +77,7 @@
   "claudeCode.preferredLocation": "sidebar",
 
   // AI Code Settings
-  "chat.disableAIFeatures": true,
+  "chat.disableAIFeatures": {{ $disableAiFeatures }},
   "gitlens.gitkraken.mcp.autoEnabled": false,
   "json.schemaDownload.trustedDomains": {
     "https://developer.microsoft.com/json-schemas/": true,

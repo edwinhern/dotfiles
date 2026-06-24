@@ -23,3 +23,11 @@ CONFIG="$DOTFILES_ROOT/home/dot_config/opencode/opencode.jsonc"
   [[ "$config_content" != *'opencode-supermemory'* ]]
   [[ "$config_content" == *'"opencode-wakatime"'* ]]
 }
+
+@test "opencode config omits Tavily MCP" {
+  config_content="$(<"$CONFIG")"
+
+  [[ "$config_content" == *'"grep": {'* ]]
+  [[ "$config_content" != *'"tavily": {'* ]]
+  [[ "$config_content" != *'TAVILY_API_KEY'* ]]
+}

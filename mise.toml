@@ -1,5 +1,5 @@
 [tools]
-"github:microsoft/apm" = "0.15.0"
+"github:microsoft/apm" = "latest"
 bats = "1.13.0"
 chezmoi = "2.70.3"
 prettier = "3.8.3"
