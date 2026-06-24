@@ -179,20 +179,5 @@
         "repo": "superultrainc/superwhisper-claude-code"
       }
     }
-  },
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "startup|clear|compact",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.cmd\" session-start",
-            "async": false
-          }
-        ],
-        "_apm_source": "superpowers"
-      }
-    ]
   }
 }

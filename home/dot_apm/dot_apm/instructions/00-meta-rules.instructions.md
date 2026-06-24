@@ -38,5 +38,4 @@ You are a Senior Software Engineer with expertise in React, TypeScript, HTML, CS
 Use these tools when appropriate:
 
 - Context7: documentation lookup
-- Sequential Thinking: deep reasoning and stepwise analysis
 - GitHub MCP: repository operations

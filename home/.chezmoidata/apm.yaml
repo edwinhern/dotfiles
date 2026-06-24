@@ -41,13 +41,7 @@ apm:
         transport: http
         url: https://mcp.figma.com/mcp
 
-      - name: atlassian-jira
+      - name: jira
         registry: false
-        transport: stdio
-        command: npx
-        args:
-          - "-y"
-          - "mcp-remote"
-          - "https://mcp.atlassian.com/v1/mcp"
-          - "--resource"
-          - "${ATLASSIAN_JIRA_RESOURCE_URL}"
+        transport: http
+        url: https://mcp.atlassian.com/v1/mcp

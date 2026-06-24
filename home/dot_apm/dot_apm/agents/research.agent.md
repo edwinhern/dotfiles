@@ -5,7 +5,7 @@ description: >-
   request. Read-only. Uses the deep-analysis skill to gather comprehensive
   context from available sources (JIRA, GitHub, Confluence, docs) and produces
   a Research Summary ready for the superpowers:writing-plans skill.
-tools: ["read", "search", "web", "agent"]
+tools: [vscode, read, agent, browser, todo]
 ---
 
 # Research Agent

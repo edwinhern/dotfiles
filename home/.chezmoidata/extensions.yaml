@@ -1,43 +1,30 @@
 vscode:
   shared:
     # core
-    - dbaeumer.vscode-eslint
     - eamodio.gitlens
     - EditorConfig.EditorConfig
     - esbenp.prettier-vscode
     - usernamehw.errorlens
     # ui / dx
     - adpyke.codesnap
-    - alefragnani.project-manager
     - edwinhuish.better-comments-next
     - fosshaas.fontsize-shortcuts
     # Themes
-    - miguelsolorio.symbols
+    - Catppuccin.catppuccin-vsc-icons
+    - Catppuccin.catppuccin-vsc
     - raunofreiberg.vesper
     # markdown
     - shd101wyy.markdown-preview-enhanced
-    - yzhang.markdown-all-in-one
-    # typescript
-    - yoavbls.pretty-ts-errors
 
   personal:
     - LeonardSSH.vscord
-    # python
-    - charliermarsh.ruff
-    - ms-python.debugpy
-    - ms-python.python
-    - ms-python.vscode-pylance
-    - ms-python.vscode-python-envs
     # frontend
     - biomejs.biome
     - bradlc.vscode-tailwindcss
     - csstools.postcss
-    # latex / pdf
+    # latex
     - james-yu.latex-workshop
-    - mathematic.vscode-latex
-    - tomoki1207.pdf
-    # claude
-    - anthropic.claude-code
 
   work:
+    - dbaeumer.vscode-eslint
     - codacy-app.codacy
