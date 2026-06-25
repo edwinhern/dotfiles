@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# @file run_onchange_08_install-graphify-skills.sh
+# @brief Install Graphify agent skills.
+# @description APM data hash: {{ include ".chezmoidata/apm.yaml" | sha256sum }}
+# @description active group helper hash: {{ include ".chezmoitemplates/lib/chezmoi/active-groups.json.tmpl" | sha256sum }}
+# @description active group values helper hash: {{ include ".chezmoitemplates/lib/chezmoi/active-group-values.json.tmpl" | sha256sum }}
+{{- $targets := includeTemplate "lib/chezmoi/active-group-values.json.tmpl" (dict "ctx" . "valuesByGroup" .apm.targets) | fromJson -}}
+{{- $platforms := list -}}
+{{- range $target := $targets -}}
+{{- if eq $target "agent-skills" -}}
+{{- $platforms = append $platforms "agents" -}}
+{{- else if eq $target "claude" -}}
+{{- $platforms = append $platforms "claude" -}}
+{{- end -}}
+{{- end -}}
+{{- $hasPlatforms := gt (len $platforms) 0 -}}
+
+{{ if and (eq .chezmoi.os "darwin") .personal $hasPlatforms }}
+{{ template "lib/common/log.sh" . }}
+GRAPHIFY_PLATFORMS=(
+{{ range $platforms -}}
+  "{{ . }}"
+{{ end -}}
+)
+{{ template "lib/install/graphify-skills.sh" . }}
+{{ end }}

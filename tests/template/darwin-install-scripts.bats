@@ -9,6 +9,8 @@ DARWIN_DATA='{"chezmoi":{"os":"darwin"},"personal":true,"work":false}'
 WORK_DATA='{"chezmoi":{"os":"darwin"},"personal":false,"work":true}'
 PACKAGE_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_02_install-packages.sh.tmpl"
 UV_TOOLS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_03_install-uv-tools.sh.tmpl"
+GRAPHIFY_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_install-graphify-skills.sh.tmpl"
+EMPTY_APM_DATA='{"chezmoi":{"os":"darwin"},"personal":true,"work":false,"apm":{"targets":{"shared":[],"personal":[],"work":[]}}}'
 
 render_template() {
   mise exec -- chezmoi execute-template --source "$SOURCE_DIR" --override-data "$DARWIN_DATA" <"$1"
@@ -94,4 +96,37 @@ render_template_with_data() {
   refute_output --partial '"tavily-cli"'
   refute_output --partial 'uv tool install --upgrade'
   refute_output --partial 'uv_tools_install_main'
+}
+
+@test "darwin install script templates inject Graphify shell library" {
+  assert_file_contains "$GRAPHIFY_TEMPLATE" '{{ template "lib/install/graphify-skills.sh" . }}'
+}
+
+@test "personal Graphify template renders agent and Claude platforms" {
+  run render_template_with_data "$GRAPHIFY_TEMPLATE" "$DARWIN_DATA"
+
+  assert_success
+  assert_output --partial 'GRAPHIFY_PLATFORMS=('
+  assert_output --partial '"agents"'
+  assert_output --partial '"claude"'
+  assert_output --partial 'graphify_skills_install_main'
+}
+
+@test "work Graphify template renders no personal platforms" {
+  run render_template_with_data "$GRAPHIFY_TEMPLATE" "$WORK_DATA"
+
+  assert_success
+  refute_output --partial '"agents"'
+  refute_output --partial '"claude"'
+  refute_output --partial 'graphify install --platform'
+  refute_output --partial 'graphify_skills_install_main'
+}
+
+@test "empty APM target groups render no Graphify commands" {
+  run render_template_with_data "$GRAPHIFY_TEMPLATE" "$EMPTY_APM_DATA"
+
+  assert_success
+  refute_output --partial 'GRAPHIFY_PLATFORMS=('
+  refute_output --partial 'graphify install --platform'
+  refute_output --partial 'graphify_skills_install_main'
 }

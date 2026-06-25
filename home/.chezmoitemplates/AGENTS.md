@@ -61,3 +61,10 @@ Use `gh` CLI for all GitHub interactions. Never clone repositories to read code.
 - Real person responses: polite, concise
 
 Ask yourself: "Would someone unfamiliar with this repo understand this commit message?"
+
+## Graphify
+
+- Use the installed Graphify skill when the user invokes `/graphify`.
+- If `graphify-out/graph.json` exists, prefer `graphify query`, `graphify path`, or `graphify explain` before raw file search for codebase questions.
+- Read `GRAPH_REPORT.md` only for broad architecture review or when graph commands do not answer the question.
+- Treat `graphify-out/` as per-repo data and do not create it from a global setup script.
