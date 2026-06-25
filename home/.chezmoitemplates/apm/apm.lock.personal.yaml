@@ -1,47 +1,47 @@
-lockfile_version: "1"
-generated_at: "2026-06-25T15:38:00.810714+00:00"
+lockfile_version: '1'
+generated_at: '2026-06-25T22:11:47.432025+00:00'
 apm_version: 0.21.0
 dependencies:
-  - repo_url: JuliusBrussee/caveman
-    host: github.com
-    resolved_commit: 32f37af81a02a4b91c107b768f1365848e5bf005
-    resolved_ref: v1.9.0
-    package_type: marketplace_plugin
-    content_hash: sha256:3e238a67ce11def6d73257cf8eabad78899df2909c57997e956be8e3e32943db
-  - repo_url: JuliusBrussee/skills
-    host: github.com
-    resolved_commit: 1fa763bf01ab01b7012b6767a564a071aa115c85
-    resolved_ref: main
-    package_type: skill_bundle
-    content_hash: sha256:e6e8748936c290c0773d1a2c2b50638c94b848b31fcd61e16c4c5e613e3f0a0c
-    skill_subset:
-      - grill-me
-      - junior-to-senior
-  - repo_url: anthropics/claude-plugins-official
-    host: github.com
-    resolved_commit: b0aea92dae92e227e66f78f2fee6db1e09d18287
-    resolved_ref: main
-    virtual_path: plugins/skill-creator
-    is_virtual: true
-    package_type: marketplace_plugin
-    content_hash: sha256:dcd0f840fa69b67c59e727eb9217e38194bda74b3d694d0e8d7ab00b290fe58a
-  - repo_url: obra/superpowers
-    host: github.com
-    resolved_commit: 896224c4b1879920ab573417e68fd51d2ccc9072
-    resolved_ref: v6.0.3
-    package_type: marketplace_plugin
-    content_hash: sha256:5b14832a84b21359e629052d2f4692fabded091ae2a80d085909776747e1f26e
-    declared_license: MIT
-  - repo_url: schpet/linear-cli
-    host: github.com
-    resolved_commit: a3e2960b7fb5951dcab91b0439b1e6518d828eca
-    resolved_ref: v2.0.0
-    package_type: marketplace_plugin
-    content_hash: sha256:b6dcb09081bd6515548614982e6e135d1758802ee32dda30932067207ccb291c
-  - repo_url: tavily-ai/skills
-    host: github.com
-    resolved_commit: ea5e8201b0d3ed9c10b70b71187589bd761fe2d2
-    resolved_ref: main
-    package_type: marketplace_plugin
-    content_hash: sha256:dae40889b2ccaee31d909107c38bb8d0170bdf9c2a95ddd4ae9fff876bdd069d
-    declared_license: MIT
+- repo_url: JuliusBrussee/caveman
+  host: github.com
+  resolved_commit: 32f37af81a02a4b91c107b768f1365848e5bf005
+  resolved_ref: v1.9.0
+  package_type: marketplace_plugin
+  content_hash: sha256:3e238a67ce11def6d73257cf8eabad78899df2909c57997e956be8e3e32943db
+- repo_url: JuliusBrussee/skills
+  host: github.com
+  resolved_commit: 1fa763bf01ab01b7012b6767a564a071aa115c85
+  resolved_ref: main
+  package_type: skill_bundle
+  content_hash: sha256:e6e8748936c290c0773d1a2c2b50638c94b848b31fcd61e16c4c5e613e3f0a0c
+  skill_subset:
+  - grill-me
+  - junior-to-senior
+- repo_url: anthropics/claude-plugins-official
+  host: github.com
+  resolved_commit: a8237e1537e987a92c9f33e5cd650acbe175fd5e
+  resolved_ref: main
+  virtual_path: plugins/skill-creator
+  is_virtual: true
+  package_type: marketplace_plugin
+  content_hash: sha256:09476584a3731e3c64d504241afd18e1bdcd7095583edf9fd913f19efda5640b
+- repo_url: obra/superpowers
+  host: github.com
+  resolved_commit: 896224c4b1879920ab573417e68fd51d2ccc9072
+  resolved_ref: v6.0.3
+  package_type: marketplace_plugin
+  content_hash: sha256:5b14832a84b21359e629052d2f4692fabded091ae2a80d085909776747e1f26e
+  declared_license: MIT
+- repo_url: schpet/linear-cli
+  host: github.com
+  resolved_commit: a3e2960b7fb5951dcab91b0439b1e6518d828eca
+  resolved_ref: v2.0.0
+  package_type: marketplace_plugin
+  content_hash: sha256:b6dcb09081bd6515548614982e6e135d1758802ee32dda30932067207ccb291c
+- repo_url: tavily-ai/skills
+  host: github.com
+  resolved_commit: ea5e8201b0d3ed9c10b70b71187589bd761fe2d2
+  resolved_ref: main
+  package_type: marketplace_plugin
+  content_hash: sha256:dae40889b2ccaee31d909107c38bb8d0170bdf9c2a95ddd4ae9fff876bdd069d
+  declared_license: MIT
