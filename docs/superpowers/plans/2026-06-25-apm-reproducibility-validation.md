@@ -37,27 +37,32 @@ No commit steps run unless the user asks; each task ends with a commit step the 
 APM warns that unpinned refs drift. Set a deliberate channel per dependency: a release tag where the upstream publishes releases, else the default branch. The exact SHA is captured later in the lockfile.
 
 **Files:**
+
 - Modify: `home/.chezmoidata/apm.yaml`
 
 - [ ] **Step 1: Discover each dependency's newest tag (empty output means no releases - use the default branch)**
 
 Run:
+
 ```bash
 for repo in obra/superpowers JuliusBrussee/caveman anthropics/claude-plugins-official schpet/linear-cli tavily-ai/skills JuliusBrussee/skills; do
   printf '%s -> ' "$repo"
   gh api "repos/$repo/tags" --jq '.[0].name' 2>/dev/null || echo "(no tags)"
 done
 ```
+
 Expected: one line per repo, either a tag like `v1.2.3` or `(no tags)`/empty.
 
 - [ ] **Step 2: Determine each repo's default branch (used when no tag exists)**
 
 Run:
+
 ```bash
 for repo in obra/superpowers JuliusBrussee/caveman anthropics/claude-plugins-official schpet/linear-cli tavily-ai/skills JuliusBrussee/skills; do
   printf '%s -> ' "$repo"; gh api "repos/$repo" --jq '.default_branch'
 done
 ```
+
 Expected: one branch name per repo (e.g. `main`).
 
 - [ ] **Step 3: Edit `home/.chezmoidata/apm.yaml` to append `#<ref>` to each dependency**
@@ -65,19 +70,19 @@ Expected: one branch name per repo (e.g. `main`).
 Use the tag from Step 1 if present, else the branch from Step 2. String deps become `owner/repo#<ref>`; the map dep keeps its shape with the ref on the git line. Example shape (substitute the refs you resolved):
 
 ```yaml
-  dependencies:
-    shared:
-      - obra/superpowers#<ref>
-      - JuliusBrussee/caveman#<ref>
-      - anthropics/claude-plugins-official/plugins/skill-creator#<ref>
-    personal:
-      - schpet/linear-cli#<ref>
-      - tavily-ai/skills#<ref>
-      - git: JuliusBrussee/skills#<ref>
-        skills:
-          - grill-me
-          - junior-to-senior
-    work: []
+dependencies:
+  shared:
+    - obra/superpowers#<ref>
+    - JuliusBrussee/caveman#<ref>
+    - anthropics/claude-plugins-official/plugins/skill-creator#<ref>
+  personal:
+    - schpet/linear-cli#<ref>
+    - tavily-ai/skills#<ref>
+    - git: JuliusBrussee/skills#<ref>
+      skills:
+        - grill-me
+        - junior-to-senior
+  work: []
 ```
 
 Leave `apm.targets` and `apm.mcp` unchanged.
@@ -85,12 +90,14 @@ Leave `apm.targets` and `apm.mcp` unchanged.
 - [ ] **Step 4: Verify both contexts still render valid YAML with refs present**
 
 Run:
+
 ```bash
 echo "== personal =="; mise exec -- chezmoi execute-template --source home \
   --override-data '{"personal":true,"work":false}' < home/dot_apm/apm.yml.tmpl | grep -E '^\s+- '
 echo "== work =="; mise exec -- chezmoi execute-template --source home \
   --override-data '{"personal":false,"work":true}' < home/dot_apm/apm.yml.tmpl | grep -E '^\s+- '
 ```
+
 Expected: rendered dependency lines all carry `#<ref>`.
 
 - [ ] **Step 5: Commit**
@@ -107,6 +114,7 @@ git commit -m "feat: DOT-31 pin APM dependency channels"
 One implementation of "resolve pinned tools, then materialize a context's `~/.apm` into a temp home" used by both validation and lockfile refresh.
 
 **Files:**
+
 - Create: `scripts/apm-lib.sh`
 - Test: `tests/unit/scripts/apm-lib.bats`
 
@@ -232,6 +240,7 @@ git commit -m "feat: DOT-31 add shared apm materialization library"
 ### Task 3: Lockfile refresh script + initial committed lockfiles
 
 **Files:**
+
 - Create: `scripts/refresh-apm-locks.sh`
 - Create: `home/.chezmoitemplates/apm/apm.lock.personal.yaml` (generated)
 - Create: `home/.chezmoitemplates/apm/apm.lock.work.yaml` (generated)
@@ -281,10 +290,12 @@ done
 - [ ] **Step 2: Generate the lockfiles**
 
 Run:
+
 ```bash
 mkdir -p home/.chezmoitemplates/apm
 bash scripts/refresh-apm-locks.sh
 ```
+
 Expected: two `[refresh] wrote ...` lines, and two new lockfiles whose first line is `lockfile_version: '1'`.
 
 - [ ] **Step 3: Verify the lockfiles look resolved**
@@ -304,6 +315,7 @@ git commit -m "feat: DOT-31 add lockfile refresh script and committed locks"
 ### Task 4: Deploy the right lockfile per context
 
 **Files:**
+
 - Create: `home/dot_apm/apm.lock.yaml.tmpl`
 - Test: `tests/template/apm-lockfile.bats`
 
@@ -376,6 +388,7 @@ git commit -m "feat: DOT-31 deploy per-context apm lockfile"
 ### Task 5: Make the runtime install reproducible
 
 **Files:**
+
 - Modify: `home/.chezmoitemplates/lib/install/apm.sh`
 - Modify: `tests/unit/lib/install/apm.bats`
 
@@ -426,6 +439,7 @@ git commit -m "feat: DOT-31 install APM frozen for reproducible applies"
 ### Task 6: Validation entrypoint `scripts/validate-apm.sh`
 
 **Files:**
+
 - Create: `scripts/validate-apm.sh`
 - Test: `tests/unit/scripts/validate-apm.bats`
 
@@ -561,12 +575,14 @@ Expected: `personal: PASS` (networked; needs the committed lockfile from Task 3)
 - [ ] **Step 6: Negative test - prove the gate catches drift**
 
 Run:
+
 ```bash
 cp home/.chezmoitemplates/apm/apm.lock.personal.yaml /tmp/apm.lock.bak
 printf '\n# tampered\n' >>home/.chezmoitemplates/apm/apm.lock.personal.yaml
 bash scripts/validate-apm.sh personal; echo "exit=$?"
 cp /tmp/apm.lock.bak home/.chezmoitemplates/apm/apm.lock.personal.yaml
 ```
+
 Expected: `personal: FAIL` and `exit=1`, then the lockfile is restored.
 
 - [ ] **Step 7: Commit**
@@ -581,6 +597,7 @@ git commit -m "feat: DOT-31 add apm validation entrypoint"
 ### Task 7: Mise tasks
 
 **Files:**
+
 - Modify: `mise.toml`
 
 - [ ] **Step 1: Add the tasks**
@@ -622,6 +639,7 @@ git commit -m "feat: DOT-31 add apm validation and refresh mise tasks"
 ### Task 8: Rewire the CI validate_apm job
 
 **Files:**
+
 - Modify: `.github/workflows/ci.yaml`
 
 - [ ] **Step 1: Replace the job body with the shared entrypoint + cache**
@@ -629,23 +647,23 @@ git commit -m "feat: DOT-31 add apm validation and refresh mise tasks"
 Replace the `validate_apm` job's steps (the `Render apm.yml` and `Audit APM project` steps) so each matrix entry calls the mise task, and cache the APM dir keyed on the committed lockfiles:
 
 ```yaml
-  validate_apm:
-    name: Validate APM config (${{ matrix.context }})
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        context: [personal, work]
-    steps:
-      - uses: actions/checkout@v6
-      - uses: jdx/mise-action@v4
-      - name: Cache APM downloads
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/apm
-          key: apm-${{ runner.os }}-${{ hashFiles('home/.chezmoitemplates/apm/apm.lock.*.yaml') }}
-      - name: Validate APM (${{ matrix.context }})
-        run: mise validate-apm-${{ matrix.context }}
+validate_apm:
+  name: Validate APM config (${{ matrix.context }})
+  runs-on: ubuntu-latest
+  strategy:
+    fail-fast: false
+    matrix:
+      context: [personal, work]
+  steps:
+    - uses: actions/checkout@v6
+    - uses: jdx/mise-action@v4
+    - name: Cache APM downloads
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/apm
+        key: apm-${{ runner.os }}-${{ hashFiles('home/.chezmoitemplates/apm/apm.lock.*.yaml') }}
+    - name: Validate APM (${{ matrix.context }})
+      run: mise validate-apm-${{ matrix.context }}
 ```
 
 The script writes its own stub chezmoi config into a temp home, so the prior `write-chezmoi-config` action step is no longer needed in this job.
@@ -667,6 +685,7 @@ git commit -m "feat: DOT-31 run apm validation through shared entrypoint in CI"
 ### Task 9: Scheduled APM update PR bot
 
 **Files:**
+
 - Create: `.github/workflows/apm-update.yaml`
 
 - [ ] **Step 1: Create the workflow**
@@ -719,6 +738,7 @@ git commit -m "feat: DOT-31 add scheduled APM update PR bot"
 ### Task 10: Full verification
 
 **Files:**
+
 - Verify all changed files.
 
 - [ ] **Step 1: Run the full bats suite**

@@ -12,7 +12,7 @@ Make APM setup reproducible and verifiable. A `chezmoi apply` on any machine sho
 
 The first draft added a validation script but left the underlying reproducibility holes in place:
 
-- APM dependencies in `home/.chezmoidata/apm.yaml` are floating refs (`obra/superpowers`, `JuliusBrussee/caveman`, ...) with no `#tag`/`#sha`. APM's own installer warns: *"dependencies unpinned ... add #tag or #sha to prevent drift."*
+- APM dependencies in `home/.chezmoidata/apm.yaml` are floating refs (`obra/superpowers`, `JuliusBrussee/caveman`, ...) with no `#tag`/`#sha`. APM's own installer warns: _"dependencies unpinned ... add #tag or #sha to prevent drift."_
 - No `apm.lock.yaml` is committed.
 - The real run-script `home/.chezmoitemplates/lib/install/apm.sh` runs bare `apm install --global`, which re-resolves "whatever is on the default branch today" on every apply.
 
