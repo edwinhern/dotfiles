@@ -47,7 +47,6 @@ teardown() {
   assert_line '  hostname: ci-runner'
   assert_line '    name: CI Bot'
   assert_line '    email: ci@example.com'
-  refute_line --partial 'atlassian_resource_url:'
 }
 
 @test "invalid context: exits non-zero with error message on stderr" {

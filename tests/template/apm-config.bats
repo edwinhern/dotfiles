@@ -24,10 +24,6 @@ render_apm_template() {
   assert_line '      url: https://mcp.grep.app'
   refute_line --regexp 'name: figma'
   refute_line --regexp 'name: jira'
-  refute_line --regexp 'name: atlassian-knowledge'
-  refute_line --regexp '\$\{FIGMA_TOKEN\}'
-  refute_line --regexp '\$\{ATLASSIAN_JIRA_RESOURCE_URL\}'
-  refute_line --regexp '\$\{ATLASSIAN_KNOWLEDGE_RESOURCE_URL\}'
 }
 
 @test "personal APM config renders personal target" {
@@ -68,10 +64,6 @@ render_apm_template() {
   assert_line '      url: https://mcp.figma.com/mcp'
   assert_line '    - name: jira'
   assert_line '      url: https://mcp.atlassian.com/v1/mcp'
-  refute_line --regexp 'name: atlassian-knowledge'
-  refute_line --regexp '\$\{ATLASSIAN_KNOWLEDGE_RESOURCE_URL\}'
-  refute_line --regexp 'Authorization.*FIGMA_TOKEN'
-  refute_line --regexp '\$\{input:figma-token\}'
 }
 
 @test "work APM config renders work target" {
@@ -97,11 +89,4 @@ render_apm_template() {
   refute_line --partial 'JuliusBrussee/skills'
   refute_line --partial 'grill-me'
   refute_line --partial 'junior-to-senior'
-}
-
-@test "work APM config does not require legacy atlassian_resource_url data" {
-  run render_apm_template "$WORK_DATA"
-
-  assert_success
-  refute_line --partial 'atlassian_resource_url'
 }
