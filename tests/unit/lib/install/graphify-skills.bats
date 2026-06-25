@@ -17,7 +17,7 @@ printf '%s\n' "$*" >>"$GRAPHIFY_ARGS_FILE"
 exit "${GRAPHIFY_EXIT_CODE:-0}"
 GRAPHIFY
   chmod +x "$BATS_TEST_TMPDIR/bin/graphify"
-  export PATH="$BATS_TEST_TMPDIR/bin:$PATH"
+  export PATH="$BATS_TEST_TMPDIR/bin:/usr/bin:/bin"
 }
 
 @test "main: installs each Graphify platform" {
