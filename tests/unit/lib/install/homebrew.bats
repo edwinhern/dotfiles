@@ -25,8 +25,8 @@ CURL
   run bash -c "source '$LOG_LIB' && source '$LIB' && homebrew_install_main"
 
   assert_success
-  assert_output --partial "[homebrew] Installing Homebrew..."
-  assert_output --partial "[homebrew] Install complete."
+  assert_line "[homebrew] Installing Homebrew..."
+  assert_line "[homebrew] Install complete."
   [ "$(<"$CURL_ARGS_FILE")" = "-fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh" ]
   [ "$(<"$HOMEBREW_INSTALL_FILE")" = "installed" ]
 }
@@ -41,6 +41,6 @@ BREW
   run bash -c "source '$LOG_LIB' && source '$LIB' && main"
 
   assert_success
-  assert_output --partial "[homebrew] Homebrew is already installed, skipping installation."
+  assert_line "[homebrew] Homebrew is already installed, skipping installation."
   [ ! -f "$HOMEBREW_INSTALL_FILE" ]
 }

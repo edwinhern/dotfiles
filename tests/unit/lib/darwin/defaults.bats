@@ -41,8 +41,8 @@ capture_dock_layout() {
   run bash -c "source '$LOG_LIB' && source '$LIB' && macos_defaults_main"
 
   assert_success
-  assert_output --partial "[defaults] Applying macOS defaults..."
-  assert_output --partial "[defaults] macOS defaults applied."
+  assert_line "[defaults] Applying macOS defaults..."
+  assert_line "[defaults] macOS defaults applied."
   assert_file_contains "$COMMAND_LOG" "defaults write NSGlobalDomain AppleShowAllExtensions -bool true"
   assert_file_contains "$COMMAND_LOG" "killall Finder"
   assert_file_contains "$COMMAND_LOG" "dockutil --no-restart --remove all"

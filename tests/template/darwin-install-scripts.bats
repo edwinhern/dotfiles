@@ -54,79 +54,79 @@ render_template_with_data() {
   run render_template_with_data "$PACKAGE_TEMPLATE" "$DARWIN_DATA"
 
   assert_success
-  assert_output --partial 'brew "mas"'
-  assert_output --partial 'brew "mise"'
-  assert_output --partial 'cask "discord"'
-  assert_output --partial 'mas "Klack", id: 6446206067'
-  refute_output --partial 'cask "microsoft-office"'
-  refute_output --partial 'cask "microsoft-teams"'
-  refute_output --partial 'cask "slack"'
-  refute_output --partial 'Be Focused - Pomodoro Timer'
+  assert_line 'brew "mas"'
+  assert_line 'brew "mise"'
+  assert_line 'cask "discord"'
+  assert_line 'mas "Klack", id: 6446206067'
+  refute_line 'cask "microsoft-office"'
+  refute_line 'cask "microsoft-teams"'
+  refute_line 'cask "slack"'
+  refute_line --partial 'Be Focused - Pomodoro Timer'
 }
 
 @test "work package template renders approved work apps" {
   run render_template_with_data "$PACKAGE_TEMPLATE" "$WORK_DATA"
 
   assert_success
-  assert_output --partial 'brew "mas"'
-  assert_output --partial 'cask "microsoft-office"'
-  assert_output --partial 'cask "microsoft-teams"'
-  assert_output --partial 'cask "slack"'
-  assert_output --partial 'mas "Be Focused - Pomodoro Timer", id: 973134470'
-  refute_output --partial 'cask "discord"'
-  refute_output --partial 'mas "Klack", id: 6446206067'
-  refute_output --partial 'cask "microsoft-outlook"'
-  refute_output --partial 'brew "java"'
-  refute_output --partial 'brew "gradle"'
-  refute_output --partial 'brew "maven"'
-  refute_output --partial 'brew "kafka"'
+  assert_line 'brew "mas"'
+  assert_line 'cask "microsoft-office"'
+  assert_line 'cask "microsoft-teams"'
+  assert_line 'cask "slack"'
+  assert_line 'mas "Be Focused - Pomodoro Timer", id: 973134470'
+  refute_line 'cask "discord"'
+  refute_line 'mas "Klack", id: 6446206067'
+  refute_line 'cask "microsoft-outlook"'
+  refute_line 'brew "java"'
+  refute_line 'brew "gradle"'
+  refute_line 'brew "maven"'
+  refute_line 'brew "kafka"'
 }
 
 @test "personal uv tools template renders Graphify and Tavily CLI tools" {
   run render_template_with_data "$UV_TOOLS_TEMPLATE" "$DARWIN_DATA"
 
   assert_success
-  assert_output --partial 'UV_TOOLS=('
-  assert_output --partial '"graphifyy"'
-  assert_output --partial '"tavily-cli"'
-  assert_output --partial 'uv_tools_install_main'
+  assert_line 'UV_TOOLS=('
+  assert_line --partial '"graphifyy"'
+  assert_line --partial '"tavily-cli"'
+  assert_line --partial 'uv_tools_install_main'
 }
 
 @test "work uv tools template has no personal uv tools" {
   run render_template_with_data "$UV_TOOLS_TEMPLATE" "$WORK_DATA"
 
   assert_success
-  refute_output --partial '"graphifyy"'
-  refute_output --partial '"tavily-cli"'
-  refute_output --partial 'uv tool install --upgrade'
-  refute_output --partial 'uv_tools_install_main'
+  refute_line --partial '"graphifyy"'
+  refute_line --partial '"tavily-cli"'
+  refute_line --partial 'uv tool install --upgrade'
+  refute_line --partial 'uv_tools_install_main'
 }
 
 @test "personal Graphify template renders agent and Claude platforms" {
   run render_template_with_data "$GRAPHIFY_TEMPLATE" "$DARWIN_DATA"
 
   assert_success
-  assert_output --partial 'GRAPHIFY_PLATFORMS=('
-  assert_output --partial '"agents"'
-  assert_output --partial '"claude"'
-  assert_output --partial 'graphify_skills_install_main'
+  assert_line 'GRAPHIFY_PLATFORMS=('
+  assert_line --partial '"agents"'
+  assert_line --partial '"claude"'
+  assert_line --partial 'graphify_skills_install_main'
 }
 
 @test "work Graphify template renders no personal platforms" {
   run render_template_with_data "$GRAPHIFY_TEMPLATE" "$WORK_DATA"
 
   assert_success
-  refute_output --partial '"agents"'
-  refute_output --partial '"claude"'
-  refute_output --partial 'graphify install --platform'
-  refute_output --partial 'graphify_skills_install_main'
+  refute_line --partial '"agents"'
+  refute_line --partial '"claude"'
+  refute_line --partial 'graphify install --platform'
+  refute_line --partial 'graphify_skills_install_main'
 }
 
 @test "empty APM target groups render no Graphify commands" {
   run render_template_with_data "$GRAPHIFY_TEMPLATE" "$EMPTY_APM_DATA"
 
   assert_success
-  refute_output --partial 'GRAPHIFY_PLATFORMS=('
-  refute_output --partial 'graphify install --platform'
-  refute_output --partial 'graphify_skills_install_main'
+  refute_line 'GRAPHIFY_PLATFORMS=('
+  refute_line --partial 'graphify install --platform'
+  refute_line --partial 'graphify_skills_install_main'
 }

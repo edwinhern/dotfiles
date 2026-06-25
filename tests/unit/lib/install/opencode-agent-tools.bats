@@ -26,8 +26,8 @@ MD
   run bash -c "source '$LOG_LIB' && source '$TOOLS_LIB' && opencode_agent_tools_normalize_dir '$AGENTS_DIR'"
 
   assert_success
-  assert_output --partial "rewrote cavecrew-investigator.md"
-  assert_output --partial "1 file(s) updated"
+  assert_line --partial "rewrote cavecrew-investigator.md"
+  assert_line --partial "1 file(s) updated"
 
   local expected
   expected='---
@@ -60,7 +60,7 @@ MD
   run bash -c "source '$LOG_LIB' && source '$TOOLS_LIB' && opencode_agent_tools_normalize_dir '$AGENTS_DIR'"
 
   assert_success
-  assert_output --partial "0 file(s) updated"
+  assert_line --partial "0 file(s) updated"
   [ "$(<"$AGENTS_DIR/already-fixed.md")" = "$before" ]
 }
 
@@ -80,7 +80,7 @@ MD
   run bash -c "source '$LOG_LIB' && source '$TOOLS_LIB' && opencode_agent_tools_normalize_dir '$AGENTS_DIR'"
 
   assert_success
-  assert_output --partial "0 file(s) updated"
+  assert_line --partial "0 file(s) updated"
   [ "$(<"$AGENTS_DIR/body-mention.md")" = "$before" ]
 }
 
@@ -88,14 +88,14 @@ MD
   run bash -c "source '$LOG_LIB' && source '$TOOLS_LIB' && opencode_agent_tools_normalize_dir '$BATS_TEST_TMPDIR/does-not-exist'"
 
   assert_success
-  assert_output --partial "No agents dir"
+  assert_line --partial "No agents dir"
 }
 
 @test "normalize_dir: empty dir reports zero updates" {
   run bash -c "source '$LOG_LIB' && source '$TOOLS_LIB' && opencode_agent_tools_normalize_dir '$AGENTS_DIR'"
 
   assert_success
-  assert_output --partial "0 file(s) updated"
+  assert_line --partial "0 file(s) updated"
 }
 
 @test "normalize_dir: drops empty items and strips quotes" {
@@ -135,7 +135,7 @@ MD
 
   run bash -c "source '$LOG_LIB' && source '$TOOLS_LIB' && opencode_agent_tools_normalize_dir '$AGENTS_DIR'"
   assert_success
-  assert_output --partial "0 file(s) updated"
+  assert_line --partial "0 file(s) updated"
   [ "$(<"$AGENTS_DIR/idem.md")" = "$after_first" ]
 }
 

@@ -33,23 +33,23 @@ DARWIN_DATA='{"chezmoi":{"os":"darwin"}}'
 @test "install-apm template injects log_info, log_warn, log_error definitions" {
   run mise exec -- chezmoi execute-template --source "$SOURCE_DIR" --override-data "$DARWIN_DATA" <"$TMPL"
   assert_success
-  assert_output --partial 'log_info() {'
-  assert_output --partial 'log_warn() {'
-  assert_output --partial 'log_error() {'
+  assert_line 'log_info() {'
+  assert_line 'log_warn() {'
+  assert_line 'log_error() {'
 }
 
 @test "install-apm template uses log_info at the call sites" {
   run mise exec -- chezmoi execute-template --source "$SOURCE_DIR" --override-data "$DARWIN_DATA" <"$TMPL"
   assert_success
-  assert_output --partial 'log_info "[apm] Installing globally'
-  assert_output --partial 'log_info "[apm] Install complete."'
+  assert_line '  log_info "[apm] Installing globally from ~/.apm/apm.yml (frozen)..."'
+  assert_line '  log_info "[apm] Install complete."'
 }
 
 @test "install-apm template runs frozen install (no tolerated-failure fallback)" {
   run mise exec -- chezmoi execute-template --source "$SOURCE_DIR" --override-data "$DARWIN_DATA" <"$TMPL"
   assert_success
-  assert_output --partial 'apm install --global --frozen'
-  refute_output --partial 'apm install --global ||'
+  assert_line --partial 'apm install --global --frozen'
+  refute_line --partial 'apm install --global ||'
 }
 
 @test "rendered install-apm script is syntactically valid bash" {
@@ -60,10 +60,10 @@ DARWIN_DATA='{"chezmoi":{"os":"darwin"}}'
 @test "rendered install-apm script preserves chezmoi content-hash trigger comments" {
   run mise exec -- chezmoi execute-template --source "$SOURCE_DIR" --override-data "$DARWIN_DATA" <"$TMPL"
   assert_success
-  assert_output --partial '# apm.yml:'
-  assert_output --partial '# apm data:'
-  assert_output --partial '# apm mcp template:'
-  assert_output --partial '# apm lock (personal):'
-  assert_output --partial '# apm lock (work):'
-  assert_output --partial '# agents:'
+  assert_line --regexp '^# apm\.yml:'
+  assert_line --regexp '^# apm data:'
+  assert_line --regexp '^# apm mcp template:'
+  assert_line --regexp '^# apm lock \(personal\):'
+  assert_line --regexp '^# apm lock \(work\):'
+  assert_line --regexp '^# agents:'
 }

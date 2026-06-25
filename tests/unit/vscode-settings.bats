@@ -20,10 +20,10 @@ render_settings() {
   run render_settings "$PERSONAL_DATA"
 
   assert_success
-  assert_output --partial '"extensions.ignoreRecommendations": true'
-  assert_output --partial '"json.schemaDownload.trustedDomains": {'
-  assert_output --partial '"https://opencode.ai": true'
-  assert_output --partial '"https://json.schemastore.org/": true'
-  refute_output --partial '"https://www.schemastore.org/": true'
-  refute_output --partial '"https://schemastore.azurewebsites.net/": true'
+  assert_line '  "extensions.ignoreRecommendations": true,'
+  assert_line '  "json.schemaDownload.trustedDomains": {'
+  assert_line '    "https://opencode.ai": true,'
+  assert_line '    "https://json.schemastore.org/": true,'
+  refute_line --regexp '"https://www\.schemastore\.org/"'
+  refute_line --regexp '"https://schemastore\.azurewebsites\.net/"'
 }

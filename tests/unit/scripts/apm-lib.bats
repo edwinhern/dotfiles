@@ -26,8 +26,8 @@ MISE
 @test "apm_lib_resolve_bins sets CHEZMOI_BIN and APM_BIN before HOME changes" {
   run bash -c "source '$LIB' && apm_lib_resolve_bins && echo \"\$CHEZMOI_BIN|\$APM_BIN\""
   assert_success
-  assert_output --partial "/bin/chezmoi|"
-  assert_output --partial "/bin/apm"
+  assert_line --partial "/bin/chezmoi|"
+  assert_line --partial "/bin/apm"
 }
 
 @test "apm_lib_materialize applies only the ~/.apm target with scripts excluded" {
@@ -38,8 +38,8 @@ MISE
   "
   assert_success
   run cat "$ARGS_FILE"
-  assert_output --partial "apply"
-  assert_output --partial "--include files,dirs"
-  assert_output --partial "/home/.apm"
-  refute_output --partial "scripts"
+  assert_line --partial "apply"
+  assert_line --partial "--include files,dirs"
+  assert_line --partial "/home/.apm"
+  refute_line --partial "scripts"
 }

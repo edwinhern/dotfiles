@@ -27,8 +27,8 @@ APM
   run bash -c "source '$LOG_LIB' && source '$APM_LIB' && apm_install_main"
 
   assert_success
-  assert_output --partial "[apm] Installing globally from ~/.apm/apm.yml (frozen)..."
-  assert_output --partial "[apm] Install complete."
+  assert_line "[apm] Installing globally from ~/.apm/apm.yml (frozen)..."
+  assert_line "[apm] Install complete."
   [ "$(<"$APM_ARGS_FILE")" = "install --global --frozen" ]
   [ "$(<"$APM_CWD_FILE")" = "$HOME/.apm" ]
 }
@@ -39,7 +39,7 @@ APM
   run bash -c "source '$LOG_LIB' && source '$APM_LIB' && apm_install_main"
 
   assert_success
-  assert_output --partial "warn: [apm] apm install --frozen exited non-zero"
-  assert_output --partial "[apm] Install complete."
+  assert_line --partial "warn: [apm] apm install --frozen exited non-zero"
+  assert_line "[apm] Install complete."
   [ "$(<"$APM_ARGS_FILE")" = "install --global --frozen" ]
 }

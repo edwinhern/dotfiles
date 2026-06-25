@@ -25,20 +25,20 @@ STUB
 @test "all runs both contexts and reports each" {
   run bash "$SCRIPT" all
   assert_success
-  assert_output --partial "personal: PASS"
-  assert_output --partial "work: PASS"
+  assert_line --partial "personal: PASS"
+  assert_line --partial "work: PASS"
 }
 
 @test "all reports both even when personal fails, exits non-zero" {
   export APM_EXIT=1
   run bash "$SCRIPT" all
   assert_failure
-  assert_output --partial "personal: FAIL"
-  assert_output --partial "work: FAIL"
+  assert_line --partial "personal: FAIL"
+  assert_line --partial "work: FAIL"
 }
 
 @test "rejects an unknown context" {
   run bash "$SCRIPT" bogus
   assert_failure
-  assert_output --partial "Unsupported context"
+  assert_line --partial "Unsupported context"
 }

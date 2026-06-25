@@ -24,8 +24,8 @@ MISE
   run bash -c "source '$LOG_LIB' && source '$LIB' && mise_install_main"
 
   assert_success
-  assert_output --partial "[mise] Installing mise tools..."
-  assert_output --partial "[mise] Mise tools installed."
+  assert_line "[mise] Installing mise tools..."
+  assert_line "[mise] Mise tools installed."
   [ "$(<"$MISE_ARGS_FILE")" = "install --yes" ]
 }
 
@@ -35,6 +35,6 @@ MISE
   run bash -c "source '$LOG_LIB' && source '$LIB' && mise_install_main"
 
   assert_failure 9
-  assert_output --partial "[mise] Installing mise tools..."
+  assert_line "[mise] Installing mise tools..."
   [ "$(<"$MISE_ARGS_FILE")" = "install --yes" ]
 }

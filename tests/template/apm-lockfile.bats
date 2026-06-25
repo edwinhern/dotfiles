@@ -17,12 +17,12 @@ render() {
   personal_first="$(grep -m1 resolved_commit "$DOTFILES_ROOT/home/.chezmoitemplates/apm/apm.lock.personal.yaml")"
   run render "$PERSONAL"
   assert_success
-  assert_output --partial "lockfile_version"
-  assert_output --partial "$personal_first"
+  assert_line --regexp '^lockfile_version'
+  assert_line "$personal_first"
 }
 
 @test "work context renders the work lockfile" {
   run render "$WORK"
   assert_success
-  assert_output --partial "lockfile_version"
+  assert_line --regexp '^lockfile_version'
 }
