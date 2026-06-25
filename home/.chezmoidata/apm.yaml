@@ -8,14 +8,14 @@ apm:
       - copilot
   dependencies:
     shared:
-      - obra/superpowers
-      - JuliusBrussee/caveman
-      - anthropics/claude-plugins-official/plugins/skill-creator
+      - obra/superpowers#v6.0.3
+      - JuliusBrussee/caveman#v1.9.0
+      - anthropics/claude-plugins-official/plugins/skill-creator#main
 
     personal:
-      - schpet/linear-cli
-      - tavily-ai/skills
-      - git: JuliusBrussee/skills
+      - schpet/linear-cli#v2.0.0
+      - tavily-ai/skills#main
+      - git: JuliusBrussee/skills#main
         skills:
           - grill-me
           - junior-to-senior

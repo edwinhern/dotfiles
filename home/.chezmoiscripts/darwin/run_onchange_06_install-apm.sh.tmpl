@@ -3,6 +3,8 @@
 # apm.yml:       {{ include "dot_apm/apm.yml.tmpl" | sha256sum }}
 # apm data:      {{ include ".chezmoidata/apm.yaml" | sha256sum }}
 # apm mcp template: {{ include ".chezmoitemplates/apm/mcp-server.yml.tmpl" | sha256sum }}
+# apm lock (personal): {{ include ".chezmoitemplates/apm/apm.lock.personal.yaml" | sha256sum }}
+# apm lock (work):     {{ include ".chezmoitemplates/apm/apm.lock.work.yaml" | sha256sum }}
 # agents:        {{ range (glob (printf "%s/dot_apm/dot_apm/agents/*" $src)) }}{{ include (trimPrefix (printf "%s/" $src) .) | sha256sum }} {{ end }}
 # instructions:  {{ range (glob (printf "%s/dot_apm/dot_apm/instructions/*" $src)) }}{{ include (trimPrefix (printf "%s/" $src) .) | sha256sum }} {{ end }}
 # skills:        {{ range (glob (printf "%s/dot_apm/dot_apm/skills/**/*.md" $src)) }}{{ include (trimPrefix (printf "%s/" $src) .) | sha256sum }} {{ end }}
