@@ -20,9 +20,13 @@ contexts=("$@")
 [ "$#" -eq 0 ] && contexts=(personal work)
 
 apm_lib_resolve_bins
+PRETTIER_BIN="$(mise which prettier)"
+export PRETTIER_BIN
 
 tmp_root="$(mktemp -d)"
 trap 'rm -rf "$tmp_root"' EXIT
+
+written=()
 
 for context in "${contexts[@]}"; do
   tmp_home="$tmp_root/home-$context"
@@ -33,6 +37,11 @@ for context in "${contexts[@]}"; do
     XDG_CACHE_HOME="$tmp_home/.cache" XDG_CONFIG_HOME="$tmp_home/.config" XDG_STATE_HOME="$tmp_home/.local/state" \
     "${APM_BIN}" lock --update --global
 
-  cp "$tmp_home/.apm/apm.lock.yaml" "$repo/home/.chezmoitemplates/apm/apm.lock.$context.yaml"
+  dest="$repo/home/.chezmoitemplates/apm/apm.lock.$context.yaml"
+  cp "$tmp_home/.apm/apm.lock.yaml" "$dest"
+  written+=("$dest")
   printf '[refresh] wrote home/.chezmoitemplates/apm/apm.lock.%s.yaml\n' "$context"
 done
+
+"${PRETTIER_BIN}" --write "${written[@]}"
+printf '[refresh] formatted %d lockfile(s) with prettier\n' "${#written[@]}"
