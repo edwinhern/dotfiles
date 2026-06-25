@@ -17,3 +17,12 @@
   type: git-repo
   url: https://github.com/olets/zsh-transient-prompt.git
   refreshPeriod: 168h
+
+".vscode/extensions/arishawke.fadetouched-1.0.0":
+  type: archive
+  url: https://github.com/Arishawke/fadetouched-theme/archive/refs/heads/main.tar.gz
+  exact: true
+  stripComponents: 3
+  refreshPeriod: 168h
+  include:
+    - "*/ports/vscode/**"
