@@ -16,10 +16,10 @@ fi
 # @description Install APM dependencies from `${HOME}/.apm/apm.yml`.
 #
 function apm_install_main() {
-  log_info "[apm] Installing globally from ~/.apm/apm.yml..."
+  log_info "[apm] Installing globally from ~/.apm/apm.yml (frozen)..."
   cd "${HOME}/.apm"
 
-  apm install --global || log_warn "[apm] apm install exited with errors (likely MCP token prompts in non-interactive shell)"
+  apm install --global --frozen || log_warn "[apm] apm install --frozen exited non-zero (lockfile drift or MCP token prompt in non-interactive shell)"
 
   log_info "[apm] Install complete."
 }
