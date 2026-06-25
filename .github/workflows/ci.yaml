@@ -12,13 +12,17 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Least privilege: every job here only reads the repo.
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: Lint shell scripts, markdown, and YAML
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
       - run: mise lint
 
   validate_apm:
@@ -30,7 +34,7 @@ jobs:
         context: [personal, work]
     steps:
       - uses: actions/checkout@v6
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
       - name: Stub chezmoi config (${{ matrix.context }} context)
         uses: ./.github/actions/write-chezmoi-config
         with:
@@ -43,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: docker://rhysd/actionlint:1.7.12
+      - uses: docker://rhysd/actionlint@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667 # 1.7.12
         with:
           args: -color
 
@@ -56,7 +60,7 @@ jobs:
         context: [personal, work]
     steps:
       - uses: actions/checkout@v6
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
       - name: Stub chezmoi config (${{ matrix.context }} context)
         uses: ./.github/actions/write-chezmoi-config
         with:
@@ -73,5 +77,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
       - run: mise test
