@@ -26,8 +26,8 @@ UV
   run bash -c "source '$LOG_LIB' && source '$LIB' && UV_TOOLS=('graphifyy' 'tavily-cli') && uv_tools_install_main"
 
   assert_success
-  assert_output --partial "[uv] Installing uv tools..."
-  assert_output --partial "[uv] uv tools installed."
+  assert_line "[uv] Installing uv tools..."
+  assert_line "[uv] uv tools installed."
   [ "$(<"$UV_ARGS_FILE")" = $'tool install --upgrade graphifyy\ntool install --upgrade tavily-cli' ]
 }
 
@@ -44,6 +44,6 @@ UV
   run bash -c "source '$LOG_LIB' && source '$LIB' && UV_TOOLS=('graphifyy' 'tavily-cli') && uv_tools_install_main"
 
   assert_failure 8
-  assert_output --partial "[uv] Installing uv tools..."
+  assert_line "[uv] Installing uv tools..."
   [ "$(<"$UV_ARGS_FILE")" = $'tool install --upgrade graphifyy\ntool install --upgrade tavily-cli' ]
 }

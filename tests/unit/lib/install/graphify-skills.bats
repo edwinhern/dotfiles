@@ -24,8 +24,8 @@ GRAPHIFY
   run bash -c "source '$LOG_LIB' && source '$LIB' && GRAPHIFY_PLATFORMS=('agents' 'claude') && main"
 
   assert_success
-  assert_output --partial "[graphify] Installing Graphify agent skills..."
-  assert_output --partial "[graphify] Graphify agent skills installed."
+  assert_line "[graphify] Installing Graphify agent skills..."
+  assert_line "[graphify] Graphify agent skills installed."
   [ "$(<"$GRAPHIFY_ARGS_FILE")" = $'install --platform agents\ninstall --platform claude' ]
 }
 
@@ -42,7 +42,7 @@ GRAPHIFY
   run bash -c "source '$LOG_LIB' && source '$LIB' && GRAPHIFY_PLATFORMS=() && main"
 
   assert_success
-  assert_output --partial "[graphify] No Graphify platforms to install."
+  assert_line "[graphify] No Graphify platforms to install."
   [ ! -s "$GRAPHIFY_ARGS_FILE" ]
 }
 
@@ -52,5 +52,5 @@ GRAPHIFY
   run bash -c "source '$LOG_LIB' && source '$LIB' && GRAPHIFY_PLATFORMS=('agents') && main"
 
   assert_failure 1
-  assert_output --partial "error: [graphify] graphify not found. Ensure run_onchange_03_install-uv-tools ran successfully."
+  assert_line "error: [graphify] graphify not found. Ensure run_onchange_03_install-uv-tools ran successfully."
 }

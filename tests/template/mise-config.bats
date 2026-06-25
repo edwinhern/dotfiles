@@ -19,7 +19,7 @@ render_mise_template() {
   run render_mise_template "$PERSONAL_DATA"
 
   assert_success
-  assert_output --partial '"github:microsoft/apm" = "latest"'
+  assert_line '"github:microsoft/apm" = "latest"'
 }
 
 @test "mise config renders tools from mise data groups" {
@@ -34,33 +34,33 @@ render_mise_template() {
   run render_mise_template "$PERSONAL_DATA"
 
   assert_success
-  assert_output --partial '"npm:@schpet/linear-cli" = "latest"'
+  assert_line '"npm:@schpet/linear-cli" = "latest"'
 }
 
 @test "mise config installs uv for personal hosts" {
   run render_mise_template "$PERSONAL_DATA"
 
   assert_success
-  assert_output --partial '"uv" = "latest"'
+  assert_line '"uv" = "latest"'
 }
 
 @test "mise config installs APM for work hosts" {
   run render_mise_template "$WORK_DATA"
 
   assert_success
-  assert_output --partial '"github:microsoft/apm" = "latest"'
+  assert_line '"github:microsoft/apm" = "latest"'
 }
 
 @test "mise config does not install Linear CLI for work hosts" {
   run render_mise_template "$WORK_DATA"
 
   assert_success
-  refute_output --partial '"npm:@schpet/linear-cli" = "latest"'
+  refute_line '"npm:@schpet/linear-cli" = "latest"'
 }
 
 @test "mise config does not install uv for work hosts" {
   run render_mise_template "$WORK_DATA"
 
   assert_success
-  refute_output --partial '"uv" = "latest"'
+  refute_line '"uv" = "latest"'
 }

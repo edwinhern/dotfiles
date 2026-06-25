@@ -12,14 +12,16 @@ OPENCODE_TEMPLATE="$DOTFILES_ROOT/home/dot_config/opencode/AGENTS.md.tmpl"
   run mise exec -- chezmoi execute-template --source "$SOURCE_DIR" <"$CLAUDE_TEMPLATE"
 
   assert_success
-  assert_output --partial '# Claude Code Settings'
-  assert_output --partial 'Use `gh` CLI for all GitHub interactions.'
+  assert_line --index 0 '# Claude Code Settings'
+  assert_line --regexp '^### GitHub CLI$'
+  assert_line 'Use `gh` CLI for all GitHub interactions. Never clone repositories to read code.'
 
   run mise exec -- chezmoi execute-template --source "$SOURCE_DIR" <"$OPENCODE_TEMPLATE"
 
   assert_success
-  assert_output --partial '# Claude Code Settings'
-  assert_output --partial 'Use `gh` CLI for all GitHub interactions.'
+  assert_line --index 0 '# Claude Code Settings'
+  assert_line --regexp '^### GitHub CLI$'
+  assert_line 'Use `gh` CLI for all GitHub interactions. Never clone repositories to read code.'
 }
 
 @test "agent instruction templates use markdown template source" {
@@ -37,16 +39,16 @@ OPENCODE_TEMPLATE="$DOTFILES_ROOT/home/dot_config/opencode/AGENTS.md.tmpl"
   run mise exec -- chezmoi execute-template --source "$SOURCE_DIR" <"$CLAUDE_TEMPLATE"
 
   assert_success
-  assert_output --partial '## Graphify'
-  assert_output --partial 'Use the installed Graphify skill when the user invokes `/graphify`.'
-  assert_output --partial 'graphify query'
-  assert_output --partial 'GRAPH_REPORT.md'
+  assert_line '## Graphify'
+  assert_line '- Use the installed Graphify skill when the user invokes `/graphify`.'
+  assert_line --partial 'graphify query'
+  assert_line --partial 'GRAPH_REPORT.md'
 
   run mise exec -- chezmoi execute-template --source "$SOURCE_DIR" <"$OPENCODE_TEMPLATE"
 
   assert_success
-  assert_output --partial '## Graphify'
-  assert_output --partial 'Use the installed Graphify skill when the user invokes `/graphify`.'
-  assert_output --partial 'graphify query'
-  assert_output --partial 'GRAPH_REPORT.md'
+  assert_line '## Graphify'
+  assert_line '- Use the installed Graphify skill when the user invokes `/graphify`.'
+  assert_line --partial 'graphify query'
+  assert_line --partial 'GRAPH_REPORT.md'
 }

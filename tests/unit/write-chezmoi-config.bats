@@ -28,32 +28,32 @@ teardown() {
   run "$SCRIPT" personal
   assert_success
   run cat "$HOME/.config/chezmoi/chezmoi.yaml"
-  assert_output --partial 'personal: true'
-  assert_output --partial 'work: false'
+  assert_line '  personal: true'
+  assert_line '  work: false'
 }
 
 @test "work context: sets personal=false, work=true" {
   run "$SCRIPT" work
   assert_success
   run cat "$HOME/.config/chezmoi/chezmoi.yaml"
-  assert_output --partial 'personal: false'
-  assert_output --partial 'work: true'
+  assert_line '  personal: false'
+  assert_line '  work: true'
 }
 
 @test "rendered yaml includes stub hostname and git identity only" {
   run "$SCRIPT" personal
   assert_success
   run cat "$HOME/.config/chezmoi/chezmoi.yaml"
-  assert_output --partial 'hostname: ci-runner'
-  assert_output --partial 'name: CI Bot'
-  assert_output --partial 'email: ci@example.com'
-  refute_output --partial 'atlassian_resource_url:'
+  assert_line '  hostname: ci-runner'
+  assert_line '    name: CI Bot'
+  assert_line '    email: ci@example.com'
+  refute_line --partial 'atlassian_resource_url:'
 }
 
 @test "invalid context: exits non-zero with error message on stderr" {
   run "$SCRIPT" garbage
   assert_failure
-  assert_output --partial 'Unsupported context: garbage'
+  assert_line 'Unsupported context: garbage'
 }
 
 @test "missing context argument: exits non-zero" {
@@ -67,6 +67,6 @@ teardown() {
   run "$SCRIPT" work
   assert_success
   run cat "$HOME/.config/chezmoi/chezmoi.yaml"
-  assert_output --partial 'work: true'
-  refute_output --partial 'personal: true'
+  assert_line '  work: true'
+  refute_line '  personal: true'
 }

@@ -12,30 +12,30 @@ FIXTURES="$DOTFILES_ROOT/tests/fixtures/statusline"
 @test "renders full payload: model, context, cost, 5h rate limit" {
   run sh "$STATUSLINE" < "$FIXTURES/full-payload.json"
   assert_success
-  assert_output --partial 'Opus 4.7'
-  assert_output --partial '17%'
-  assert_output --partial '$0.42'
-  assert_output --partial '5h'
-  assert_output --partial '45%'
+  assert_line --partial 'Opus 4.7'
+  assert_line --partial '17%'
+  assert_line --partial '$0.42'
+  assert_line --partial '5h'
+  assert_line --partial '45%'
 }
 
 @test "renders full payload: effort segment when .effort.level is present" {
   run sh "$STATUSLINE" < "$FIXTURES/full-payload.json"
   assert_success
-  assert_output --partial 'max'
+  assert_line --partial 'max'
 }
 
 @test "minimal payload: succeeds and omits rate-limit / cost / effort segments" {
   run sh "$STATUSLINE" < "$FIXTURES/minimal.json"
   assert_success
-  assert_output --partial 'Sonnet 4.6'
-  assert_output --partial '5%'
-  refute_output --partial '5h'
-  refute_output --partial '$'
+  assert_line --partial 'Sonnet 4.6'
+  assert_line --partial '5%'
+  refute_line --partial '5h'
+  refute_line --partial '$'
 }
 
 @test "worktree fixture: surfaces the worktree name segment" {
   run sh "$STATUSLINE" < "$FIXTURES/worktree.json"
   assert_success
-  assert_output --partial 'feat-experiment'
+  assert_line --partial 'feat-experiment'
 }

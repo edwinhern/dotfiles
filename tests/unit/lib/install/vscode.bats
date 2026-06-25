@@ -26,8 +26,8 @@ CODE
   run bash -c "source '$LOG_LIB' && source '$LIB' && VSCODE_EXTENSIONS=('one.ext' 'two.ext') && vscode_install_extensions_main"
 
   assert_success
-  assert_output --partial "[vscode] Installing VS Code extensions..."
-  assert_output --partial "[vscode] VS Code extensions installed."
+  assert_line "[vscode] Installing VS Code extensions..."
+  assert_line "[vscode] VS Code extensions installed."
   [ "$(<"$CODE_ARGS_FILE")" = $'--install-extension one.ext --force\n--install-extension two.ext --force' ]
 }
 
@@ -37,7 +37,7 @@ CODE
   run bash -c "source '$LOG_LIB' && source '$LIB' && VSCODE_EXTENSIONS=('good.ext' 'bad.ext') && vscode_install_extensions_main"
 
   assert_success
-  assert_output --partial "warn: [vscode] 1 extension(s) failed to install:"
-  assert_output --partial "  - bad.ext"
-  assert_output --partial "[vscode] VS Code extensions installed."
+  assert_line "warn: [vscode] 1 extension(s) failed to install:"
+  assert_line "  - bad.ext"
+  assert_line "[vscode] VS Code extensions installed."
 }

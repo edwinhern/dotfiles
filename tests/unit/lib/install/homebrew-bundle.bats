@@ -38,9 +38,9 @@ BREW
   run bash -c "source '$LOG_LIB' && source '$LIB' && homebrew_bundle_main"
 
   assert_success
-  assert_output --partial "[homebrew] Updating Homebrew metadata..."
-  assert_output --partial "[homebrew] Running brew bundle..."
-  assert_output --partial "[homebrew] Packages installed."
+  assert_line "[homebrew] Updating Homebrew metadata..."
+  assert_line "[homebrew] Running brew bundle..."
+  assert_line "[homebrew] Packages installed."
   [ "$(<"$BREW_ARGS_FILE")" = $'update\nbundle --file=/dev/stdin' ]
   [ "$(<"$BREW_STDIN_FILE")" = "$HOMEBREW_BUNDLE_CONTENT" ]
 }
@@ -52,6 +52,6 @@ BREW
   run bash -c "source '$LOG_LIB' && source '$LIB' && homebrew_bundle_main"
 
   assert_failure 7
-  assert_output --partial "[homebrew] Running brew bundle..."
+  assert_line "[homebrew] Running brew bundle..."
   [ "$(<"$BREW_ARGS_FILE")" = $'update\nbundle --file=/dev/stdin' ]
 }
