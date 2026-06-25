@@ -17,7 +17,10 @@ fi
 #
 function apm_install_main() {
   log_info "[apm] Installing globally from ~/.apm/apm.yml (frozen)..."
-  cd "${HOME}/.apm"
+  cd "${HOME}/.apm" || {
+    log_error "[apm] ~/.apm not found; run 'chezmoi apply' to materialize it."
+    return 1
+  }
 
   apm install --global --frozen || log_warn "[apm] apm install --frozen exited non-zero (lockfile drift or MCP token prompt in non-interactive shell)"
 

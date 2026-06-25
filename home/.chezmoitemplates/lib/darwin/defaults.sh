@@ -92,7 +92,8 @@ function dock_configure() {
     log_warn "[defaults] dockutil not found. Run 'brew install dockutil' or rerun 'chezmoi apply'."
   fi
 
-  killall Dock
+  # Best-effort restart; killall exits non-zero when Dock is not running.
+  killall Dock || true
 }
 
 #
@@ -101,7 +102,9 @@ function dock_configure() {
 function macos_defaults_main() {
   log_info "[defaults] Applying macOS defaults..."
 
-  osascript -e 'tell application "System Settings" to quit'
+  # Best-effort; osascript exits non-zero if System Settings is absent or
+  # automation is denied. Either way, do not abort the defaults run.
+  osascript -e 'tell application "System Settings" to quit' || true
 
   defaults write NSGlobalDomain AppleShowAllExtensions -bool true
   defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
@@ -115,7 +118,8 @@ function macos_defaults_main() {
   defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
   defaults write com.apple.finder _FXSortFoldersFirst -bool true
   defaults write com.apple.finder CreateDesktop -bool false
-  killall Finder
+  # Best-effort restart; killall exits non-zero when Finder is not running.
+  killall Finder || true
 
   dock_configure
 
@@ -123,7 +127,8 @@ function macos_defaults_main() {
   mkdir -p "${HOME}/Pictures/Screenshots"
   defaults write com.apple.screencapture location -string "${HOME}/Pictures/Screenshots"
   defaults write com.apple.screencapture show-thumbnail -bool false
-  killall SystemUIServer
+  # Best-effort restart; killall exits non-zero when SystemUIServer is not running.
+  killall SystemUIServer || true
 
   defaults write com.apple.CrashReporter DialogType none
   defaults write com.apple.LaunchServices LSQuarantine -bool false
@@ -131,7 +136,8 @@ function macos_defaults_main() {
 
   if ! defaults read com.apple.LaunchServices/com.apple.launchservices.secure 2>/dev/null |
     grep -q '"LSHandlerRoleAll" = "com\.brave\.browser"'; then
-    open -a "Brave Browser" --args --make-default-browser
+    # Best-effort; open exits non-zero when Brave is not installed.
+    open -a "Brave Browser" --args --make-default-browser || true
   fi
 
   log_info "[defaults] macOS defaults applied."

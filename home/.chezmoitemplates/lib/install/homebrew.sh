@@ -24,7 +24,17 @@ function is_homebrew_installed() {
 function homebrew_install_main() {
   log_info "[homebrew] Installing Homebrew..."
 
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  local installer
+  installer="$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || {
+    log_error "[homebrew] Failed to download the Homebrew install script."
+    return 1
+  }
+  if [ -z "${installer}" ]; then
+    log_error "[homebrew] Homebrew install script was empty; aborting."
+    return 1
+  fi
+
+  /bin/bash -c "${installer}"
 
   log_info "[homebrew] Install complete."
 }
@@ -39,6 +49,11 @@ function main() {
   fi
 
   homebrew_install_main
+
+  if ! is_homebrew_installed; then
+    log_error "[homebrew] Install reported success but 'brew' is not on PATH."
+    return 1
+  fi
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
