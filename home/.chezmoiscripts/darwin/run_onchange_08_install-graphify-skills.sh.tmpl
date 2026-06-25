@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# apm data hash: {{ include ".chezmoidata/apm.yaml" | sha256sum }}
+{{- $platforms := list -}}
+{{- if .personal -}}
+{{- range (index .apm.targets "shared") -}}
+{{- if eq . "agent-skills" }}{{ $platforms = append $platforms "agents" }}{{- else if eq . "claude" }}{{ $platforms = append $platforms "claude" }}{{- end -}}
+{{- end -}}
+{{- range (index .apm.targets "personal") -}}
+{{- if eq . "agent-skills" }}{{ $platforms = append $platforms "agents" }}{{- else if eq . "claude" }}{{ $platforms = append $platforms "claude" }}{{- end -}}
+{{- end -}}
+{{- end }}
+
+{{ if and (eq .chezmoi.os "darwin") (gt (len $platforms) 0) }}
+{{ template "lib/common/log.sh" . }}
+GRAPHIFY_PLATFORMS=(
+{{ range $platforms -}}
+  "{{ . }}"
+{{ end -}}
+)
+{{ template "lib/install/graphify-skills.sh" . }}
+{{ end }}
