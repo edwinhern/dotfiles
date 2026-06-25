@@ -35,24 +35,8 @@ jobs:
         uses: ./.github/actions/write-chezmoi-config
         with:
           context: ${{ matrix.context }}
-      - name: Render apm.yml from template
-        run: |
-          apm_source="$RUNNER_TEMP/apm-source"
-          mkdir -p "$apm_source"
-          mise exec -- chezmoi execute-template --source home < home/dot_apm/apm.yml.tmpl > "$apm_source/apm.yml"
-          cp -r home/dot_apm/dot_apm "$apm_source/.apm"
-          echo "APM_SOURCE=$apm_source" >> "$GITHUB_ENV"
-      - name: Audit APM project
-        run: |
-          apm_project="$(mktemp -d)"
-          cp "$APM_SOURCE/apm.yml" "$apm_project/apm.yml"
-          cp -r "$APM_SOURCE/.apm" "$apm_project/.apm"
-          mise exec -- bash -c "
-            set -euo pipefail
-            cd \"\$1\"
-            apm install --parallel-downloads 0
-            apm audit --ci --no-drift --no-policy
-          " _ "$apm_project"
+      - name: Frozen install + audit (${{ matrix.context }})
+        run: mise exec -- bash scripts/validate-apm.sh ${{ matrix.context }}
 
   actions_lint:
     name: Lint GitHub Actions workflows

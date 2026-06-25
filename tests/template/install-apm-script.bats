@@ -45,10 +45,11 @@ DARWIN_DATA='{"chezmoi":{"os":"darwin"}}'
   assert_output --partial 'log_info "[apm] Install complete."'
 }
 
-@test "install-apm template uses log_warn for the tolerated apm install failure" {
+@test "install-apm template runs frozen install (no tolerated-failure fallback)" {
   run mise exec -- chezmoi execute-template --source "$SOURCE_DIR" --override-data "$DARWIN_DATA" <"$TMPL"
   assert_success
-  assert_output --partial 'apm install --global || log_warn'
+  assert_output --partial 'apm install --global --frozen'
+  refute_output --partial 'apm install --global ||'
 }
 
 @test "rendered install-apm script is syntactically valid bash" {
@@ -62,5 +63,7 @@ DARWIN_DATA='{"chezmoi":{"os":"darwin"}}'
   assert_output --partial '# apm.yml:'
   assert_output --partial '# apm data:'
   assert_output --partial '# apm mcp template:'
+  assert_output --partial '# apm lock (personal):'
+  assert_output --partial '# apm lock (work):'
   assert_output --partial '# agents:'
 }

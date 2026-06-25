@@ -55,7 +55,7 @@ function validate_context() {
     cd "$tmp_home/.apm" &&
       HOME="$tmp_home" \
         XDG_CACHE_HOME="$tmp_home/.cache" XDG_CONFIG_HOME="$tmp_home/.config" XDG_STATE_HOME="$tmp_home/.local/state" \
-        "${APM_BIN}" audit --ci --no-policy
+        "${APM_BIN}" audit --ci --no-drift --no-policy
   )
   audit_rc=$?
 

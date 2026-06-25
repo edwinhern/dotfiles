@@ -1,0 +1,37 @@
+name: Update APM Locks
+
+on:
+  schedule:
+    - cron: "0 0 * * 5" # Every Friday at midnight UTC, matching CI schedule
+  workflow_dispatch: # Allow manual trigger from the Actions tab
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  refresh_locks:
+    name: Refresh APM lockfiles
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: jdx/mise-action@v4
+      - name: Refresh APM lockfiles
+        run: mise exec -- bash scripts/refresh-apm-locks.sh
+      - name: Open PR if lockfiles changed
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "chore: refresh APM lockfiles"
+          branch: chore/apm-lock-refresh
+          delete-branch: true
+          title: "Refresh APM lockfiles"
+          body: |
+            Automated refresh of committed APM lockfiles.
+
+            Re-resolves each channel ref to its latest SHA and rewrites
+            `home/.chezmoitemplates/apm/apm.lock.*.yaml`.
+
+            CI runs the frozen-install gate on the new lockfiles before merge.
+
+            Refs DOT-31
+          labels: dependencies
