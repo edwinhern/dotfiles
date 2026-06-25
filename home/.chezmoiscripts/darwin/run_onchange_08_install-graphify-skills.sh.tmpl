@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# apm data hash: {{ include ".chezmoidata/apm.yaml" | sha256sum }}
+# @file run_onchange_08_install-graphify-skills.sh
+# @brief Install Graphify agent skills.
+# @description APM data hash: {{ include ".chezmoidata/apm.yaml" | sha256sum }}
 {{- $platforms := list -}}
 {{- if .personal -}}
 {{- range (index .apm.targets "shared") -}}
