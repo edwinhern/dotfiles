@@ -19,11 +19,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: jdx/mise-action@v4
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
       - name: Refresh APM lockfiles
         run: mise exec -- bash scripts/refresh-apm-locks.sh
+      # Gate the refreshed lockfiles here: a PR opened with the default
+      # GITHUB_TOKEN does not trigger the on: pull_request CI run, so the
+      # frozen-install check must pass before the PR is opened.
+      - name: Validate refreshed lockfiles
+        run: mise exec -- bash scripts/validate-apm.sh all
       - name: Open PR if lockfiles changed
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           commit-message: "chore: refresh APM lockfiles"
           branch: chore/apm-lock-refresh
@@ -35,7 +40,8 @@ jobs:
             Re-resolves each channel ref to its latest SHA and rewrites
             `home/.chezmoitemplates/apm/apm.lock.*.yaml`.
 
-            CI runs the frozen-install gate on the new lockfiles before merge.
+            The frozen-install gate ran on these lockfiles before this PR was
+            opened, since an auto-PR does not trigger the on: pull_request CI run.
 
             Refs DOT-31
           labels: dependencies
