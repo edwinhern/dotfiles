@@ -26,6 +26,7 @@ No commit steps are included because this session should not commit unless the u
 ### Task 1: Chezmoi Group Helpers
 
 **Files:**
+
 - Create: `home/.chezmoitemplates/lib/chezmoi/active-groups.json.tmpl`
 - Create: `home/.chezmoitemplates/lib/chezmoi/active-group-values.json.tmpl`
 
@@ -65,6 +66,7 @@ Do not add separate helper tests yet. The Graphify template tests in Task 3 will
 ### Task 2: Graphify Installer Library
 
 **Files:**
+
 - Create: `tests/unit/lib/install/graphify-skills.bats`
 - Create: `home/.chezmoitemplates/lib/install/graphify-skills.sh`
 
@@ -209,6 +211,7 @@ Expected: PASS.
 ### Task 3: Darwin Graphify Run Script
 
 **Files:**
+
 - Create: `home/.chezmoiscripts/darwin/run_onchange_08_install-graphify-skills.sh.tmpl`
 - Modify: `tests/template/darwin-install-scripts.bats`
 
@@ -306,6 +309,7 @@ Expected: PASS.
 ### Task 4: Shared Agent Instructions
 
 **Files:**
+
 - Modify: `home/.chezmoitemplates/AGENTS.md`
 - Modify: `tests/template/agent-instructions.bats`
 
@@ -361,6 +365,7 @@ Expected: PASS.
 ### Task 5: Final Verification
 
 **Files:**
+
 - Verify all changed files.
 
 - [ ] **Step 1: Run targeted tests**
