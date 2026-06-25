@@ -28,7 +28,10 @@ fi
 function opencode_agent_tools_normalize_file() {
   local path="$1"
   local tmp
-  tmp="$(mktemp)"
+  # Create the temp file alongside the target so the final mv is an atomic
+  # same-filesystem rename (mktemp in $TMPDIR can cross filesystems, degrading
+  # mv to a non-atomic copy that drops the original mode and owner).
+  tmp="$(mktemp "${path}.XXXXXX")"
 
   if awk '
     BEGIN { fm = 0; changed = 0 }

@@ -19,6 +19,18 @@ source "$repo/scripts/apm-lib.sh"
 contexts=("$@")
 [ "$#" -eq 0 ] && contexts=(personal work)
 
+# Reject unknown contexts before doing work; an unvalidated context would
+# silently write a misnamed apm.lock.<context>.yaml into the repo.
+for context in "${contexts[@]}"; do
+  case "$context" in
+  personal | work) ;;
+  *)
+    printf 'Unsupported context: %s (use personal, work)\n' "$context" >&2
+    exit 1
+    ;;
+  esac
+done
+
 apm_lib_resolve_bins
 PRETTIER_BIN="$(mise which prettier)"
 export PRETTIER_BIN
