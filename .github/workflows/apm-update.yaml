@@ -9,6 +9,10 @@ concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: true
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   refresh_locks:
     name: Refresh APM lockfiles
@@ -19,7 +23,7 @@ jobs:
       - name: Refresh APM lockfiles
         run: mise exec -- bash scripts/refresh-apm-locks.sh
       - name: Open PR if lockfiles changed
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: "chore: refresh APM lockfiles"
           branch: chore/apm-lock-refresh
