@@ -1,8 +1,8 @@
-- name: {{ index . "name" }}
+- name: "{{ index . "name" }}"
   registry: {{ index . "registry" }}
   transport: {{ index . "transport" }}
 {{- if hasKey . "url" }}
-  url: {{ index . "url" }}
+  url: "{{ index . "url" }}"
 {{- end }}
 {{- if hasKey . "headers" }}
   headers:
@@ -11,7 +11,7 @@
 {{- end }}
 {{- end }}
 {{- if hasKey . "command" }}
-  command: {{ index . "command" }}
+  command: "{{ index . "command" }}"
 {{- end }}
 {{- if hasKey . "args" }}
   args:
