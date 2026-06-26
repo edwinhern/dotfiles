@@ -1,5 +1,5 @@
 lockfile_version: "1"
-generated_at: "2026-06-25T22:21:09.257158+00:00"
+generated_at: "2026-06-26T00:57:08.097409+00:00"
 apm_version: 0.21.0
 dependencies:
   - repo_url: JuliusBrussee/caveman
@@ -10,7 +10,7 @@ dependencies:
     content_hash: sha256:3e238a67ce11def6d73257cf8eabad78899df2909c57997e956be8e3e32943db
   - repo_url: anthropics/claude-plugins-official
     host: github.com
-    resolved_commit: a8237e1537e987a92c9f33e5cd650acbe175fd5e
+    resolved_commit: 6b93bc00d3753cacd3ad6f52a55c524813cd989e
     resolved_ref: main
     virtual_path: plugins/skill-creator
     is_virtual: true
