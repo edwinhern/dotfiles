@@ -5,6 +5,7 @@
 load '../../../test_helpers/load.bash'
 
 LOG_LIB="$DOTFILES_ROOT/home/.chezmoitemplates/lib/common/log.sh"
+PRELUDE="$DOTFILES_ROOT/home/.chezmoitemplates/lib/common/install-prelude.sh"
 LIB="$DOTFILES_ROOT/home/.chezmoitemplates/lib/install/vscode.sh"
 
 setup() {
@@ -23,7 +24,7 @@ CODE
 }
 
 @test "vscode_install_extensions_main: installs each extension with force" {
-  run bash -c "source '$LOG_LIB' && source '$LIB' && VSCODE_EXTENSIONS=('one.ext' 'two.ext') && vscode_install_extensions_main"
+  run bash -c "source '$LOG_LIB' && source '$PRELUDE' && source '$LIB' && VSCODE_EXTENSIONS=('one.ext' 'two.ext') && vscode_install_extensions_main"
 
   assert_success
   assert_line "[vscode] Installing VS Code extensions..."
@@ -34,10 +35,20 @@ CODE
 @test "vscode_install_extensions_main: warns but succeeds when an extension fails" {
   export CODE_FAIL_EXTENSION='bad.ext'
 
-  run bash -c "source '$LOG_LIB' && source '$LIB' && VSCODE_EXTENSIONS=('good.ext' 'bad.ext') && vscode_install_extensions_main"
+  run bash -c "source '$LOG_LIB' && source '$PRELUDE' && source '$LIB' && VSCODE_EXTENSIONS=('good.ext' 'bad.ext') && vscode_install_extensions_main"
 
   assert_success
   assert_line "warn: [vscode] 1 extension(s) failed to install:"
   assert_line "  - bad.ext"
   assert_line "[vscode] VS Code extensions installed."
+}
+
+@test "vscode_install_extensions_main: fails when the VS Code CLI is missing" {
+  rm -f "$BATS_TEST_TMPDIR/bin/code"
+  export PATH="$BATS_TEST_TMPDIR/bin:/usr/bin:/bin"
+
+  run bash -c "source '$LOG_LIB' && source '$PRELUDE' && source '$LIB' && VSCODE_EXTENSIONS=('one.ext') && vscode_install_extensions_main"
+
+  assert_failure 1
+  assert_line "error: [code] not found. Open VS Code and run: Shell Command: Install 'code' command in PATH"
 }

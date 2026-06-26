@@ -38,12 +38,15 @@ UV
   [ "$(<"$UV_ARGS_FILE")" = $'tool install --upgrade graphifyy\ntool install --upgrade tavily-cli' ]
 }
 
-@test "uv_tools_install_main: fails when uv tool install fails" {
+@test "uv_tools_install_main: warns but succeeds when a tool fails" {
   export UV_FAIL_TOOL='tavily-cli'
 
   run bash -c "source '$LOG_LIB' && source '$LIB' && UV_TOOLS=('graphifyy' 'tavily-cli') && uv_tools_install_main"
 
-  assert_failure 8
+  assert_success
   assert_line "[uv] Installing uv tools..."
+  assert_line "warn: [uv] 1 tool(s) failed to install:"
+  assert_line "  - tavily-cli"
+  assert_line "[uv] uv tools installed."
   [ "$(<"$UV_ARGS_FILE")" = $'tool install --upgrade graphifyy\ntool install --upgrade tavily-cli' ]
 }

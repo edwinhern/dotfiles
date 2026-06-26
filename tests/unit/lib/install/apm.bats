@@ -5,6 +5,7 @@
 load '../../../test_helpers/load.bash'
 
 LOG_LIB="$DOTFILES_ROOT/home/.chezmoitemplates/lib/common/log.sh"
+PRELUDE="$DOTFILES_ROOT/home/.chezmoitemplates/lib/common/install-prelude.sh"
 APM_LIB="$DOTFILES_ROOT/home/.chezmoitemplates/lib/install/apm.sh"
 
 setup() {
@@ -24,7 +25,7 @@ APM
 }
 
 @test "apm_install_main: runs apm install globally from ~/.apm" {
-  run bash -c "source '$LOG_LIB' && source '$APM_LIB' && apm_install_main"
+  run bash -c "source '$LOG_LIB' && source '$PRELUDE' && source '$APM_LIB' && apm_install_main"
 
   assert_success
   assert_line "[apm] Installing globally from ~/.apm/apm.yml (frozen)..."
@@ -36,7 +37,7 @@ APM
 @test "apm_install_main: warns and completes when apm install fails" {
   export APM_EXIT_CODE=7
 
-  run bash -c "source '$LOG_LIB' && source '$APM_LIB' && apm_install_main"
+  run bash -c "source '$LOG_LIB' && source '$PRELUDE' && source '$APM_LIB' && apm_install_main"
 
   assert_success
   assert_line --partial "warn: [apm] apm install --frozen exited non-zero"

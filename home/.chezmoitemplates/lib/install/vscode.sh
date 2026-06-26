@@ -9,20 +9,10 @@
 set -Eeuo pipefail
 
 #
-# @description Check if the VS Code CLI is installed.
-#
-function is_vscode_cli_installed() {
-  command -v code >/dev/null 2>&1
-}
-
-#
 # @description Install configured VS Code extensions.
 #
 function vscode_install_extensions_main() {
-  if ! is_vscode_cli_installed; then
-    log_warn "[vscode] VS Code CLI not found. Open VS Code and run: Shell Command: Install 'code' command in PATH"
-    return 0
-  fi
+  require_command code "Open VS Code and run: Shell Command: Install 'code' command in PATH" || return 1
 
   log_info "[vscode] Installing VS Code extensions..."
 
@@ -52,5 +42,11 @@ function main() {
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  # When run directly, pull in the shared libraries that chezmoi otherwise
+  # concatenates ahead of this file.
+  # shellcheck source=/dev/null
+  command -v log_info >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/log.sh"
+  # shellcheck source=/dev/null
+  command -v require_command >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/install-prelude.sh"
   main
 fi

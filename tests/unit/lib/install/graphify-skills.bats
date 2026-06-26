@@ -47,6 +47,17 @@ GRAPHIFY
   [ ! -s "$GRAPHIFY_ARGS_FILE" ]
 }
 
+@test "main: warns but succeeds when a platform fails" {
+  export GRAPHIFY_EXIT_CODE=5
+
+  run bash -c "source '$LOG_LIB' && source '$PRELUDE' && source '$LIB' && GRAPHIFY_PLATFORMS=('agents') && main"
+
+  assert_success
+  assert_line "warn: [graphify] 1 platform(s) failed to install:"
+  assert_line "  - agents"
+  assert_line "[graphify] Graphify agent skills installed."
+}
+
 @test "main: fails when graphify is missing" {
   rm -f "$BATS_TEST_TMPDIR/bin/graphify"
 

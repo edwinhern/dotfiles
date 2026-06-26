@@ -106,5 +106,9 @@ function main() {
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  # When run directly, pull in the log library that chezmoi otherwise
+  # concatenates ahead of this file.
+  # shellcheck source=/dev/null
+  command -v log_info >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/log.sh"
   main
 fi
