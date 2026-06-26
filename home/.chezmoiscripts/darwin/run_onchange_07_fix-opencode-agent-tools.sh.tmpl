@@ -3,5 +3,6 @@
 
 {{ if eq .chezmoi.os "darwin" }}
 {{ template "lib/common/log.sh" . }}
+{{ template "lib/common/install-prelude.sh" . }}
 {{ template "lib/install/opencode-agent-tools.sh" . }}
 {{ end }}

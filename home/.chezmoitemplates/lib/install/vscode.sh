@@ -8,10 +8,6 @@
 
 set -Eeuo pipefail
 
-if [ "${DOTFILES_DEBUG:-}" ]; then
-  set -x
-fi
-
 #
 # @description Check if the VS Code CLI is installed.
 #

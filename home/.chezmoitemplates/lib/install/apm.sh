@@ -8,10 +8,6 @@
 
 set -Eeuo pipefail
 
-if [ "${DOTFILES_DEBUG:-}" ]; then
-  set -x
-fi
-
 #
 # @description Install APM dependencies from `${HOME}/.apm/apm.yml`.
 #

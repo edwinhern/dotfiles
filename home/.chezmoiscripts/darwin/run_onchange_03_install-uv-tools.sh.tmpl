@@ -9,6 +9,7 @@
 
 {{ if and (eq .chezmoi.os "darwin") $hasTools }}
 {{ template "lib/common/log.sh" . }}
+{{ template "lib/common/install-prelude.sh" . }}
 UV_TOOLS=(
 {{ range $groups -}}
 {{ $tools := index $.uv.tools . -}}

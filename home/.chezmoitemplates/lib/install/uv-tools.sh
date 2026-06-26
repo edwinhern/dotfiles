@@ -8,17 +8,6 @@
 
 set -Eeuo pipefail
 
-if [ "${DOTFILES_DEBUG:-}" ]; then
-  set -x
-fi
-
-#
-# @description Check if uv is installed.
-#
-function is_uv_installed() {
-  command -v uv >/dev/null 2>&1
-}
-
 #
 # @description Install tools declared in UV_TOOLS.
 #
@@ -38,10 +27,7 @@ function uv_tools_install_main() {
 # @description Run the uv tool install flow.
 #
 function main() {
-  if ! is_uv_installed; then
-    log_error "[uv] uv not found. Ensure run_onchange_03_install-mise-tools ran successfully."
-    return 1
-  fi
+  require_command uv "Ensure run_onchange_03_install-mise-tools ran successfully." || return 1
 
   uv_tools_install_main
 }

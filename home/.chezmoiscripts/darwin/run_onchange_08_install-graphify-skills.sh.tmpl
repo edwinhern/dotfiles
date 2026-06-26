@@ -10,6 +10,7 @@
 
 {{ if and (eq .chezmoi.os "darwin") (gt (len $platforms) 0) }}
 {{ template "lib/common/log.sh" . }}
+{{ template "lib/common/install-prelude.sh" . }}
 GRAPHIFY_PLATFORMS=(
 {{ range $platforms -}}
   "{{ . }}"

@@ -8,25 +8,11 @@
 
 set -Eeuo pipefail
 
-if [ "${DOTFILES_DEBUG:-}" ]; then
-  set -x
-fi
-
-#
-# @description Check if Homebrew is installed.
-#
-function is_homebrew_installed() {
-  command -v brew >/dev/null 2>&1
-}
-
 #
 # @description Install packages from rendered Brewfile content.
 #
 function homebrew_bundle_main() {
-  if ! is_homebrew_installed; then
-    log_error "[homebrew] Homebrew not found. Ensure run_once_01_install-homebrew ran successfully."
-    return 1
-  fi
+  require_command brew "Ensure run_once_01_install-homebrew ran successfully." || return 1
 
   log_info "[homebrew] Updating Homebrew metadata..."
   brew update
