@@ -3,20 +3,20 @@
 # @brief Template rendering tests for shared agent instruction markdown.
 
 load '../test_helpers/load.bash'
+load '../test_helpers/templates.bash'
 
-SOURCE_DIR="$DOTFILES_ROOT/home"
 CLAUDE_TEMPLATE="$DOTFILES_ROOT/home/dot_claude/CLAUDE.md.tmpl"
 OPENCODE_TEMPLATE="$DOTFILES_ROOT/home/dot_config/opencode/AGENTS.md.tmpl"
 
 @test "agent instruction templates render shared markdown" {
-  run mise exec -- chezmoi execute-template --source "$SOURCE_DIR" <"$CLAUDE_TEMPLATE"
+  run render_chezmoi_template "$CLAUDE_TEMPLATE"
 
   assert_success
   assert_line --index 0 '# Claude Code Settings'
   assert_line --regexp '^### GitHub CLI$'
   assert_line 'Use `gh` CLI for all GitHub interactions. Never clone repositories to read code.'
 
-  run mise exec -- chezmoi execute-template --source "$SOURCE_DIR" <"$OPENCODE_TEMPLATE"
+  run render_chezmoi_template "$OPENCODE_TEMPLATE"
 
   assert_success
   assert_line --index 0 '# Claude Code Settings'
@@ -36,7 +36,7 @@ OPENCODE_TEMPLATE="$DOTFILES_ROOT/home/dot_config/opencode/AGENTS.md.tmpl"
 }
 
 @test "agent instruction templates render Graphify guidance" {
-  run mise exec -- chezmoi execute-template --source "$SOURCE_DIR" <"$CLAUDE_TEMPLATE"
+  run render_chezmoi_template "$CLAUDE_TEMPLATE"
 
   assert_success
   assert_line '## Graphify'
@@ -44,7 +44,7 @@ OPENCODE_TEMPLATE="$DOTFILES_ROOT/home/dot_config/opencode/AGENTS.md.tmpl"
   assert_line --partial 'graphify query'
   assert_line --partial 'GRAPH_REPORT.md'
 
-  run mise exec -- chezmoi execute-template --source "$SOURCE_DIR" <"$OPENCODE_TEMPLATE"
+  run render_chezmoi_template "$OPENCODE_TEMPLATE"
 
   assert_success
   assert_line '## Graphify'
