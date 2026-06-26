@@ -61,6 +61,7 @@
       "Bash(file:*)",
       "Bash(fzf:*)",
       "Bash(go:*)",
+      "Bash(graphify:*)",
       "Bash(grep:*)",
       "Bash(head:*)",
       "Bash(hostname)",
@@ -157,7 +158,7 @@
       "Read(**/*.pem)",
       "Read(**/*.key)"
     ],
-    "defaultMode": "plan"
+    "defaultMode": "acceptEdits"
   },
   "alwaysThinkingEnabled": true,
   "autoScrollEnabled": true,
