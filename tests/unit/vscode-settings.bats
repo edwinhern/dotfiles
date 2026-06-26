@@ -7,7 +7,6 @@ load '../test_helpers/load.bash'
 SOURCE_DIR="$DOTFILES_ROOT/home"
 SETTINGS_TEMPLATE="$DOTFILES_ROOT/home/Library/Application Support/Code/User/settings.json"
 PERSONAL_DATA='{"chezmoi":{"os":"darwin"},"personal":true,"work":false}'
-WORK_DATA='{"chezmoi":{"os":"darwin"},"personal":false,"work":true}'
 
 render_settings() {
   local data="$1"

@@ -5,8 +5,6 @@
 #
 # Line 1 (status):   model | effort | context bar | cost | 5h rate limit
 # Line 2 (location): dir | worktree | branch | agent
-#
-# shellcheck disable=SC2154  # most vars are assigned via the jq | eval block below
 
 input=$(cat)
 
@@ -43,13 +41,19 @@ make_bar() {
   pct=${1%.*}
   [ -z "$pct" ] && pct=0
   width=10
-  filled=$(( pct * width / 100 ))
+  filled=$((pct * width / 100))
   [ "$filled" -gt "$width" ] && filled=$width
   [ "$filled" -lt 0 ] && filled=0
   i=0
   bar=""
-  while [ "$i" -lt "$filled" ]; do bar="${bar}█"; i=$(( i + 1 )); done
-  while [ "$i" -lt "$width" ];  do bar="${bar}░"; i=$(( i + 1 )); done
+  while [ "$i" -lt "$filled" ]; do
+    bar="${bar}█"
+    i=$((i + 1))
+  done
+  while [ "$i" -lt "$width" ]; do
+    bar="${bar}░"
+    i=$((i + 1))
+  done
   printf '%s' "$bar"
 }
 
@@ -59,9 +63,12 @@ make_bar() {
 threshold_color() {
   pct=${1%.*}
   [ -z "$pct" ] && pct=0
-  if [ "$pct" -ge 90 ]; then printf '%s' "$RED"
-  elif [ "$pct" -ge 70 ]; then printf '%s' "$YELLOW"
-  else printf '%s' "$GREEN"
+  if [ "$pct" -ge 90 ]; then
+    printf '%s' "$RED"
+  elif [ "$pct" -ge 70 ]; then
+    printf '%s' "$YELLOW"
+  else
+    printf '%s' "$GREEN"
   fi
 }
 
@@ -71,8 +78,8 @@ threshold_color() {
 fmt_reset_time() {
   ts="$1"
   [ -z "$ts" ] && return
-  date -r "$ts" "+%-I:%M%p" 2>/dev/null \
-    || date -d "@$ts" "+%-I:%M%p" 2>/dev/null
+  date -r "$ts" "+%-I:%M%p" 2>/dev/null ||
+    date -d "@$ts" "+%-I:%M%p" 2>/dev/null
 }
 
 # @description Format one rate-limit block.
@@ -80,7 +87,9 @@ fmt_reset_time() {
 # @arg $2 string Reset Unix timestamp.
 # @arg $3 string Label (e.g., "5h", "7d").
 format_rate_limit() {
-  pct="$1"; reset_ts="$2"; label="$3"
+  pct="$1"
+  reset_ts="$2"
+  label="$3"
   [ -z "$pct" ] && return
   pct_int=${pct%.*}
   color=$(threshold_color "$pct_int")
@@ -99,8 +108,12 @@ format_rate_limit() {
 # @arg $2 string Segment to append.
 sep=" ${DIM}|${RST} "
 add_segment() {
-  base="$1"; seg="$2"
-  [ -z "$seg" ] && { printf '%s' "$base"; return; }
+  base="$1"
+  seg="$2"
+  [ -z "$seg" ] && {
+    printf '%s' "$base"
+    return
+  }
   if [ -z "$base" ]; then
     printf '%s' "$seg"
   else
@@ -112,11 +125,12 @@ add_segment() {
 line1=""
 
 # Model
+# shellcheck disable=SC2154  # assigned by the jq | eval block above
 line1=$(add_segment "$line1" "🤖 $model")
 
 # Effort (💪 emoji, suppressed when missing or "default")
-[ -n "$effort" ] && [ "$effort" != "default" ] \
-  && line1=$(add_segment "$line1" "💪 $effort")
+[ -n "$effort" ] && [ "$effort" != "default" ] &&
+  line1=$(add_segment "$line1" "💪 $effort")
 
 # Context window — show used%, color-coded by threshold (no bar; the number is the signal)
 if [ -n "$used" ]; then
@@ -125,7 +139,7 @@ if [ -n "$used" ]; then
   line1=$(add_segment "$line1" "🧠 ${color}${used_int}%${RST}")
 elif [ -n "$remaining" ]; then
   rem_int=${remaining%.*}
-  used_int=$(( 100 - rem_int ))
+  used_int=$((100 - rem_int))
   color=$(threshold_color "$used_int")
   line1=$(add_segment "$line1" "🧠 ${color}${used_int}%${RST}")
 fi
@@ -137,6 +151,7 @@ if [ -n "$total_cost" ]; then
 fi
 
 # 5-hour rate limit
+# shellcheck disable=SC2154  # assigned by the jq | eval block above
 rl_5h=$(format_rate_limit "$rl_5h_pct" "$rl_5h_reset" "5h")
 [ -n "$rl_5h" ] && line1=$(add_segment "$line1" "⏱️  $rl_5h")
 
@@ -161,7 +176,7 @@ fi
 if [ -n "$current_dir" ]; then
   git_str=$(
     cd "$current_dir" 2>/dev/null || exit 0
-    git rev-parse --git-dir > /dev/null 2>&1 || exit 0
+    git rev-parse --git-dir >/dev/null 2>&1 || exit 0
     b=$(git branch --show-current 2>/dev/null)
     [ -z "$b" ] && b=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
     s=$(git diff --cached --numstat 2>/dev/null | wc -l | tr -d ' ')
