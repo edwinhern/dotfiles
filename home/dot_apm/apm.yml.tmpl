@@ -20,11 +20,11 @@ dependencies:
 {{- with .skills }}
       skills:
 {{- range . }}
-        - {{ . }}
+        - "{{ . }}"
 {{- end }}
 {{- end }}
 {{- else }}
-    - {{ . }}
+    - "{{ . }}"
 {{- end }}
 {{ end }}
 {{ end -}}

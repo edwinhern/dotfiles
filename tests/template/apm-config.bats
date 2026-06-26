@@ -19,9 +19,9 @@ render_apm_template() {
   run render_apm_template "$PERSONAL_DATA"
 
   assert_success
-  assert_line '    - name: grep'
+  assert_line '    - name: "grep"'
   assert_line '      registry: false'
-  assert_line '      url: https://mcp.grep.app'
+  assert_line '      url: "https://mcp.grep.app"'
   refute_line --regexp 'name: figma'
   refute_line --regexp 'name: jira'
 }
@@ -41,15 +41,15 @@ render_apm_template() {
   run render_apm_template "$PERSONAL_DATA"
 
   assert_success
-  assert_line --partial '    - obra/superpowers'
-  assert_line --partial '    - JuliusBrussee/caveman'
-  assert_line --partial '    - anthropics/claude-plugins-official/plugins/skill-creator'
-  assert_line --partial '    - schpet/linear-cli'
-  assert_line --partial '    - tavily-ai/skills'
+  assert_line --partial '    - "obra/superpowers'
+  assert_line --partial '    - "JuliusBrussee/caveman'
+  assert_line --partial '    - "anthropics/claude-plugins-official/plugins/skill-creator'
+  assert_line --partial '    - "schpet/linear-cli'
+  assert_line --partial '    - "tavily-ai/skills'
   assert_line --partial '    - git: JuliusBrussee/skills'
   assert_line '      skills:'
-  assert_line '        - grill-me'
-  assert_line '        - junior-to-senior'
+  assert_line '        - "grill-me"'
+  assert_line '        - "junior-to-senior"'
   refute_line --partial 'interface-kit'
   refute_line --partial 'loop-factory'
   refute_line --partial 'context-canary'
@@ -59,11 +59,11 @@ render_apm_template() {
   run render_apm_template "$WORK_DATA"
 
   assert_success
-  assert_line '    - name: grep'
-  assert_line '    - name: figma'
-  assert_line '      url: https://mcp.figma.com/mcp'
-  assert_line '    - name: jira'
-  assert_line '      url: https://mcp.atlassian.com/v1/mcp'
+  assert_line '    - name: "grep"'
+  assert_line '    - name: "figma"'
+  assert_line '      url: "https://mcp.figma.com/mcp"'
+  assert_line '    - name: "jira"'
+  assert_line '      url: "https://mcp.atlassian.com/v1/mcp"'
 }
 
 @test "work APM config renders work target" {
@@ -81,9 +81,9 @@ render_apm_template() {
   run render_apm_template "$WORK_DATA"
 
   assert_success
-  assert_line --partial '    - obra/superpowers'
-  assert_line --partial '    - JuliusBrussee/caveman'
-  assert_line --partial '    - anthropics/claude-plugins-official/plugins/skill-creator'
+  assert_line --partial '    - "obra/superpowers'
+  assert_line --partial '    - "JuliusBrussee/caveman'
+  assert_line --partial '    - "anthropics/claude-plugins-official/plugins/skill-creator'
   refute_line --partial '    - schpet/linear-cli'
   refute_line --partial '    - tavily-ai/skills'
   refute_line --partial 'JuliusBrussee/skills'
