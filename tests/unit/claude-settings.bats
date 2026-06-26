@@ -9,7 +9,7 @@ SETTINGS="$DOTFILES_ROOT/home/dot_claude/settings.json"
 @test "claude settings use current model aliases" {
   settings_content="$(<"$SETTINGS")"
 
-  [[ "$settings_content" == *'"model": "opusplan"'* ]]
+  [[ "$settings_content" == *'"model": "opusplan[1m]"'* ]]
   [[ "$settings_content" == *'"CLAUDE_CODE_SUBAGENT_MODEL": "inherit"'* ]]
   [[ "$settings_content" != *'ANTHROPIC_DEFAULT_OPUS_MODEL'* ]]
   [[ "$settings_content" != *'ANTHROPIC_DEFAULT_SONNET_MODEL'* ]]

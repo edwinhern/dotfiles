@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "model": "opusplan",
+  "model": "opusplan[1m]",
   "cleanupPeriodDays": 365,
   "env": {
     "BASH_DEFAULT_TIMEOUT_MS": "300000",
@@ -25,6 +25,7 @@
   "permissions": {
     "allow": [
       "Bash(apm:*)",
+      "Bash(awk:*)",
       "Bash(bat:*)",
       "Bash(bats:*)",
       "Bash(brew:*)",
@@ -47,6 +48,7 @@
       "Bash(cut:*)",
       "Bash(date)",
       "Bash(date:*)",
+      "Bash(delta:*)",
       "Bash(df:*)",
       "Bash(diff:*)",
       "Bash(docker-compose:*)",
@@ -105,6 +107,7 @@
       "Bash(wc:*)",
       "Bash(wget:*)",
       "Bash(which:*)",
+      "Bash(whoami)",
       "Bash(wrangler:*)",
       "Bash(xargs:*)",
       "mcp__ide__getDiagnostics",
