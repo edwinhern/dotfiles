@@ -1,6 +1,4 @@
-{{- $groups := list "shared" -}}
-{{- if .personal }}{{ $groups = append $groups "personal" }}{{ end -}}
-{{- if .work     }}{{ $groups = append $groups "work"     }}{{ end -}}
+{{ $groups := includeTemplate "lib/chezmoi/active-groups.json.tmpl" . | fromJson -}}
 name: development
 version: 1.0.0
 description: APM project for development

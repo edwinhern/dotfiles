@@ -1,0 +1,11 @@
+{{- $ctx := .ctx -}}
+{{- $valuesByGroup := .valuesByGroup -}}
+{{- $groups := includeTemplate "lib/chezmoi/active-groups.json.tmpl" $ctx | fromJson -}}
+{{- $values := list -}}
+{{- range $groups -}}
+{{- $groupValues := index $valuesByGroup . -}}
+{{- range $groupValues -}}
+{{- $values = append $values . -}}
+{{- end -}}
+{{- end -}}
+{{- $values | toJson -}}
