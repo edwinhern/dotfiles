@@ -3,4 +3,3 @@
 -- Add any additional options here
 
 vim.opt.clipboard = "unnamedplus"
-vim.o.autoread = true

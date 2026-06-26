@@ -2,6 +2,7 @@ return {
   {
     "nickjvandyke/opencode.nvim",
     version = "*",
+    lazy = false,
     dependencies = {
       {
         "folke/snacks.nvim",
@@ -69,6 +70,8 @@ return {
           server = false,
         },
       }
+
+      vim.o.autoread = true
     end,
   },
 }
