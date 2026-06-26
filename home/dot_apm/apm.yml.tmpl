@@ -1,4 +1,4 @@
-{{- $groups := includeTemplate "lib/chezmoi/active-groups.json.tmpl" . | fromJson -}}
+{{ $groups := includeTemplate "lib/chezmoi/active-groups.json.tmpl" . | fromJson -}}
 name: development
 version: 1.0.0
 description: APM project for development

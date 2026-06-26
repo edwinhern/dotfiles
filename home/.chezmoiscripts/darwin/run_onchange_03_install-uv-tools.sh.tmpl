@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # uv tools data hash: {{ include ".chezmoidata/uv.yaml" | sha256sum }}
-{{- $groups := includeTemplate "lib/chezmoi/active-groups.json.tmpl" . | fromJson -}}
+{{ $groups := includeTemplate "lib/chezmoi/active-groups.json.tmpl" . | fromJson -}}
 {{- $hasTools := false -}}
 {{- range $groups -}}
 {{- $tools := index $.uv.tools . -}}

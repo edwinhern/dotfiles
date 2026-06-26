@@ -12,7 +12,7 @@ DARWIN_DATA='{"chezmoi":{"os":"darwin"},"personal":true,"work":false}'
 WORK_DATA='{"chezmoi":{"os":"darwin"},"personal":false,"work":true}'
 SHARED_DATA='{"chezmoi":{"os":"darwin"},"personal":false,"work":false}'
 
-APM_VALUES_BY_GROUP='{"shared":[],"personal":["claude","agent-skills"],"work":["copilot"]}'
+APM_VALUES_BY_GROUP='{"shared":["graphify"],"personal":["claude","agent-skills"],"work":["copilot"]}'
 
 render_helper() {
   local template="$1"
@@ -49,7 +49,7 @@ render_helper() {
   run render_helper "$ACTIVE_GROUP_VALUES_TMPL" "$data"
 
   assert_success
-  assert_output '["claude","agent-skills"]'
+  assert_output '["graphify","claude","agent-skills"]'
 }
 
 @test "active-group-values merges shared and work apm targets for work context" {
@@ -59,7 +59,7 @@ render_helper() {
   run render_helper "$ACTIVE_GROUP_VALUES_TMPL" "$data"
 
   assert_success
-  assert_output '["copilot"]'
+  assert_output '["graphify","copilot"]'
 }
 
 @test "active-group-values returns only shared apm targets when neither personal nor work" {
@@ -69,5 +69,5 @@ render_helper() {
   run render_helper "$ACTIVE_GROUP_VALUES_TMPL" "$data"
 
   assert_success
-  assert_output '[]'
+  assert_output '["graphify"]'
 }
