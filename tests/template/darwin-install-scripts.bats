@@ -3,29 +3,16 @@
 # @brief Template rendering tests for Darwin chezmoi install scripts.
 
 load '../test_helpers/load.bash'
+load '../test_helpers/templates.bash'
 
-SOURCE_DIR="$DOTFILES_ROOT/home"
-DARWIN_DATA='{"chezmoi":{"os":"darwin"},"personal":true,"work":false}'
-WORK_DATA='{"chezmoi":{"os":"darwin"},"personal":false,"work":true}'
 EMPTY_APM_DATA='{"chezmoi":{"os":"darwin"},"personal":true,"work":false,"apm":{"targets":{"shared":[],"personal":[],"work":[]}}}'
 PACKAGE_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_02_install-packages.sh.tmpl"
 UV_TOOLS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_03_install-uv-tools.sh.tmpl"
 GRAPHIFY_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_install-graphify-skills.sh.tmpl"
 
-render_template() {
-  mise exec -- chezmoi execute-template --source "$SOURCE_DIR" --override-data "$DARWIN_DATA" <"$1"
-}
-
-render_template_with_data() {
-  local template="$1"
-  local data="$2"
-
-  mise exec -- chezmoi execute-template --source "$SOURCE_DIR" --override-data "$data" <"$template"
-}
-
 @test "darwin install script templates render with bash shebang" {
   for template in "$DOTFILES_ROOT"/home/.chezmoiscripts/darwin/*.tmpl; do
-    run render_template "$template"
+    run render_chezmoi_template "$template" "$DARWIN_DATA"
     assert_success
     [ "${lines[0]}" = "#!/usr/bin/env bash" ]
   done
@@ -45,13 +32,13 @@ render_template_with_data() {
 
 @test "rendered darwin install scripts are syntactically valid bash" {
   for template in "$DOTFILES_ROOT"/home/.chezmoiscripts/darwin/*.tmpl; do
-    rendered="$(render_template "$template")"
+    rendered="$(render_chezmoi_template "$template" "$DARWIN_DATA")"
     printf '%s\n' "$rendered" | bash -n
   done
 }
 
 @test "personal package template keeps personal tools and omits work apps" {
-  run render_template_with_data "$PACKAGE_TEMPLATE" "$DARWIN_DATA"
+  run render_chezmoi_template "$PACKAGE_TEMPLATE" "$DARWIN_DATA"
 
   assert_success
   assert_line 'brew "mas"'
@@ -65,7 +52,7 @@ render_template_with_data() {
 }
 
 @test "work package template renders approved work apps" {
-  run render_template_with_data "$PACKAGE_TEMPLATE" "$WORK_DATA"
+  run render_chezmoi_template "$PACKAGE_TEMPLATE" "$WORK_DATA"
 
   assert_success
   assert_line 'brew "mas"'
@@ -83,7 +70,7 @@ render_template_with_data() {
 }
 
 @test "personal uv tools template renders Graphify and Tavily CLI tools" {
-  run render_template_with_data "$UV_TOOLS_TEMPLATE" "$DARWIN_DATA"
+  run render_chezmoi_template "$UV_TOOLS_TEMPLATE" "$DARWIN_DATA"
 
   assert_success
   assert_line 'UV_TOOLS=('
@@ -93,7 +80,7 @@ render_template_with_data() {
 }
 
 @test "work uv tools template has no personal uv tools" {
-  run render_template_with_data "$UV_TOOLS_TEMPLATE" "$WORK_DATA"
+  run render_chezmoi_template "$UV_TOOLS_TEMPLATE" "$WORK_DATA"
 
   assert_success
   refute_line --partial '"graphifyy"'
@@ -103,7 +90,7 @@ render_template_with_data() {
 }
 
 @test "personal Graphify template renders agent and Claude platforms" {
-  run render_template_with_data "$GRAPHIFY_TEMPLATE" "$DARWIN_DATA"
+  run render_chezmoi_template "$GRAPHIFY_TEMPLATE" "$DARWIN_DATA"
 
   assert_success
   assert_line 'GRAPHIFY_PLATFORMS=('
@@ -113,7 +100,7 @@ render_template_with_data() {
 }
 
 @test "work Graphify template renders no personal platforms" {
-  run render_template_with_data "$GRAPHIFY_TEMPLATE" "$WORK_DATA"
+  run render_chezmoi_template "$GRAPHIFY_TEMPLATE" "$WORK_DATA"
 
   assert_success
   refute_line --partial '"agents"'
@@ -123,7 +110,7 @@ render_template_with_data() {
 }
 
 @test "empty APM target groups render no Graphify commands" {
-  run render_template_with_data "$GRAPHIFY_TEMPLATE" "$EMPTY_APM_DATA"
+  run render_chezmoi_template "$GRAPHIFY_TEMPLATE" "$EMPTY_APM_DATA"
 
   assert_success
   refute_line 'GRAPHIFY_PLATFORMS=('

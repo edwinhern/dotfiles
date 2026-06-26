@@ -3,20 +3,12 @@
 # @brief Template rendering tests for home/dot_apm/apm.yml.tmpl.
 
 load '../test_helpers/load.bash'
+load '../test_helpers/templates.bash'
 
-SOURCE_DIR="$DOTFILES_ROOT/home"
 APM_TEMPLATE="$DOTFILES_ROOT/home/dot_apm/apm.yml.tmpl"
-PERSONAL_DATA='{"chezmoi":{"os":"darwin"},"personal":true,"work":false}'
-WORK_DATA='{"chezmoi":{"os":"darwin"},"personal":false,"work":true}'
-
-render_apm_template() {
-  local data="$1"
-
-  mise exec -- chezmoi execute-template --source "$SOURCE_DIR" --override-data "$data" <"$APM_TEMPLATE"
-}
 
 @test "personal APM config renders only shared MCP servers" {
-  run render_apm_template "$PERSONAL_DATA"
+  run render_chezmoi_template "$APM_TEMPLATE" "$PERSONAL_DATA"
 
   assert_success
   assert_line '    - name: "grep"'
@@ -27,7 +19,7 @@ render_apm_template() {
 }
 
 @test "personal APM config renders personal target" {
-  run render_apm_template "$PERSONAL_DATA"
+  run render_chezmoi_template "$APM_TEMPLATE" "$PERSONAL_DATA"
 
   assert_success
   assert_line '  - claude'
@@ -38,7 +30,7 @@ render_apm_template() {
 }
 
 @test "personal APM config renders shared and personal APM packages" {
-  run render_apm_template "$PERSONAL_DATA"
+  run render_chezmoi_template "$APM_TEMPLATE" "$PERSONAL_DATA"
 
   assert_success
   assert_line --partial '    - "obra/superpowers'
@@ -56,7 +48,7 @@ render_apm_template() {
 }
 
 @test "work APM config renders Figma and Jira MCP servers" {
-  run render_apm_template "$WORK_DATA"
+  run render_chezmoi_template "$APM_TEMPLATE" "$WORK_DATA"
 
   assert_success
   assert_line '    - name: "grep"'
@@ -67,7 +59,7 @@ render_apm_template() {
 }
 
 @test "work APM config renders work target" {
-  run render_apm_template "$WORK_DATA"
+  run render_chezmoi_template "$APM_TEMPLATE" "$WORK_DATA"
 
   assert_success
   assert_line '  - copilot'
@@ -78,7 +70,7 @@ render_apm_template() {
 }
 
 @test "work APM config renders shared APM packages without personal packages" {
-  run render_apm_template "$WORK_DATA"
+  run render_chezmoi_template "$APM_TEMPLATE" "$WORK_DATA"
 
   assert_success
   assert_line --partial '    - "obra/superpowers'

@@ -10,12 +10,8 @@ load '../test_helpers/load.bash'
 SCRIPT="$DOTFILES_ROOT/.github/actions/write-chezmoi-config/write-chezmoi-config.sh"
 
 setup() {
-  TMPHOME="$(mktemp -d)"
-  export HOME="$TMPHOME"
-}
-
-teardown() {
-  rm -rf "$TMPHOME"
+  export HOME="$BATS_TEST_TMPDIR/home"
+  mkdir -p "$HOME"
 }
 
 @test "personal context: exits success and writes chezmoi.yaml" {
