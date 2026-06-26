@@ -14,11 +14,20 @@ set -Eeuo pipefail
 function uv_tools_install_main() {
   log_info "[uv] Installing uv tools..."
 
+  local failed=()
   local tool
   for tool in "${UV_TOOLS[@]-}"; do
     [[ -z "${tool}" ]] && continue
-    uv tool install --upgrade "${tool}"
+
+    if ! uv tool install --upgrade "${tool}"; then
+      failed+=("${tool}")
+    fi
   done
+
+  if ((${#failed[@]} > 0)); then
+    log_warn "[uv] ${#failed[@]} tool(s) failed to install:"
+    printf '  - %s\n' "${failed[@]}" >&2
+  fi
 
   log_info "[uv] uv tools installed."
 }
@@ -33,5 +42,11 @@ function main() {
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  # When run directly, pull in the shared libraries that chezmoi otherwise
+  # concatenates ahead of this file.
+  # shellcheck source=/dev/null
+  command -v log_info >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/log.sh"
+  # shellcheck source=/dev/null
+  command -v require_command >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/install-prelude.sh"
   main
 fi

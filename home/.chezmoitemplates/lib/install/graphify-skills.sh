@@ -14,6 +14,7 @@ set -Eeuo pipefail
 function graphify_skills_install_main() {
   local has_platform=0
   local platform
+  local failed=()
 
   for platform in "${GRAPHIFY_PLATFORMS[@]-}"; do
     [[ -z "${platform}" ]] && continue
@@ -32,8 +33,16 @@ function graphify_skills_install_main() {
 
   for platform in "${GRAPHIFY_PLATFORMS[@]-}"; do
     [[ -z "${platform}" ]] && continue
-    graphify install --platform "${platform}"
+
+    if ! graphify install --platform "${platform}"; then
+      failed+=("${platform}")
+    fi
   done
+
+  if ((${#failed[@]} > 0)); then
+    log_warn "[graphify] ${#failed[@]} platform(s) failed to install:"
+    printf '  - %s\n' "${failed[@]}" >&2
+  fi
 
   log_info "[graphify] Graphify agent skills installed."
 }
@@ -46,5 +55,11 @@ function main() {
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  # When run directly, pull in the shared libraries that chezmoi otherwise
+  # concatenates ahead of this file.
+  # shellcheck source=/dev/null
+  command -v log_info >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/log.sh"
+  # shellcheck source=/dev/null
+  command -v require_command >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/install-prelude.sh"
   main
 fi

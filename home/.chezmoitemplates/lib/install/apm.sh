@@ -12,6 +12,8 @@ set -Eeuo pipefail
 # @description Install APM dependencies from `${HOME}/.apm/apm.yml`.
 #
 function apm_install_main() {
+  require_command apm "Ensure run_onchange_03_install-mise-tools ran successfully." || return 1
+
   log_info "[apm] Installing globally from ~/.apm/apm.yml (frozen)..."
   cd "${HOME}/.apm" || {
     log_error "[apm] ~/.apm not found; run 'chezmoi apply' to materialize it."
@@ -31,5 +33,11 @@ function main() {
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  # When run directly, pull in the shared libraries that chezmoi otherwise
+  # concatenates ahead of this file.
+  # shellcheck source=/dev/null
+  command -v log_info >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/log.sh"
+  # shellcheck source=/dev/null
+  command -v require_command >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/install-prelude.sh"
   main
 fi

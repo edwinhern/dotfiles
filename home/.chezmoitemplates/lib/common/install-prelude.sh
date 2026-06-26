@@ -8,8 +8,12 @@
 #   scripts via chezmoi template rendering, after lib/common/log.sh and before
 #   the install library.
 #
-#   Error-handling convention:
+#   Error-handling conventions for install libraries:
 #     Missing prerequisite tool: call require_command and return on failure.
+#     Per-item install loop: keep going on failure, then warn with a summary.
+#     Single critical command: let it fail the script.
+#     Standalone run: the self-exec guard sources log.sh and this prelude when
+#                     they are not already defined.
 
 if [ "${DOTFILES_DEBUG:-}" ]; then
   set -x
