@@ -11,8 +11,10 @@ ACTIVE_GROUP_VALUES_TMPL="$DOTFILES_ROOT/home/.chezmoitemplates/lib/chezmoi/acti
 DARWIN_DATA='{"chezmoi":{"os":"darwin"},"personal":true,"work":false}'
 WORK_DATA='{"chezmoi":{"os":"darwin"},"personal":false,"work":true}'
 SHARED_DATA='{"chezmoi":{"os":"darwin"},"personal":false,"work":false}'
+BOTH_DATA='{"chezmoi":{"os":"darwin"},"personal":true,"work":true}'
 
 APM_VALUES_BY_GROUP='{"shared":["graphify"],"personal":["claude","agent-skills"],"work":["copilot"]}'
+APM_VALUES_SPARSE='{"shared":["graphify"]}'
 
 render_helper() {
   local template="$1"
@@ -65,6 +67,23 @@ render_helper() {
 @test "active-group-values returns only shared apm targets when neither personal nor work" {
   local data
   data=$(printf '{"ctx":{"personal":false,"work":false},"valuesByGroup":%s}' "$APM_VALUES_BY_GROUP")
+
+  run render_helper "$ACTIVE_GROUP_VALUES_TMPL" "$data"
+
+  assert_success
+  assert_output '["graphify"]'
+}
+
+@test "active-groups returns shared, personal, and work when both are true" {
+  run render_helper "$ACTIVE_GROUPS_TMPL" "$BOTH_DATA"
+
+  assert_success
+  assert_output '["shared","personal","work"]'
+}
+
+@test "active-group-values silently skips groups absent from valuesByGroup" {
+  local data
+  data=$(printf '{"ctx":{"personal":true,"work":false},"valuesByGroup":%s}' "$APM_VALUES_SPARSE")
 
   run render_helper "$ACTIVE_GROUP_VALUES_TMPL" "$data"
 
