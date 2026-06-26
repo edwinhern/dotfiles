@@ -14,10 +14,6 @@
 
 set -Eeuo pipefail
 
-if [ "${DOTFILES_DEBUG:-}" ]; then
-  set -x
-fi
-
 #
 # @description Rewrite one markdown file's frontmatter `tools:` array
 #   (if any) into opencode's expected map form. Writes back in place.

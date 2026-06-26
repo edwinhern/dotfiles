@@ -8,17 +8,6 @@
 
 set -Eeuo pipefail
 
-if [ "${DOTFILES_DEBUG:-}" ]; then
-  set -x
-fi
-
-#
-# @description Check if mise is installed.
-#
-function is_mise_installed() {
-  command -v mise >/dev/null 2>&1
-}
-
 #
 # @description Install tools declared in mise config.
 #
@@ -32,10 +21,7 @@ function mise_install_main() {
 # @description Run the mise install flow.
 #
 function main() {
-  if ! is_mise_installed; then
-    log_error "[mise] mise not found. Ensure run_onchange_02_install-packages ran successfully."
-    return 1
-  fi
+  require_command mise "Ensure run_onchange_02_install-packages ran successfully." || return 1
 
   mise_install_main
 }

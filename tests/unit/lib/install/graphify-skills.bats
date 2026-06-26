@@ -5,6 +5,7 @@
 load '../../../test_helpers/load.bash'
 
 LOG_LIB="$DOTFILES_ROOT/home/.chezmoitemplates/lib/common/log.sh"
+PRELUDE="$DOTFILES_ROOT/home/.chezmoitemplates/lib/common/install-prelude.sh"
 LIB="$DOTFILES_ROOT/home/.chezmoitemplates/lib/install/graphify-skills.sh"
 
 setup() {
@@ -21,7 +22,7 @@ GRAPHIFY
 }
 
 @test "main: installs each Graphify platform" {
-  run bash -c "source '$LOG_LIB' && source '$LIB' && GRAPHIFY_PLATFORMS=('agents' 'claude') && main"
+  run bash -c "source '$LOG_LIB' && source '$PRELUDE' && source '$LIB' && GRAPHIFY_PLATFORMS=('agents' 'claude') && main"
 
   assert_success
   assert_line "[graphify] Installing Graphify agent skills..."
@@ -30,7 +31,7 @@ GRAPHIFY
 }
 
 @test "main: skips empty platform entries" {
-  run bash -c "source '$LOG_LIB' && source '$LIB' && GRAPHIFY_PLATFORMS=('agents' '' 'claude') && main"
+  run bash -c "source '$LOG_LIB' && source '$PRELUDE' && source '$LIB' && GRAPHIFY_PLATFORMS=('agents' '' 'claude') && main"
 
   assert_success
   [ "$(<"$GRAPHIFY_ARGS_FILE")" = $'install --platform agents\ninstall --platform claude' ]
@@ -39,7 +40,7 @@ GRAPHIFY
 @test "main: exits cleanly with no Graphify platforms" {
   rm -f "$BATS_TEST_TMPDIR/bin/graphify"
 
-  run bash -c "source '$LOG_LIB' && source '$LIB' && GRAPHIFY_PLATFORMS=() && main"
+  run bash -c "source '$LOG_LIB' && source '$PRELUDE' && source '$LIB' && GRAPHIFY_PLATFORMS=() && main"
 
   assert_success
   assert_line "[graphify] No Graphify platforms to install."
@@ -49,8 +50,8 @@ GRAPHIFY
 @test "main: fails when graphify is missing" {
   rm -f "$BATS_TEST_TMPDIR/bin/graphify"
 
-  run bash -c "source '$LOG_LIB' && source '$LIB' && GRAPHIFY_PLATFORMS=('agents') && main"
+  run bash -c "source '$LOG_LIB' && source '$PRELUDE' && source '$LIB' && GRAPHIFY_PLATFORMS=('agents') && main"
 
   assert_failure 1
-  assert_line "error: [graphify] graphify not found. Ensure run_onchange_03_install-uv-tools ran successfully."
+  assert_line "error: [graphify] not found. Ensure run_onchange_03_install-uv-tools ran successfully."
 }

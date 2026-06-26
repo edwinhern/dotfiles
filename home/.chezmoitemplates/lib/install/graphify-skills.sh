@@ -8,17 +8,6 @@
 
 set -Eeuo pipefail
 
-if [ "${DOTFILES_DEBUG:-}" ]; then
-  set -x
-fi
-
-#
-# @description Check if the Graphify CLI is installed.
-#
-function is_graphify_installed() {
-  command -v graphify >/dev/null 2>&1
-}
-
 #
 # @description Install Graphify skills for selected platforms.
 #
@@ -37,10 +26,7 @@ function graphify_skills_install_main() {
     return 0
   fi
 
-  if ! is_graphify_installed; then
-    log_error "[graphify] graphify not found. Ensure run_onchange_03_install-uv-tools ran successfully."
-    return 1
-  fi
+  require_command graphify "Ensure run_onchange_03_install-uv-tools ran successfully." || return 1
 
   log_info "[graphify] Installing Graphify agent skills..."
 

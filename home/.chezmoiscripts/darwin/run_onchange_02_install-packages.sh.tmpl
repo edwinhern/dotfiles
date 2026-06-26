@@ -4,6 +4,7 @@
 
 {{ if eq .chezmoi.os "darwin" }}
 {{ template "lib/common/log.sh" . }}
+{{ template "lib/common/install-prelude.sh" . }}
 HOMEBREW_BUNDLE_CONTENT=$(cat <<'BREWFILE'
 {{ range $groups }}# {{ . }}
 {{- $g := index $.packages.darwin.homebrew . }}

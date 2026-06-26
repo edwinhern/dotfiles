@@ -30,6 +30,18 @@ GRAPHIFY_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_in
   assert_file_contains "$GRAPHIFY_TEMPLATE" '{{ template "lib/install/graphify-skills.sh" . }}'
 }
 
+@test "darwin install script templates inject the install prelude" {
+  local prelude='{{ template "lib/common/install-prelude.sh" . }}'
+  assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_once_01_install-homebrew.sh.tmpl" "$prelude"
+  assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_02_install-packages.sh.tmpl" "$prelude"
+  assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_03_install-mise-tools.sh.tmpl" "$prelude"
+  assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_03_install-uv-tools.sh.tmpl" "$prelude"
+  assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_04_install-vscode-extensions.sh.tmpl" "$prelude"
+  assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_06_install-apm.sh.tmpl" "$prelude"
+  assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_07_fix-opencode-agent-tools.sh.tmpl" "$prelude"
+  assert_file_contains "$GRAPHIFY_TEMPLATE" "$prelude"
+}
+
 @test "rendered darwin install scripts are syntactically valid bash" {
   for template in "$DOTFILES_ROOT"/home/.chezmoiscripts/darwin/*.tmpl; do
     rendered="$(render_chezmoi_template "$template" "$DARWIN_DATA")"
