@@ -2,15 +2,11 @@
 # @file run_onchange_08_install-graphify-skills.sh
 # @brief Install Graphify agent skills.
 # @description APM data hash: {{ include ".chezmoidata/apm.yaml" | sha256sum }}
+{{- $activeTargets := includeTemplate "lib/chezmoi/active-group-values.json.tmpl" (dict "ctx" . "valuesByGroup" .apm.targets) | fromJson -}}
 {{- $platforms := list -}}
-{{- if .personal -}}
-{{- range (index .apm.targets "shared") -}}
+{{- range $activeTargets -}}
 {{- if eq . "agent-skills" }}{{ $platforms = append $platforms "agents" }}{{- else if eq . "claude" }}{{ $platforms = append $platforms "claude" }}{{- end -}}
 {{- end -}}
-{{- range (index .apm.targets "personal") -}}
-{{- if eq . "agent-skills" }}{{ $platforms = append $platforms "agents" }}{{- else if eq . "claude" }}{{ $platforms = append $platforms "claude" }}{{- end -}}
-{{- end -}}
-{{- end }}
 
 {{ if and (eq .chezmoi.os "darwin") (gt (len $platforms) 0) }}
 {{ template "lib/common/log.sh" . }}

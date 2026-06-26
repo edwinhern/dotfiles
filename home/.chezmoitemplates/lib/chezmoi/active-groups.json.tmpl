@@ -1,0 +1,4 @@
+{{- $groups := list "shared" -}}
+{{- if .personal }}{{ $groups = append $groups "personal" }}{{ end -}}
+{{- if .work }}{{ $groups = append $groups "work" }}{{ end -}}
+{{- $groups | toJson -}}
