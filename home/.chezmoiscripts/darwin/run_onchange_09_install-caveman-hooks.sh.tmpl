@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# @file run_onchange_09_install-caveman-hooks.sh
+# @brief Install the caveman persistent-mode hook runtime.
+# @description APM data hash: {{ include ".chezmoidata/apm.yaml" | sha256sum }}
+{{- $activeTargets := includeTemplate "lib/chezmoi/active-group-values.json.tmpl" (dict "ctx" . "valuesByGroup" .apm.targets) | fromJson -}}
+{{- $claudeActive := false -}}
+{{- range $activeTargets -}}
+{{- if eq . "claude" }}{{ $claudeActive = true }}{{- end -}}
+{{- end -}}
+
+{{ if and (eq .chezmoi.os "darwin") $claudeActive }}
+{{ template "lib/common/log.sh" . }}
+{{ template "lib/common/install-prelude.sh" . }}
+{{ template "lib/install/caveman-hooks.sh" . }}
+{{ end }}
