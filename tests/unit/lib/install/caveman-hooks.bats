@@ -41,6 +41,16 @@ run_lib() {
   done
 }
 
+@test "main: mirrors the full runtime into the apm nested hook path" {
+  run_lib
+
+  assert_success
+  local f
+  for f in "${RUNTIME_FILES[@]}"; do
+    assert_file_exist "$CAVEMAN_HOOK_DEST/caveman/src/hooks/$f"
+  done
+}
+
 @test "main: warns and succeeds when source dir is absent" {
   rm -rf "$CAVEMAN_HOOK_SOURCE"
 

@@ -14,6 +14,10 @@ set -Eeuo pipefail
 
 CAVEMAN_HOOK_SOURCE="${CAVEMAN_HOOK_SOURCE:-${HOME}/.apm/apm_modules/JuliusBrussee/caveman/src/hooks}"
 CAVEMAN_HOOK_DEST="${CAVEMAN_HOOK_DEST:-${CLAUDE_CONFIG_DIR:-${HOME}/.claude}/hooks}"
+# apm injects a SessionStart hook pointing at this nested path, but only ships a
+# partial runtime there, so its hook fails to require caveman-config. Mirror the
+# full runtime here too so apm's injected hook resolves if apm re-adds it.
+CAVEMAN_HOOK_APM_DEST="${CAVEMAN_HOOK_APM_DEST:-${CAVEMAN_HOOK_DEST}/caveman/src/hooks}"
 CAVEMAN_HOOK_FILES=(
   "caveman-config.js"
   "caveman-activate.js"
@@ -33,7 +37,11 @@ function caveman_hooks_install_main() {
   fi
 
   log_info "[caveman] Installing caveman hook runtime into ${CAVEMAN_HOOK_DEST}..."
-  mkdir -p "${CAVEMAN_HOOK_DEST}"
+
+  local dest
+  for dest in "${CAVEMAN_HOOK_DEST}" "${CAVEMAN_HOOK_APM_DEST}"; do
+    mkdir -p "${dest}"
+  done
 
   local file
   local missing=()
@@ -42,7 +50,9 @@ function caveman_hooks_install_main() {
       missing+=("${file}")
       continue
     fi
-    cp -f "${CAVEMAN_HOOK_SOURCE}/${file}" "${CAVEMAN_HOOK_DEST}/${file}"
+    for dest in "${CAVEMAN_HOOK_DEST}" "${CAVEMAN_HOOK_APM_DEST}"; do
+      cp -f "${CAVEMAN_HOOK_SOURCE}/${file}" "${dest}/${file}"
+    done
   done
 
   if ((${#missing[@]} > 0)); then
