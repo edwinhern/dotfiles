@@ -22,6 +22,8 @@
 {{-   $personal = true -}}
 {{- end -}}
 
+sourceDir: {{ .chezmoi.sourceDir | quote }}
+
 data:
     hostname: {{ $hostname | quote }}
     personal: {{ $personal }}
