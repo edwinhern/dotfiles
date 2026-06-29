@@ -3,7 +3,6 @@ apm:
     shared: []
     personal:
       - claude
-      - agent-skills
     work:
       - copilot
   dependencies:
