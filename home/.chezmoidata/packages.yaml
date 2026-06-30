@@ -23,13 +23,6 @@ packages:
           - zoxide
           - fd
           - fzf
-          - lazygit
-          - neovim
-          - tree-sitter-cli
-          - imagemagick
-          - ghostscript
-          - tectonic
-          - mermaid-cli
         casks:
           # fonts
           - font-monaspace
@@ -44,12 +37,7 @@ packages:
         mas: []
 
       personal:
-        taps:
-          - anomalyco/tap # For Opencode
-        formulas:
-          - anomalyco/tap/opencode
         casks:
-          - aldente
           - claude-code
           - cleanshot
           - discord
