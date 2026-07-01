@@ -114,11 +114,9 @@ function main() {
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-  # When run directly, pull in the shared libraries that chezmoi otherwise
+  # When run directly, pull in the shared log library that chezmoi otherwise
   # concatenates ahead of this file.
   # shellcheck source=/dev/null
   command -v log_info >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/log.sh"
-  # shellcheck source=/dev/null
-  command -v require_command >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/install-prelude.sh"
   main
 fi
