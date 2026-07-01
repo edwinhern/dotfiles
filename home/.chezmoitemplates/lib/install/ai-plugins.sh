@@ -3,10 +3,12 @@
 # @brief Install cross-agent AI plugins for the active agent targets.
 # @description
 #   Installs each plugin in AI_PLUGINS for every agent in AI_PLUGIN_TARGETS.
-#   Claude Code plugins install through the marketplace CLI; GitHub Copilot has
-#   no plugin runtime, so the plugin source installs as a skill instead.
-#   Sourceable from bats tests and injected into chezmoi run scripts via
-#   chezmoi template rendering.
+#   Each entry is name|marketplace|source|copilot. Claude Code always installs
+#   every entry as a native marketplace plugin. GitHub Copilot routes per entry
+#   on the copilot field: `plugin` uses the native Copilot CLI marketplace,
+#   `skill` (or anything else) falls back to `npx skills add`. Sourceable from
+#   bats tests and injected into chezmoi run scripts via chezmoi template
+#   rendering.
 
 set -Eeuo pipefail
 
@@ -20,6 +22,18 @@ function _ai_plugins_add_to_claude() {
   local name="$1" marketplace="$2" src="$3"
   claude plugin marketplace add "${src}" &&
     claude plugin install "${name}@${marketplace}"
+}
+
+#
+# @description Add one plugin's marketplace and install it into the Copilot CLI.
+# @arg $1 string Plugin name.
+# @arg $2 string Marketplace name.
+# @arg $3 string Marketplace source repo.
+#
+function _ai_plugins_add_copilot_plugin() {
+  local name="$1" marketplace="$2" src="$3"
+  copilot plugin marketplace add "${src}" &&
+    copilot plugin install "${name}@${marketplace}"
 }
 
 #
@@ -48,7 +62,8 @@ function _ai_plugins_for_claude_code() {
     name="${entry%%|*}"
     rest="${entry#*|}"
     marketplace="${rest%%|*}"
-    src="${rest##*|}"
+    rest="${rest#*|}"
+    src="${rest%%|*}"
     _ai_plugins_add_to_claude "${name}" "${marketplace}" "${src}" || failed+=("${name}")
   done
 
@@ -58,23 +73,39 @@ function _ai_plugins_for_claude_code() {
 }
 
 #
-# @description Install every plugin for the GitHub Copilot target.
+# @description Install every plugin for the GitHub Copilot target, routing each
+#   entry on its copilot field: `plugin` installs natively through the Copilot
+#   CLI, anything else installs the source as a skill. A missing required CLI
+#   fails only that entry, so one broken mechanism never blocks the other.
 # @exitcode 0 Plugins processed (failures are warned, not fatal).
-# @exitcode 1 npx is missing.
 #
 function _ai_plugins_for_copilot() {
-  if ! command -v npx >/dev/null 2>&1; then
-    log_error "[ai-plugins] npx not found. Ensure Node.js is installed (run_onchange_03_install-mise-tools)."
-    return 1
-  fi
-
   local -a failed=()
-  local entry name src
+  local entry name marketplace src mech rest
   for entry in "${AI_PLUGINS[@]-}"; do
     [[ -z "${entry}" ]] && continue
     name="${entry%%|*}"
-    src="${entry##*|}"
-    _ai_plugins_add_to_copilot "${src}" || failed+=("${name}")
+    rest="${entry#*|}"
+    marketplace="${rest%%|*}"
+    rest="${rest#*|}"
+    src="${rest%%|*}"
+    mech="${rest##*|}"
+
+    if [[ "${mech}" == "plugin" ]]; then
+      if ! command -v copilot >/dev/null 2>&1; then
+        log_error "[ai-plugins] copilot CLI not found. Install it (brew install copilot-cli)."
+        failed+=("${name}")
+        continue
+      fi
+      _ai_plugins_add_copilot_plugin "${name}" "${marketplace}" "${src}" || failed+=("${name}")
+    else
+      if ! command -v npx >/dev/null 2>&1; then
+        log_error "[ai-plugins] npx not found. Ensure Node.js is installed (run_onchange_03_install-mise-tools)."
+        failed+=("${name}")
+        continue
+      fi
+      _ai_plugins_add_to_copilot "${src}" || failed+=("${name}")
+    fi
   done
 
   if ((${#failed[@]} > 0)); then

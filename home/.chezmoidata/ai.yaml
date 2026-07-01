@@ -31,13 +31,19 @@ ai:
         skill: context7-cli
     work: []
   plugins:
+    # copilot: how the plugin installs for the github-copilot target.
+    #   plugin -> native `copilot plugin marketplace add/install` (Copilot CLI).
+    #   skill  -> `npx skills add <source> -a github-copilot` (no native plugin).
+    # The claude-code target always installs every entry as a native plugin.
     shared:
       - name: caveman
         marketplace: caveman
         source: JuliusBrussee/caveman
+        copilot: skill
       - name: superpowers
         marketplace: superpowers-dev
         source: obra/superpowers
+        copilot: plugin
   mcp:
     shared:
       - name: grep
