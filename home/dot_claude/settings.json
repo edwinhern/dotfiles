@@ -195,5 +195,6 @@
   "autoMemoryEnabled": true,
   "showThinkingSummaries": true,
   "skipWorkflowUsageWarning": true,
-  "autoScrollEnabled": true
+  "autoScrollEnabled": true,
+  "skipDangerousModePermissionPrompt": true
 }
