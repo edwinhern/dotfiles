@@ -1,7 +1,0 @@
-include = ["**/*.toml"]
-exclude = [
-  "**/*.tmpl",
-  "**/.git/**",
-  "**/.worktrees/**",
-  "tests/test_helpers/**",
-]

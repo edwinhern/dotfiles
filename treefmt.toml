@@ -1,6 +1,10 @@
 # treefmt: one formatter per file type. Walks the tree, respects .gitignore,
-# and dispatches to each tool. Replaces the hand-rolled shell-file discovery
-# that the mise format/lint tasks used to duplicate.
+# and dispatches to each tool. Owns all file selection so no per-tool ignore
+# files (.prettierignore, taplo.toml) are needed at the repo root.
+#
+# Chezmoi templates (*.tmpl) hold Go template syntax that these formatters
+# cannot parse. Vendored bats libraries under tests/test_helpers are third
+# party and stay unformatted.
 
 [formatter.shfmt]
 command = "shfmt"
@@ -12,9 +16,10 @@ excludes = ["*.tmpl"]
 command = "prettier"
 options = ["--write"]
 includes = ["*.md", "*.yaml", "*.yml", "*.json"]
+excludes = ["*.tmpl", "tests/test_helpers/**"]
 
 [formatter.taplo]
 command = "taplo"
 options = ["fmt"]
 includes = ["*.toml"]
-excludes = ["*.tmpl"]
+excludes = ["*.tmpl", "tests/test_helpers/**"]
