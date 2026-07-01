@@ -2,7 +2,7 @@
 # Single source of truth for all package manager declarations.
 # Referenced by run_onchange_ scripts via Chezmoi template data (.packages.*).
 #
-# Each group under darwin.homebrew has the same shape: {formulas, casks, mas}.
+# Each group under darwin.homebrew has the same shape: {taps, formulas, casks, mas}.
 # `shared` always applies; `personal` or `work` is added based on host context.
 
 packages:
@@ -37,6 +37,8 @@ packages:
         mas: []
 
       personal:
+        taps: []
+        formulas: []
         casks:
           - claude-code
           - cleanshot
