@@ -1,4 +1,5 @@
 [tools]
+actionlint = "1.7.12"
 bats = "1.13.0"
 chezmoi = "2.70.3"
 prettier = "3.8.3"
@@ -19,16 +20,16 @@ run = 'chezmoi apply --verbose --source="$PWD"'
 description = "Clear chezmoi script state"
 run = "chezmoi state delete-bucket --bucket=scriptState"
 
-[tasks.reset-config]
-description = "Re-run chezmoi init data prompts for this source tree"
-run = 'chezmoi init --data=false --source="$PWD"'
+[tasks.apply-dry-run]
+description = "Preview a full chezmoi apply from this source tree without writing"
+run = 'chezmoi apply --source="$PWD" -n -v'
 
 [tasks.format]
 description = "Format all files with treefmt"
 run = "treefmt"
 
 [tasks.lint]
-description = "Check formatting with treefmt and lint shell with shellcheck"
+description = "Check formatting, lint shell, and lint GitHub Actions workflows"
 run = '''
 #!/usr/bin/env bash
 set -euo pipefail
@@ -44,6 +45,11 @@ git ls-files '*.sh' '*.zsh' '*.zshrc' | xargs shellcheck
 # Severity stays at warning because bats idioms (literal-string assertions, per-test
 # subshells) trip info-level checks that are not real bugs.
 git ls-files '*.bats' | xargs shellcheck --severity=warning
+
+# actionlint checks workflow semantics that treefmt cannot: expression syntax,
+# runner labels, job needs, and shellcheck over embedded run: scripts. It finds
+# .github/workflows on its own and picks up the shellcheck installed above.
+actionlint
 '''
 
 [tasks.test]
