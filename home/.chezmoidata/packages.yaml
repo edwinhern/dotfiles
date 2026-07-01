@@ -43,6 +43,7 @@ packages:
           - discord
           - microsoft-excel
           - synology-drive
+          - tailscale-app
         mas:
           - name: Klack
             id: 6446206067
