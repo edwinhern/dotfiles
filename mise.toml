@@ -33,54 +33,22 @@ run = '''
 #!/usr/bin/env bash
 set -euo pipefail
 
+# treefmt walks the tree and checks formatting; shellcheck adds static analysis.
+# git ls-files scopes both shellcheck passes to tracked files, so vendored or
+# ignored scripts stay out without hand-maintained root lists.
 treefmt --ci
 
-shell_roots=()
-has_shell_roots=0
-for root in scripts home/dot_config/zsh home/.chezmoitemplates home/dot_claude .github/actions; do
-  if [[ -d "${root}" ]]; then
-    shell_roots+=("${root}")
-    has_shell_roots=1
-  fi
-done
+git ls-files '*.sh' '*.zsh' '*.zshrc' | xargs shellcheck
 
-if ((has_shell_roots)); then
-  shell_targets=()
-  while IFS= read -r shell_target; do
-    shell_targets+=("${shell_target}")
-  done < <(find "${shell_roots[@]}" -type f \( -name '*.sh' -o -name '*.zsh' -o -name '.zshrc' \))
-
-  if [[ -n "${shell_targets[*]:-}" ]]; then
-    shellcheck "${shell_targets[@]}"
-  fi
-fi
-
-# bats files use a test DSL that shfmt would reflow, so lint them with shellcheck only.
+# bats files use a test DSL that shfmt would reflow, so shellcheck alone lints them.
 # Severity stays at warning because bats idioms (literal-string assertions, per-test
 # subshells) trip info-level checks that are not real bugs.
-if [[ -d tests ]]; then
-  bats_targets=()
-  while IFS= read -r bats_target; do
-    bats_targets+=("${bats_target}")
-  done < <(find tests -type f -name '*.bats')
-
-  if [[ -n "${bats_targets[*]:-}" ]]; then
-    shellcheck --shell=bash --severity=warning "${bats_targets[@]}"
-  fi
-fi
+git ls-files '*.bats' | xargs shellcheck --severity=warning
 '''
-
-[tasks.test-unit]
-description = "Run bats unit tests"
-run = "bats --recursive tests/unit"
-
-[tasks.test-template]
-description = "Run bats template tests"
-run = "bats --recursive tests/template"
 
 [tasks.test]
 description = "Run all bats tests"
-run = [{ task = "test-unit" }, { task = "test-template" }]
+run = "bats --recursive tests"
 
 [tasks.check]
 description = "Run lint and tests"
