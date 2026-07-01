@@ -6,6 +6,6 @@
   },
   {
     "key": "cmd+l",
-    "command": "claude-vscode.sidebar.open"
+    "command": "workbench.action.chat.open"
   }
 ]
