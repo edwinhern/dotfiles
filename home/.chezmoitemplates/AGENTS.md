@@ -69,6 +69,17 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 Never use words like "consolidate", "modernize", "streamline", "flexible", "delve", "establish", "enhanced", "comprehensive", or "optimize", nor em dashes or double hyphens, in docstrings, commit messages, or comments.
 
+## Tooling
+
+Run independent operations in parallel when they don't depend on each other.
+
+For searching a codebase, prefer efficient tools over defaults, in order:
+
+1. **Graphify** for structure questions such as definitions, callers, and architecture, when `graphify-out/graph.json` exists (see below).
+2. **`rg`** (ripgrep) for content and regex search; faster than `grep` and skips ignored files.
+3. **`fd`** for finding files by name; faster and simpler than `find`.
+4. `grep` and `find` only when the tools above do not fit.
+
 ## GitHub CLI
 
 Use `gh` CLI for all GitHub interactions. Never clone repositories to read code.
