@@ -111,12 +111,12 @@ function _ai_plugins_for_copilot() {
 #
 function _ai_plugins_for_target() {
   case "$1" in
-    claude-code) _ai_plugins_for_claude_code ;;
-    github-copilot) _ai_plugins_for_copilot ;;
-    *)
-      log_warn "[ai-plugins] unknown target '$1'; skipping."
-      return 0
-      ;;
+  claude-code) _ai_plugins_for_claude_code ;;
+  github-copilot) _ai_plugins_for_copilot ;;
+  *)
+    log_warn "[ai-plugins] unknown target '$1'; skipping."
+    return 0
+    ;;
   esac
 }
 
