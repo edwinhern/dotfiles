@@ -7,7 +7,7 @@
 
 ## Response Rule
 
-- After reading this `CLAUDE.md`, say: `🤖 I read the CLAUDE.md for edwinhern/dotfiles.`
+- After reading this `AGENTS.md`, say: `🤖 I read the CLAUDE.md for edwinhern/dotfiles.`
 
 ## Comment Policy
 
