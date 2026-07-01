@@ -1,6 +1,6 @@
-# Claude Code Settings
+# Agent Guidance
 
-Guidance for Claude Code and other AI tools. Structured around [Andrej Karpathy's observations on LLM coding pitfalls](https://x.com/karpathy/status/2015883857489522876): surface assumptions, don't overcomplicate, make surgical changes, verify before moving on.
+Guidance for AI coding agents (Claude Code, GitHub Copilot, and others). Structured around [Andrej Karpathy's observations on LLM coding pitfalls](https://x.com/karpathy/status/2015883857489522876): surface assumptions, don't overcomplicate, make surgical changes, verify before moving on.
 
 ## AI Guidance
 
