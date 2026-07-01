@@ -1,3 +1,4 @@
-{{ if eq .chezmoi.os "darwin" -}}
-{{ template "chezmoiignore.d/darwin" . }}
+{{- /* GitHub Copilot config is a work-only target (see .chezmoidata/ai.yaml). */ -}}
+{{- if not .work }}
+.copilot
 {{- end }}

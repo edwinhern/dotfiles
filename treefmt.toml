@@ -1,0 +1,20 @@
+# treefmt: one formatter per file type. Walks the tree, respects .gitignore,
+# and dispatches to each tool. Replaces the hand-rolled shell-file discovery
+# that the mise format/lint tasks used to duplicate.
+
+[formatter.shfmt]
+command = "shfmt"
+options = ["-w"]
+includes = ["*.sh", "*.zsh", ".zshrc", ".bashrc"]
+excludes = ["*.tmpl"]
+
+[formatter.prettier]
+command = "prettier"
+options = ["--write"]
+includes = ["*.md", "*.yaml", "*.yml", "*.json"]
+
+[formatter.taplo]
+command = "taplo"
+options = ["fmt"]
+includes = ["*.toml"]
+excludes = ["*.tmpl"]

@@ -1,0 +1,30 @@
+vscode:
+  shared:
+    # core
+    - eamodio.gitlens
+    - EditorConfig.EditorConfig
+    - esbenp.prettier-vscode
+    - usernamehw.errorlens
+    # ui / dx
+    - adpyke.codesnap
+    - edwinhuish.better-comments-next
+    - fosshaas.fontsize-shortcuts
+    # Themes
+    - Catppuccin.catppuccin-vsc-icons
+    - Catppuccin.catppuccin-vsc
+    - raunofreiberg.vesper
+    # markdown
+    - shd101wyy.markdown-preview-enhanced
+
+  personal:
+    - LeonardSSH.vscord
+    # frontend
+    - biomejs.biome
+    - bradlc.vscode-tailwindcss
+    - csstools.postcss
+    # latex
+    - james-yu.latex-workshop
+
+  work:
+    - dbaeumer.vscode-eslint
+    - codacy-app.codacy

@@ -25,23 +25,6 @@ jobs:
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
       - run: mise lint
 
-  validate_apm:
-    name: Validate APM config (${{ matrix.context }})
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        context: [personal, work]
-    steps:
-      - uses: actions/checkout@v6
-      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
-      - name: Stub chezmoi config (${{ matrix.context }} context)
-        uses: ./.github/actions/write-chezmoi-config
-        with:
-          context: ${{ matrix.context }}
-      - name: Frozen install + audit (${{ matrix.context }})
-        run: mise exec -- bash scripts/validate-apm.sh ${{ matrix.context }}
-
   actions_lint:
     name: Lint GitHub Actions workflows
     runs-on: ubuntu-latest

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# @file run_onchange_09_install-graphify-skills.sh
+# @brief Install Graphify agent skills.
+# @description AI data hash: {{ include ".chezmoidata/ai.yaml" | sha256sum }}
+{{- $activeTargets := includeTemplate "lib/chezmoi/active-group-values.json.tmpl" (dict "ctx" . "valuesByGroup" .ai.targets) | fromJson -}}
+{{- $platforms := list -}}
+{{- range $activeTargets -}}
+{{- if eq . "claude-code" }}{{ $platforms = append $platforms "claude" }}{{- else if eq . "github-copilot" }}{{ $platforms = append $platforms "copilot" }}{{- end -}}
+{{- end -}}
+
+{{ if and (eq .chezmoi.os "darwin") (gt (len $platforms) 0) }}
+{{ template "lib/common/log.sh" . }}
+{{ template "lib/common/install-prelude.sh" . }}
+GRAPHIFY_PLATFORMS=(
+{{ range $platforms -}}
+  "{{ . }}"
+{{ end -}}
+)
+{{ template "lib/install/graphify-skills.sh" . }}
+{{ end }}

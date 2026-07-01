@@ -1,124 +1,55 @@
 [tools]
-"github:microsoft/apm" = "0.21.0"
 bats = "1.13.0"
 chezmoi = "2.70.3"
 prettier = "3.8.3"
 shellcheck = "0.11.0"
 shfmt = "3.13.1"
 taplo = "0.10.0"
+"aqua:numtide/treefmt" = "2.5.0"
 
 [tasks.diff]
 description = "Preview chezmoi changes from this source tree"
-run = 'mise exec -- chezmoi diff --source="$PWD"'
+run = 'chezmoi diff --source="$PWD"'
 
 [tasks.update]
 description = "Apply this source tree with chezmoi"
-run = 'mise exec -- chezmoi apply --verbose --source="$PWD"'
+run = 'chezmoi apply --verbose --source="$PWD"'
 
 [tasks.reset]
 description = "Clear chezmoi script state"
-run = "mise exec -- chezmoi state delete-bucket --bucket=scriptState"
+run = "chezmoi state delete-bucket --bucket=scriptState"
 
 [tasks.reset-config]
 description = "Re-run chezmoi init data prompts for this source tree"
-run = 'mise exec -- chezmoi init --data=false --source="$PWD"'
+run = 'chezmoi init --data=false --source="$PWD"'
 
 [tasks.format]
-description = "Format shell, markdown, YAML, and TOML"
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-
-shell_roots=()
-has_shell_roots=0
-for root in scripts home/dot_config/zsh home/.chezmoitemplates home/dot_claude .github/actions; do
-  if [[ -d "${root}" ]]; then
-    shell_roots+=("${root}")
-    has_shell_roots=1
-  fi
-done
-
-if ((has_shell_roots)); then
-  shell_targets=()
-  while IFS= read -r shell_target; do
-    shell_targets+=("${shell_target}")
-  done < <(find "${shell_roots[@]}" -type f \( -name '*.sh' -o -name '*.zsh' -o -name '.zshrc' \))
-
-  if [[ -n "${shell_targets[*]:-}" ]]; then
-    mise exec -- shfmt --write "${shell_targets[@]}"
-  fi
-fi
-
-mise exec -- prettier --write .
-mise exec -- taplo fmt
-'''
+description = "Format all files with treefmt"
+run = "treefmt"
 
 [tasks.lint]
-description = "Lint shell, markdown, YAML, and TOML"
+description = "Check formatting with treefmt and lint shell with shellcheck"
 run = '''
 #!/usr/bin/env bash
 set -euo pipefail
 
-mise exec -- prettier --check .
+# treefmt walks the tree and checks formatting; shellcheck adds static analysis.
+# git ls-files scopes both shellcheck passes to tracked files, so vendored or
+# ignored scripts stay out without hand-maintained root lists.
+treefmt --ci
 
-shell_roots=()
-has_shell_roots=0
-for root in scripts home/dot_config/zsh home/.chezmoitemplates home/dot_claude .github/actions; do
-  if [[ -d "${root}" ]]; then
-    shell_roots+=("${root}")
-    has_shell_roots=1
-  fi
-done
+git ls-files '*.sh' '*.zsh' '*.zshrc' | xargs shellcheck
 
-if ((has_shell_roots)); then
-  shell_targets=()
-  while IFS= read -r shell_target; do
-    shell_targets+=("${shell_target}")
-  done < <(find "${shell_roots[@]}" -type f \( -name '*.sh' -o -name '*.zsh' -o -name '.zshrc' \))
-
-  if [[ -n "${shell_targets[*]:-}" ]]; then
-    mise exec -- shellcheck "${shell_targets[@]}"
-    mise exec -- shfmt --diff "${shell_targets[@]}"
-  fi
-fi
-
-# bats files use a test DSL that shfmt would reflow, so lint them with shellcheck only.
+# bats files use a test DSL that shfmt would reflow, so shellcheck alone lints them.
 # Severity stays at warning because bats idioms (literal-string assertions, per-test
 # subshells) trip info-level checks that are not real bugs.
-if [[ -d tests ]]; then
-  bats_targets=()
-  while IFS= read -r bats_target; do
-    bats_targets+=("${bats_target}")
-  done < <(find tests -type f -name '*.bats')
-
-  if [[ -n "${bats_targets[*]:-}" ]]; then
-    mise exec -- shellcheck --shell=bash --severity=warning "${bats_targets[@]}"
-  fi
-fi
-
-mise exec -- taplo fmt --check
+git ls-files '*.bats' | xargs shellcheck --severity=warning
 '''
-
-[tasks.test-unit]
-description = "Run bats unit tests"
-run = "mise exec -- bats --recursive tests/unit"
-
-[tasks.test-template]
-description = "Run bats template tests"
-run = "mise exec -- bats --recursive tests/template"
 
 [tasks.test]
 description = "Run all bats tests"
-run = [{ task = "test-unit" }, { task = "test-template" }]
+run = "bats --recursive tests"
 
 [tasks.check]
 description = "Run lint and tests"
 run = [{ task = "lint" }, { task = "test" }]
-
-[tasks.validate-apm]
-description = "Frozen APM install + audit gate for one or both contexts (personal, work, all)"
-run = 'bash "$MISE_PROJECT_ROOT/scripts/validate-apm.sh" "${1:-all}"'
-
-[tasks.refresh-apm-locks]
-description = "Re-resolve APM channels and rewrite committed lockfiles for all contexts"
-run = 'bash "$MISE_PROJECT_ROOT/scripts/refresh-apm-locks.sh"'

@@ -6,21 +6,13 @@ load '../test_helpers/load.bash'
 load '../test_helpers/templates.bash'
 
 CLAUDE_TEMPLATE="$DOTFILES_ROOT/home/dot_claude/CLAUDE.md.tmpl"
-OPENCODE_TEMPLATE="$DOTFILES_ROOT/home/dot_config/opencode/AGENTS.md.tmpl"
 
 @test "agent instruction templates render shared markdown" {
   run render_chezmoi_template "$CLAUDE_TEMPLATE"
 
   assert_success
-  assert_line --index 0 '# Claude Code Settings'
-  assert_line --regexp '^### GitHub CLI$'
-  assert_line 'Use `gh` CLI for all GitHub interactions. Never clone repositories to read code.'
-
-  run render_chezmoi_template "$OPENCODE_TEMPLATE"
-
-  assert_success
-  assert_line --index 0 '# Claude Code Settings'
-  assert_line --regexp '^### GitHub CLI$'
+  assert_line --index 0 '# Agent Guidance'
+  assert_line --regexp '^## GitHub CLI$'
   assert_line 'Use `gh` CLI for all GitHub interactions. Never clone repositories to read code.'
 }
 
@@ -29,22 +21,12 @@ OPENCODE_TEMPLATE="$DOTFILES_ROOT/home/dot_config/opencode/AGENTS.md.tmpl"
   [ ! -e "$DOTFILES_ROOT/home/.chezmoidata/agents.yaml" ]
 
   claude_template="$(<"$CLAUDE_TEMPLATE")"
-  opencode_template="$(<"$OPENCODE_TEMPLATE")"
 
   [[ "$claude_template" == *'{{ template "AGENTS.md" . -}}'* ]]
-  [[ "$opencode_template" == *'{{ template "AGENTS.md" . -}}'* ]]
 }
 
 @test "agent instruction templates render Graphify guidance" {
   run render_chezmoi_template "$CLAUDE_TEMPLATE"
-
-  assert_success
-  assert_line '## Graphify'
-  assert_line '- Use the installed Graphify skill when the user invokes `/graphify`.'
-  assert_line --partial 'graphify query'
-  assert_line --partial 'GRAPH_REPORT.md'
-
-  run render_chezmoi_template "$OPENCODE_TEMPLATE"
 
   assert_success
   assert_line '## Graphify'

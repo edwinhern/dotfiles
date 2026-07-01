@@ -50,10 +50,16 @@
   "github.copilot.renameSuggestions.triggerAutomatically": true,
   "github.copilot.chat.commitMessageGeneration.instructions": [
     {
-      "text": "Use conventional commit message format."
+      "text": "Use Conventional Commits format `<type>: <description>` with a type such as feat, fix, refactor, docs, test, chore, perf, build, style, or ci."
     },
     {
-      "text": "Keep the commit message short and concise. Use imperative mood and avoid unnecessary details."
+      "text": "Write the subject in imperative mood and keep it under 50 characters."
+    },
+    {
+      "text": "Add a one-line body only when it explains the why. Describe only the staged changes and never include test plans."
+    },
+    {
+      "text": "When the current branch name contains a JIRA ticket key such as BC724-550 or BS-86067, prefix the description with it, for example `feat: BC724-550 Add experiment hooks`. Omit the ticket when the branch has none."
     }
   ],
 
