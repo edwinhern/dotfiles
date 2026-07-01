@@ -15,7 +15,7 @@ AI_PLUGIN_TARGETS=(
 )
 AI_PLUGINS=(
 {{ range $activePlugins -}}
-  "{{ .name }}|{{ .marketplace }}|{{ .source }}"
+  "{{ .name }}|{{ .marketplace }}|{{ .source }}|{{ .copilot }}"
 {{ end -}}
 )
 {{ template "lib/install/ai-plugins.sh" . }}

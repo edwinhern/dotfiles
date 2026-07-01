@@ -56,6 +56,7 @@ AI_MCP_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_inst
   assert_line 'brew "mise"'
   assert_line 'cask "discord"'
   assert_line 'mas "Klack", id: 6446206067'
+  refute_line 'cask "copilot-cli"'
   refute_line 'cask "microsoft-office"'
   refute_line 'cask "microsoft-teams"'
   refute_line 'cask "slack"'
@@ -67,6 +68,7 @@ AI_MCP_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_inst
 
   assert_success
   assert_line 'brew "mas"'
+  assert_line 'cask "copilot-cli"'
   assert_line 'cask "microsoft-office"'
   assert_line 'cask "microsoft-teams"'
   assert_line 'cask "slack"'
@@ -170,8 +172,8 @@ AI_MCP_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_inst
   assert_line 'AI_PLUGIN_TARGETS=('
   assert_line --partial '"claude-code"'
   refute_line --partial '"github-copilot"'
-  assert_line --partial '"caveman|caveman|JuliusBrussee/caveman"'
-  assert_line --partial '"superpowers|superpowers-dev|obra/superpowers"'
+  assert_line --partial '"caveman|caveman|JuliusBrussee/caveman|skill"'
+  assert_line --partial '"superpowers|superpowers-dev|obra/superpowers|plugin"'
   assert_line --partial 'ai_plugins_install_main'
 }
 
@@ -182,7 +184,7 @@ AI_MCP_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_inst
   assert_line 'AI_PLUGIN_TARGETS=('
   assert_line --partial '"github-copilot"'
   refute_line --partial '"claude-code"'
-  assert_line --partial '"caveman|caveman|JuliusBrussee/caveman"'
+  assert_line --partial '"caveman|caveman|JuliusBrussee/caveman|skill"'
   assert_line --partial 'ai_plugins_install_main'
 }
 

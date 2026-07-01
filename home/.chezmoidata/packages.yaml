@@ -54,6 +54,7 @@ packages:
         taps: []
         formulas: []
         casks:
+          - copilot-cli
           - microsoft-office
           - microsoft-teams
           - slack
