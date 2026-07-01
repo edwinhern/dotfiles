@@ -54,16 +54,13 @@
   },
   "github.copilot.chat.commitMessageGeneration.instructions": [
     {
-      "text": "Use conventional commit message format."
+      "text": "Use Conventional Commits format `<type>: <description>` with a type such as feat, fix, refactor, docs, test, chore, perf, build, style, or ci."
     },
     {
-      "text": "Keep the commit message short and concise. Use imperative mood and avoid unnecessary details."
+      "text": "Write the subject in imperative mood and keep it under 50 characters."
     },
     {
-      "text": "Limit the subject line to 50 characters and start it with a type prefix such as feat, fix, refactor, docs, test, chore, perf, build, style, or ci."
-    },
-    {
-      "text": "Describe only the staged changes and do not include test plans."
+      "text": "Add a one-line body only when it explains the why. Describe only the staged changes and never include test plans."
     }
   ],
 
