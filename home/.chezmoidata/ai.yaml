@@ -1,0 +1,56 @@
+ai:
+  targets:
+    shared: []
+    personal:
+      - claude-code
+    work:
+      - github-copilot
+  skills:
+    shared:
+      - source: mattpocock/skills
+        skill: grill-me
+      - source: juliusbrussee/skills
+        skill: junior-to-senior
+      - source: blader/humanizer
+        skill: humanizer
+      - source: imadAttar/kaizen
+        skill: kaizen
+      # local domain skills authored in this repo
+      - source: local
+        skill: typescript
+      - source: local
+        skill: react
+      - source: local
+        skill: testing
+    personal:
+      - source: schpet/linear-cli
+        skill: linear-cli
+      - source: juliusbrussee/skills
+        skill: interface-kit
+      - source: upstash/context7
+        skill: context7-cli
+    work: []
+  plugins:
+    shared:
+      - name: caveman
+        marketplace: caveman
+        source: JuliusBrussee/caveman
+      - name: superpowers
+        marketplace: superpowers-dev
+        source: obra/superpowers
+  mcp:
+    shared:
+      - name: grep
+        transport: http
+        url: https://mcp.grep.app
+    personal:
+      - name: tavily
+        transport: http
+        url: https://mcp.tavily.com/mcp/
+    work:
+      - name: figma
+        transport: http
+        url: https://mcp.figma.com/mcp
+      - name: jira
+        transport: http
+        url: https://mcp.atlassian.com/v1/mcp

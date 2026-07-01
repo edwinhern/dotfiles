@@ -24,132 +24,126 @@ The deciding question for each artifact is: does it need a hook, statusline, or 
 
 Plugins are reserved for hook-bearing bundles. Everything that is only a skill goes through the `skills` CLI to the targeted agents. MCP servers are written into each targeted agent's config.
 
-## Group and Agent Data Model
+## Group and Target Data Model
 
-A new `home/.chezmoidata/ai.yaml` declares what to install, scoped by group and agent, replacing `home/.chezmoidata/apm.yaml`. Active groups per machine come from the existing `lib/chezmoi/active-groups.json.tmpl`, the same mechanism APM used.
+`home/.chezmoidata/ai.yaml` declares what to install, replacing `home/.chezmoidata/apm.yaml`. It carries a `targets` map that binds each group to the AI providers it targets, mirroring APM targets. The active group per machine comes from the existing `active-groups` template, and the OS gate stays `darwin`, matching the other install scripts.
 
-Agent identifiers follow the `skills` CLI: `claude-code` and `github-copilot`.
+Group membership implies the agent through `targets`, so no per-item agent field is needed: `personal` targets `claude-code`, `work` targets `github-copilot`, and `shared` items install for whatever the active machine targets.
 
 ```yaml
 ai:
+  targets:
+    shared: []
+    personal:
+      - claude-code
+    work:
+      - github-copilot
   skills:
-    # Almost everything is shared; the agents list does the real scoping.
     shared:
       - source: mattpocock/skills
         skill: grill-me
-        agents: [claude-code, github-copilot]
-      - source: schpet/linear-cli
-        skill: linear-cli
-        agents: [claude-code]
       - source: juliusbrussee/skills
         skill: junior-to-senior
-        agents: [claude-code, github-copilot]
-      - source: juliusbrussee/skills
-        skill: interface-kit
-        agents: [claude-code, github-copilot]
       - source: blader/humanizer
         skill: humanizer
-        agents: [claude-code, github-copilot]
       - source: imadAttar/kaizen
         skill: kaizen
-        agents: [claude-code, github-copilot]
-      - source: upstash/context7
-        skill: context7-cli
-        agents: [claude-code, github-copilot]
-      - source: anthropics/claude-plugins-official
-        skill: skill-creator
-        agents: [claude-code]
       # local domain skills authored in this repo
       - source: local
         skill: typescript
-        agents: [claude-code, github-copilot]
       - source: local
         skill: react
-        agents: [claude-code, github-copilot]
       - source: local
         skill: testing
-        agents: [claude-code, github-copilot]
+    personal:
+      - source: schpet/linear-cli
+        skill: linear-cli
+      - source: juliusbrussee/skills
+        skill: interface-kit
+      - source: upstash/context7
+        skill: context7-cli
+    work: []
   plugins:
-    # Dual-path: claude-code via marketplace, github-copilot via skills CLI.
     shared:
       - name: caveman
         marketplace: caveman
         source: JuliusBrussee/caveman
-        agents: [claude-code, github-copilot]
       - name: superpowers
         marketplace: superpowers-dev
         source: obra/superpowers
-        agents: [claude-code, github-copilot]
   mcp:
     shared:
       - name: grep
         transport: http
         url: https://mcp.grep.app
-        agents: [claude-code, github-copilot]
     personal:
       - name: tavily
         transport: http
         url: https://mcp.tavily.com/mcp/
-        agents: [claude-code]
     work:
       - name: figma
         transport: http
         url: https://mcp.figma.com/mcp
-        agents: [github-copilot]
       - name: jira
         transport: http
         url: https://mcp.atlassian.com/v1/mcp
-        agents: [github-copilot]
 ```
 
-Skills are all `shared`; the `agents` list scopes each to Claude, Copilot, or both. `linear-cli` and `skill-creator` are Claude only. The `personal` and `work` groups are used only for MCP and work-specific items. Personal machines install shared plus personal entries; work machines install shared plus work entries. `tavily` MCP is Claude only. `deep-analysis` is deferred to the work Copilot setup and is not listed until that work starts.
+Personal machines install shared plus personal entries against `claude-code`; work machines install shared plus work entries against `github-copilot`. `linear-cli`, `interface-kit`, and `context7-cli` sit in `personal`, so they reach Claude only until Copilot is added to the personal target. `skill-creator` is dropped. `tavily` MCP is personal, so Claude only. `deep-analysis` is deferred to the work Copilot setup and is not listed until that work starts.
 
 ## Skills Design
 
 Skills install with the cross-agent CLI. For each entry the install script runs:
 
 ```bash
-npx skills add <source> --skill <skill> -a <agent> [-a <agent>] --global --copy --yes
+npx skills add <source> --skill <skill> -a <target> [-a <target>] --global --copy --yes
 ```
 
-`--global` installs into `~/.claude/skills/` and `~/.copilot/skills/`. `--copy` writes real files rather than symlinks because Claude Code ignores symlinked skill directories. Agent flags come from the entry's `agents` list.
+`--global` installs into `~/.claude/skills/` and `~/.copilot/skills/`. `--copy` writes real files rather than symlinks because Claude Code ignores symlinked skill directories. The `-a` flags come from the active group's `target` in `ai.yaml`, so a skill in `shared` installs for the machine's target, and a skill in `personal` installs for `claude-code`.
 
 Local domain skills (`typescript`, `react`, `testing`, React Testing Library) are authored under `home/.chezmoitemplates/skills/` from the existing instruction files, and installed with `source: local` pointing at that path. The vendored `grill-me` and `junior-to-senior` copies already present under that directory are removed once they install from upstream sources, unless upstream is unavailable.
 
-`skill-creator` comes from the `anthropics/claude-plugins-official` marketplace repo rather than a plain skills repo, so implementation verifies that `skills add` can pull it. If it cannot, `skill-creator` installs as a Claude plugin instead. It stays Claude only either way.
-
-The `skills` CLI has no manifest file, so `home/.chezmoidata/ai.yaml` is the manifest. A `run_onchange_09_install-ai-skills.sh.tmpl` script iterates the active groups' skill entries and runs the CLI. It re-runs when the rendered data changes.
+The `skills` CLI has no manifest file, so `home/.chezmoidata/ai.yaml` is the manifest. A `run_onchange_09_install-ai-skills.sh.tmpl` script gates on `darwin`, reads the active group and its target, iterates the matching skill entries, and runs the CLI. It re-runs when the rendered data changes.
 
 ## Plugins Design
 
-Plugins are hook-bearing bundles: `caveman` and `superpowers`. Each plugin installs by a different path per agent, driven by its `agents` list.
+Plugins are hook-bearing bundles: `caveman` and `superpowers`. They live in `shared`, so each installs by the path that matches the active machine's `target`.
 
-- `claude-code`: through the marketplace.
+- `claude-code` target: through the marketplace.
 
   ```bash
   claude plugin marketplace add <source>
   claude plugin install <name>@<marketplace>
   ```
 
-- `github-copilot`: through the cross-agent skills CLI, since Copilot has no plugin or hook system.
+- `github-copilot` target: through the cross-agent skills CLI, since Copilot has no plugin or hook system.
 
   ```bash
   npx skills add <source> -a github-copilot --global --copy --yes
   ```
 
-`run_onchange_06_install-claude-plugins.sh.tmpl` iterates the active groups' plugin entries and runs the path that matches each targeted agent present on the machine. This replaces `run_onchange_06_install-apm.sh.tmpl`. Marketplaces and enabled plugins are also declared in `home/dot_claude/settings.json`.
+`run_onchange_06_install-claude-plugins.sh.tmpl` gates on `darwin`, reads the active target, and runs the matching path for each plugin entry. This replaces `run_onchange_06_install-apm.sh.tmpl`. Marketplaces and enabled plugins are also declared in `home/dot_claude/settings.json`.
 
 Caveman installs as a plugin on Claude, so Claude Code loads its hooks from the plugin directory. The manual caveman and superpowers hook entries stay removed from `settings.json`. On the Copilot side the plugins install as skills only, because Copilot has no hooks; the Copilot path runs only on a machine where Copilot is present.
 
 ## MCP Design
 
-Shared MCP servers apply to every targeted agent, so `grep` reaches both Claude and Copilot. Per agent:
+MCP delivery avoids templating any main `settings.json`, so JSON schema IntelliSense and hover help stay intact. Each agent uses its own dedicated MCP surface, and both are driven by the `ai.yaml` `mcp` block scoped by the active group's target.
 
-- Claude Code: registered at user scope, for example `claude mcp add --scope user --transport http grep https://mcp.grep.app`, or the equivalent user config entry.
-- Copilot VS Code: written into `home/Library/Application Support/Code/User/mcp.json`.
-- Copilot CLI: written into `home/dot_copilot/mcp-config.json`.
+Claude Code MCP is applied with the official CLI at user scope, which merges into the stateful `~/.claude.json` without overwriting other state:
 
-A `run_onchange` MCP script iterates the active groups' MCP entries and applies each to its targeted agents. `tavily` is Claude only. Work MCP servers use the HTTP transport with the vendor's MCP URL, including Jira at `https://mcp.atlassian.com/v1/mcp`, and authenticate over OAuth at connect time rather than a stored token. Any remaining secret values use `${VAR}` placeholders kept out of source control, sourced from `~/.secrets.local` on the work machine.
+```bash
+claude mcp add --scope user --transport http grep https://mcp.grep.app
+```
+
+A `run_onchange` script gates on `darwin`, reads the active target, iterates the matching MCP entries, and runs `claude mcp add` for each. It is idempotent: it checks `claude mcp get <name>` and skips or re-adds as needed. The stateful `~/.claude.json` is never templated.
+
+Copilot MCP uses dedicated MCP config files, which are safe to render as chezmoi templates because they are separate from the main VS Code `settings.json`:
+
+- VS Code: `home/Library/Application Support/Code/User/mcp.json`.
+- Copilot CLI: `home/dot_copilot/mcp-config.json`.
+
+Each template reads the `ai.yaml` `mcp` entries for the active target and renders them into that surface's schema. `tavily` is personal, so Claude only. Work MCP servers use the HTTP transport with the vendor's MCP URL, including Jira at `https://mcp.atlassian.com/v1/mcp`, and authenticate over OAuth at connect time rather than a stored token. Any remaining secret values use `${VAR}` placeholders kept out of source control, sourced from `~/.secrets.local` on the work machine.
 
 ## Instructions Design
 

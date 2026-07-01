@@ -6,7 +6,6 @@ vscode:
     - esbenp.prettier-vscode
     - usernamehw.errorlens
     # ui / dx
-    - illixion.vscode-vibrancy-continued
     - adpyke.codesnap
     - edwinhuish.better-comments-next
     - fosshaas.fontsize-shortcuts
