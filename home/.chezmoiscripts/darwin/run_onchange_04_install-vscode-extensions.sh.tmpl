@@ -1,26 +1,14 @@
 #!/usr/bin/env bash
-# extensions.yaml hash: {{ include ".chezmoidata/extensions.yaml" | sha256sum }}
+# vscode.yaml hash: {{ include ".chezmoidata/vscode.yaml" | sha256sum }}
+{{- $extensions := includeTemplate "lib/chezmoi/active-group-values.json.tmpl" (dict "ctx" . "valuesByGroup" .vscode) | fromJson -}}
 
 {{ if eq .chezmoi.os "darwin" }}
 {{ template "lib/common/log.sh" . }}
 {{ template "lib/common/install-prelude.sh" . }}
 VSCODE_EXTENSIONS=(
-  # shared
-  {{ range .vscode.shared -}}
+{{ range $extensions -}}
   "{{ . }}"
-  {{ end }}
-  {{ if .personal -}}
-  # personal
-  {{ range .vscode.personal -}}
-  "{{ . }}"
-  {{ end -}}
-  {{- end }}
-  {{ if .work -}}
-  # work
-  {{ range .vscode.work -}}
-  "{{ . }}"
-  {{ end -}}
-  {{- end }}
+{{ end -}}
 )
 {{ template "lib/install/vscode.sh" . }}
 {{ end }}
