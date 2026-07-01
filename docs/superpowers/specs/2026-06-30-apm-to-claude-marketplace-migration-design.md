@@ -96,14 +96,16 @@ Personal machines install shared plus personal entries against `claude-code`; wo
 Skills install with the cross-agent CLI. For each entry the install script runs:
 
 ```bash
-npx skills add <source> --skill <skill> -a <target> [-a <target>] --global --copy --yes
+npx --yes skills add <source> --skill <skill> -a <target> [-a <target>] --global --copy --yes
 ```
+
+The `npx --yes` prefix auto-confirms npx's own install prompt so the non-interactive `chezmoi apply` never hangs.
 
 `--global` installs into `~/.claude/skills/` and `~/.copilot/skills/`. `--copy` writes real files rather than symlinks because Claude Code ignores symlinked skill directories. The `-a` flags come from the active group's `target` in `ai.yaml`, so a skill in `shared` installs for the machine's target, and a skill in `personal` installs for `claude-code`.
 
 Local domain skills `typescript`, `react`, and `testing` (React Testing Library guidance lives in the `testing` skill) are authored under `home/.chezmoitemplates/skills/` from the former instruction files, and install with `source: local` pointing at that path. The previously vendored `grill-me` and `junior-to-senior` copies under that directory have been removed; both install from their upstream sources.
 
-The `skills` CLI has no manifest file, so `home/.chezmoidata/ai.yaml` is the manifest. A `run_onchange_09_install-ai-skills.sh.tmpl` script gates on `darwin`, reads the active group and its target, iterates the matching skill entries, and runs the CLI. It re-runs when the rendered data changes.
+The `skills` CLI has no manifest file, so `home/.chezmoidata/ai.yaml` is the manifest. A `run_onchange_09_install-ai-skills.sh.tmpl` script gates on `darwin`, reads the active group and its target, iterates the matching skill entries, and runs the CLI. Its trigger comment hashes both `ai.yaml` and the local skill tree under `home/.chezmoitemplates/skills/`, so it re-runs when the manifest changes or when a local `SKILL.md` is edited in place (local skills install with `--copy`, so a stale copy would otherwise persist).
 
 ## Plugins Design
 

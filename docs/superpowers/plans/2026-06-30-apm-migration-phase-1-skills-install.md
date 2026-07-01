@@ -386,6 +386,19 @@ git commit -m "test: DOT-43 add ai-skills template render tests"
 - **Type consistency:** `AI_SKILLS`, `AI_SKILL_TARGETS`, `AI_LOCAL_SKILLS_DIR`, `ai_skills_install_main`, and the `<source>|<skill>` contract are identical across the library, the run script, and the tests.
 - **Out of Phase 1 scope:** plugins install, MCP delivery, instructions, and apm teardown are later phases. Domain-skill authoring and Copilot commit wiring are already done ahead of this plan.
 
+## Execution Deltas
+
+Corrections applied during implementation, each verified against the codebase before coding:
+
+- **npx check is inline, not `require_command`.** `require_command npx "..."` emits `error: [npx] not found. ...`, but the `[ai-skills]` component-tag convention and Task 1's own test need `error: [ai-skills] npx not found. ...`. The library uses `command -v npx || { log_error "[ai-skills] npx not found. ..."; return 1; }`.
+- **The render test helper is `render_chezmoi_template "$ABS_TEMPLATE" "$JSON_DATA"`**, not `render_darwin_script "basename" "personal"`; group is selected with the `$DARWIN_DATA` / `$WORK_DATA` payload constants.
+- **The npx test stub tees to both stdout and the args file** (`printf '%s\n' "$*" | tee -a "$NPX_ARGS_FILE"`) so `assert_line` sees the invocation while the count checks still read the file.
+- **The command carries a leading `npx --yes`** (npx's own auto-confirm) to keep non-interactive apply from hanging.
+- **The trigger comment hashes the local skill tree** in addition to `ai.yaml`, so an in-place `SKILL.md` edit re-runs the `--copy` install.
+- **Coverage beyond the plan's two render tests:** added local+remote mix, partial-failure, cartesian target-by-skill, empty-entry identity, and export-line assertions; the existing darwin glob tests already cover shebang and `bash -n` validity of the new script.
+
+Known limitations, shared with the graphify sibling and out of scope here: a missing npx hard-fails `chezmoi apply` on first boot before mise shims load, and removing a skill from `ai.yaml` does not prune the previously installed copy.
+
 ## Remaining Phases (separate plans)
 
 1. This plan — skills install.
