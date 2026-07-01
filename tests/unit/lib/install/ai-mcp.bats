@@ -65,9 +65,10 @@ CLAUDE
 }
 
 @test "main: skips empty server entries" {
-  _run_main "AI_MCP=('grep|http:x' '' 'jira|http|https://mcp.atlassian.com/v1/mcp')"
+  _run_main "AI_MCP=('grep|http|https://mcp.grep.app' '' 'jira|http|https://mcp.atlassian.com/v1/mcp')"
 
   assert_success
+  assert_line "mcp add --scope user --transport http grep https://mcp.grep.app"
   assert_line "mcp add --scope user --transport http jira https://mcp.atlassian.com/v1/mcp"
 }
 

@@ -37,6 +37,7 @@ VSCODE_MCP="$DOTFILES_ROOT/home/Library/Application Support/Code/User/mcp.json.t
   assert_line --partial '"grep"'
   assert_line --partial '"jira"'
   assert_line --partial 'https://mcp.atlassian.com/v1/mcp'
+  refute_line --partial '"tools"'
 }
 
 @test "personal VS Code MCP config renders an empty server map" {
