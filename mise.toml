@@ -113,11 +113,3 @@ run = [{ task = "test-unit" }, { task = "test-template" }]
 [tasks.check]
 description = "Run lint and tests"
 run = [{ task = "lint" }, { task = "test" }]
-
-[tasks.validate-apm]
-description = "Frozen APM install + audit gate for one or both contexts (personal, work, all)"
-run = 'bash "$MISE_PROJECT_ROOT/scripts/validate-apm.sh" "${1:-all}"'
-
-[tasks.refresh-apm-locks]
-description = "Re-resolve APM channels and rewrite committed lockfiles for all contexts"
-run = 'bash "$MISE_PROJECT_ROOT/scripts/refresh-apm-locks.sh"'
