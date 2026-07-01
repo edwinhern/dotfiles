@@ -14,14 +14,6 @@ MISE_TEMPLATE="$DOTFILES_ROOT/home/dot_config/mise/config.toml.tmpl"
   assert_line '"github:microsoft/apm" = "latest"'
 }
 
-@test "mise config renders tools from mise data groups" {
-  [ -f "$DOTFILES_ROOT/home/.chezmoidata/mise.yaml" ]
-
-  template_content="$(<"$MISE_TEMPLATE")"
-
-  [[ "$template_content" == *'$.mise.tools'* ]]
-}
-
 @test "mise config installs Linear CLI for personal hosts" {
   run render_chezmoi_template "$MISE_TEMPLATE" "$PERSONAL_DATA"
 

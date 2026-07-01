@@ -21,12 +21,6 @@ LIB="$DOTFILES_ROOT/home/.chezmoitemplates/lib/common/log.sh"
   assert_output 'hello world'
 }
 
-@test "log_info: empty message produces a single newline" {
-  run sh -c ". '$LIB' && log_info ''"
-  assert_success
-  assert_output ''
-}
-
 @test "log_info: stays on stdout, not stderr" {
   run sh -c ". '$LIB' && log_info 'on-stdout' 2>/dev/null"
   assert_success

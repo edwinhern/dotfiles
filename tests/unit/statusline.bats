@@ -22,16 +22,17 @@ FIXTURES="$DOTFILES_ROOT/tests/fixtures/statusline"
 @test "renders full payload: effort segment when .effort.level is present" {
   run sh "$STATUSLINE" < "$FIXTURES/full-payload.json"
   assert_success
-  assert_line --partial 'max'
+  assert_line --partial '💪 max'
 }
 
 @test "minimal payload: succeeds and omits rate-limit / cost / effort segments" {
-  run sh "$STATUSLINE" < "$FIXTURES/minimal.json"
+  run env -u CLAUDE_CODE_EFFORT_LEVEL sh "$STATUSLINE" < "$FIXTURES/minimal.json"
   assert_success
   assert_line --partial 'Sonnet 4.6'
   assert_line --partial '5%'
   refute_line --partial '5h'
   refute_line --partial '$'
+  refute_line --partial '💪'
 }
 
 @test "worktree fixture: surfaces the worktree name segment" {

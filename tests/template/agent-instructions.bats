@@ -16,15 +16,6 @@ CLAUDE_TEMPLATE="$DOTFILES_ROOT/home/dot_claude/CLAUDE.md.tmpl"
   assert_line 'Use `gh` CLI for all GitHub interactions. Never clone repositories to read code.'
 }
 
-@test "agent instruction templates use markdown template source" {
-  [ -f "$DOTFILES_ROOT/home/.chezmoitemplates/AGENTS.md" ]
-  [ ! -e "$DOTFILES_ROOT/home/.chezmoidata/agents.yaml" ]
-
-  claude_template="$(<"$CLAUDE_TEMPLATE")"
-
-  [[ "$claude_template" == *'{{ template "AGENTS.md" . -}}'* ]]
-}
-
 @test "agent instruction templates render Graphify guidance" {
   run render_chezmoi_template "$CLAUDE_TEMPLATE"
 

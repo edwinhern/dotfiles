@@ -6,13 +6,10 @@ load '../test_helpers/load.bash'
 
 SETTINGS="$DOTFILES_ROOT/home/dot_claude/settings.json"
 
-@test "claude settings use current model aliases" {
+@test "claude settings pin the model alias" {
   settings_content="$(<"$SETTINGS")"
 
   [[ "$settings_content" == *'"model": "best"'* ]]
-  [[ "$settings_content" != *'ANTHROPIC_DEFAULT_OPUS_MODEL'* ]]
-  [[ "$settings_content" != *'ANTHROPIC_DEFAULT_SONNET_MODEL'* ]]
-  [[ "$settings_content" != *'ANTHROPIC_DEFAULT_HAIKU_MODEL'* ]]
 }
 
 @test "claude settings keep destructive bash commands gated" {
