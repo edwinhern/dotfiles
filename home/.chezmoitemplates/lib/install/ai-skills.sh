@@ -10,20 +10,61 @@
 set -Eeuo pipefail
 
 #
+# @description True when AI_SKILLS holds at least one non-empty entry.
+# @exitcode 0 A skill is present.
+# @exitcode 1 No skills.
+#
+function _ai_skills_have_any() {
+  local entry
+  for entry in "${AI_SKILLS[@]-}"; do
+    [[ -z "${entry}" ]] && continue
+    return 0
+  done
+  return 1
+}
+
+#
+# @description Resolve a skill's install source, skipping a missing local skill.
+# @arg $1 string Source token: a remote repo, or "local".
+# @arg $2 string Skill name.
+# @stdout The source to hand to `skills add`.
+# @exitcode 0 Source resolved.
+# @exitcode 1 A local skill directory is missing (warned; caller should skip).
+#
+function _ai_skills_source() {
+  local src="$1" skill="$2"
+
+  if [[ "${src}" != "local" ]]; then
+    printf '%s' "${src}"
+    return 0
+  fi
+
+  local dir="${AI_LOCAL_SKILLS_DIR:?AI_LOCAL_SKILLS_DIR must be set}/${skill}"
+  if [[ -d "${dir}" ]]; then
+    printf '%s' "${dir}"
+    return 0
+  fi
+
+  log_warn "[ai-skills] local skill '${skill}' not found at ${dir}; skipping."
+  return 1
+}
+
+#
+# @description Warn about the skills that failed to install.
+# @arg $@ string Names of the skills that failed.
+#
+function _ai_skills_report_failures() {
+  log_warn "[ai-skills] ${#} skill(s) failed to install:"
+  printf '  - %s\n' "$@" >&2
+}
+
+#
 # @description Install each selected skill for the active agent targets.
 # @exitcode 0 Skills installed, or nothing to do.
 # @exitcode 1 npx is not available.
 #
 function ai_skills_install_main() {
-  local has_skill=0
-  local entry
-  for entry in "${AI_SKILLS[@]-}"; do
-    [[ -z "${entry}" ]] && continue
-    has_skill=1
-    break
-  done
-
-  if ((has_skill == 0)); then
+  if ! _ai_skills_have_any; then
     log_info "[ai-skills] No skills to install."
     return 0
   fi
@@ -47,31 +88,19 @@ function ai_skills_install_main() {
 
   log_info "[ai-skills] Installing cross-agent skills..."
 
-  local src skill add_source
   local -a failed=()
+  local entry src skill add_source
   for entry in "${AI_SKILLS[@]-}"; do
     [[ -z "${entry}" ]] && continue
     src="${entry%%|*}"
     skill="${entry##*|}"
 
-    if [[ "${src}" == "local" ]]; then
-      add_source="${AI_LOCAL_SKILLS_DIR:?AI_LOCAL_SKILLS_DIR must be set}/${skill}"
-      if [[ ! -d "${add_source}" ]]; then
-        log_warn "[ai-skills] local skill '${skill}' not found at ${add_source}; skipping."
-        continue
-      fi
-    else
-      add_source="${src}"
-    fi
-
-    if ! npx --yes skills add "${add_source}" --skill "${skill}" "${target_flags[@]}" --global --copy --yes; then
-      failed+=("${skill}")
-    fi
+    add_source="$(_ai_skills_source "${src}" "${skill}")" || continue
+    npx --yes skills add "${add_source}" --skill "${skill}" "${target_flags[@]}" --global --copy --yes || failed+=("${skill}")
   done
 
   if ((${#failed[@]} > 0)); then
-    log_warn "[ai-skills] ${#failed[@]} skill(s) failed to install:"
-    printf '  - %s\n' "${failed[@]}" >&2
+    _ai_skills_report_failures "${failed[@]}"
   fi
 
   log_info "[ai-skills] Cross-agent skills installed."

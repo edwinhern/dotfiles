@@ -9,20 +9,35 @@
 set -Eeuo pipefail
 
 #
-# @description Install Graphify skills for selected platforms.
+# @description True when GRAPHIFY_PLATFORMS holds at least one non-empty entry.
+# @exitcode 0 A platform is present.
+# @exitcode 1 No platforms.
 #
-function graphify_skills_install_main() {
-  local has_platform=0
+function _graphify_has_platform() {
   local platform
-  local failed=()
-
   for platform in "${GRAPHIFY_PLATFORMS[@]-}"; do
     [[ -z "${platform}" ]] && continue
-    has_platform=1
-    break
+    return 0
   done
+  return 1
+}
 
-  if ((has_platform == 0)); then
+#
+# @description Warn about the platforms that failed to install.
+# @arg $@ string Names of the platforms that failed.
+#
+function _graphify_report_failures() {
+  log_warn "[graphify] ${#} platform(s) failed to install:"
+  printf '  - %s\n' "$@" >&2
+}
+
+#
+# @description Install Graphify skills for each selected platform.
+# @exitcode 0 Installed, or nothing to do.
+# @exitcode 1 The graphify CLI is missing.
+#
+function graphify_skills_install_main() {
+  if ! _graphify_has_platform; then
     log_info "[graphify] No Graphify platforms to install."
     return 0
   fi
@@ -31,17 +46,15 @@ function graphify_skills_install_main() {
 
   log_info "[graphify] Installing Graphify agent skills..."
 
+  local -a failed=()
+  local platform
   for platform in "${GRAPHIFY_PLATFORMS[@]-}"; do
     [[ -z "${platform}" ]] && continue
-
-    if ! graphify install --platform "${platform}"; then
-      failed+=("${platform}")
-    fi
+    graphify install --platform "${platform}" || failed+=("${platform}")
   done
 
   if ((${#failed[@]} > 0)); then
-    log_warn "[graphify] ${#failed[@]} platform(s) failed to install:"
-    printf '  - %s\n' "${failed[@]}" >&2
+    _graphify_report_failures "${failed[@]}"
   fi
 
   log_info "[graphify] Graphify agent skills installed."
