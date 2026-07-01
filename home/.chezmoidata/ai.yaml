@@ -13,7 +13,7 @@ ai:
         skill: junior-to-senior
       - source: blader/humanizer
         skill: humanizer
-      - source: imadAttar/kaizen
+      - source: neolabhq/context-engineering-kit
         skill: kaizen
       # local domain skills authored in this repo
       - source: local
