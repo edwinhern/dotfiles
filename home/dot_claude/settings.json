@@ -172,7 +172,7 @@
     "padding": 0
   },
   "enabledPlugins": {
-    "superwhisper@superwhisper": false
+    "superwhisper@superwhisper": true
   },
   "extraKnownMarketplaces": {
     "superwhisper": {
