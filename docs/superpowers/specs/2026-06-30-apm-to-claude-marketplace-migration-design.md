@@ -172,24 +172,34 @@ The custom agents move to the Copilot side because they are frontend and work fo
 
 ## APM Teardown
 
-Remove:
+The apm CLI stays installed for global use. Only apm's dependency-management layer is retired.
 
-- `home/.chezmoidata/apm.yaml`
-- `home/dot_apm/`
-- `home/.chezmoitemplates/apm/`
-- `home/.chezmoitemplates/lib/install/apm.sh`
-- `home/.chezmoiscripts/darwin/run_onchange_06_install-apm.sh.tmpl`
-- The APM entry in `mise.toml`
-- Runtime `~/.apm`
-- Stale `~/.claude/apm-hooks.json`
+Keep:
 
-The already-removed caveman hook and reassert scripts on the current branch fold into this teardown. Update or remove the APM bats tests.
+- The apm CLI entry in `home/.chezmoidata/mise.yaml` (`github:microsoft/apm`, shared group).
+- The `Bash(apm:*)` permission in `home/dot_claude/settings.json`.
+
+Remove the dependency-management layer:
+
+- `mise.toml` `[tasks.validate-apm]` and `[tasks.refresh-apm-locks]` (their `scripts/*.sh` no longer exist).
+- `tests/template/install-apm-script.bats` (renders the already-removed apm script; would fail).
+- `.gitignore` `apm_modules/` entry (optional; apm dependency artifact).
+- Runtime `~/.apm` dependency modules and stale `~/.claude/apm-hooks.json`.
+
+Already removed by prior cleanup: `home/.chezmoidata/apm.yaml`, `home/dot_apm/`, `home/.chezmoitemplates/apm/`, `home/.chezmoitemplates/lib/install/apm.sh`, `home/.chezmoiscripts/darwin/run_onchange_06_install-apm.sh.tmpl`, and the apm entry from `mise.toml [tools]`. The caveman hook and reassert scripts were removed earlier on this branch.
+
+## Graphify Script Repoint
+
+`run_onchange_08_install-graphify-skills.sh.tmpl` still reads retired apm data and currently breaks `chezmoi apply` on render:
+
+- Line 4 `include ".chezmoidata/apm.yaml"` references the deleted data file, which hard-errors.
+- Line 5 reads `.apm.targets`.
+
+Repoint it off apm data onto the new `ai` data: hash `.chezmoidata/ai.yaml` in the trigger comment, resolve targets from `.ai.targets`, and update the platform mapping so the graphify platforms are derived from the `ai` target ids (`claude-code`, `github-copilot`) rather than the old apm values (`agent-skills`, `claude`). This repoint is a prerequisite for a clean `chezmoi apply` and belongs to this migration.
 
 ## Components Kept As Is
 
-- The graphify install script `run_onchange_08_install-graphify-skills.sh.tmpl`.
-
-The manual caveman and superpowers hook entries stay removed from `settings.json`, because the caveman plugin supplies its hooks.
+The manual caveman and superpowers hook entries stay removed from `settings.json`, because the caveman plugin supplies its hooks. The `.chezmoitemplates/lib/` layout stays as-is: chezmoi imposes no internal structure on `.chezmoitemplates/` and there is no community convention, and the directory already separates templating helpers (`lib/chezmoi/`) from shell libraries (`lib/{common,darwin,install}/`).
 
 ## Testing and Verification
 
@@ -200,18 +210,19 @@ The manual caveman and superpowers hook entries stay removed from `settings.json
 - `grep` MCP is registered for both Claude and Copilot; `tavily` MCP is registered for Claude only.
 - The VS Code commit button produces a message in the configured style.
 - A new session `/doctor` reports no hook or settings errors.
-- `command -v apm` returns nothing and `~/.apm` is absent.
+- `command -v apm` still resolves (the CLI is kept), while the apm dependency modules under `~/.apm` are absent.
 - The bats suite passes, including tests for the new install scripts.
 
 ## Implementation Phases
 
+0. Repoint `run_onchange_08_install-graphify-skills.sh.tmpl` off retired apm data onto `ai` data, restoring a clean `chezmoi apply`.
 1. Add `home/.chezmoidata/ai.yaml` and the skills install script, so Claude and Copilot get skills.
 2. Add the plugins install script for caveman and superpowers.
 3. Add the MCP install script and apply shared MCP to both agents.
 4. Author `AGENTS.md` universal instructions and wire the Copilot commit instructions.
 5. Author the local domain skills from the instruction files.
 6. Organize the work and Copilot files.
-7. Remove APM and update tests.
+7. Retire the apm dependency-management layer (dead mise tasks, apm bats test) and update tests.
 
 ## Out of Scope
 
