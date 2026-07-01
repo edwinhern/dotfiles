@@ -172,13 +172,27 @@
     "padding": 0
   },
   "enabledPlugins": {
-    "superwhisper@superwhisper": true
+    "superwhisper@superwhisper": true,
+    "caveman@caveman": true,
+    "superpowers@superpowers-dev": true
   },
   "extraKnownMarketplaces": {
     "superwhisper": {
       "source": {
         "source": "github",
         "repo": "superultrainc/superwhisper-claude-code"
+      }
+    },
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
+    },
+    "superpowers-dev": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers"
       }
     }
   }
