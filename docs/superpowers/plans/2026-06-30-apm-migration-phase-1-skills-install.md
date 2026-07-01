@@ -17,7 +17,7 @@
 ## File Structure
 
 - Create: `home/.chezmoitemplates/lib/install/ai-skills.sh` — sourceable install library; one responsibility: run `npx skills add` for each selected skill against the target agents.
-- Create: `home/.chezmoiscripts/darwin/run_onchange_09_install-ai-skills.sh.tmpl` — chezmoi run script; resolves active targets and skills from `ai.yaml`, renders bash arrays, sources the library.
+- Create: `home/.chezmoiscripts/darwin/run_onchange_07_install-ai-skills.sh.tmpl` — chezmoi run script; resolves active targets and skills from `ai.yaml`, renders bash arrays, sources the library.
 - Create: `tests/unit/lib/install/ai-skills.bats` — behavior tests for the library, stubbing `npx`.
 - Exists (no change): `home/.chezmoidata/ai.yaml` — the manifest.
 
@@ -277,15 +277,15 @@ git commit -m "feat: DOT-43 add ai-skills install library"
 
 **Files:**
 
-- Create: `home/.chezmoiscripts/darwin/run_onchange_09_install-ai-skills.sh.tmpl`
+- Create: `home/.chezmoiscripts/darwin/run_onchange_07_install-ai-skills.sh.tmpl`
 
 - [ ] **Step 1: Write the run script**
 
-Create `home/.chezmoiscripts/darwin/run_onchange_09_install-ai-skills.sh.tmpl`:
+Create `home/.chezmoiscripts/darwin/run_onchange_07_install-ai-skills.sh.tmpl`:
 
 ```bash
 #!/usr/bin/env bash
-# @file run_onchange_09_install-ai-skills.sh
+# @file run_onchange_07_install-ai-skills.sh
 # @brief Install cross-agent AI skills.
 # @description AI data hash: {{ include ".chezmoidata/ai.yaml" | sha256sum }}
 {{- $activeTargets := includeTemplate "lib/chezmoi/active-group-values.json.tmpl" (dict "ctx" . "valuesByGroup" .ai.targets) | fromJson -}}
@@ -311,18 +311,18 @@ AI_SKILLS=(
 
 - [ ] **Step 2: Verify the template renders for a personal machine**
 
-Run: `chezmoi execute-template --init --promptString 'groups=personal' < home/.chezmoiscripts/darwin/run_onchange_09_install-ai-skills.sh.tmpl` (adjust the prompt to match this repo's group-selection variable if different; confirm from `home/.chezmoitemplates/lib/chezmoi/active-groups.json.tmpl`).
+Run: `chezmoi execute-template --init --promptString 'groups=personal' < home/.chezmoiscripts/darwin/run_onchange_07_install-ai-skills.sh.tmpl` (adjust the prompt to match this repo's group-selection variable if different; confirm from `home/.chezmoitemplates/lib/chezmoi/active-groups.json.tmpl`).
 Expected: rendered bash with `AI_SKILL_TARGETS=("claude-code")` and `AI_SKILLS` containing the shared plus personal entries (`mattpocock/skills|grill-me`, ..., `schpet/linear-cli|linear-cli`, `upstash/context7|context7-cli`), and the `lib/install/ai-skills.sh` body inlined.
 
 - [ ] **Step 3: Dry-run apply to confirm no template errors**
 
-Run: `chezmoi apply --dry-run --verbose 2>&1 | rg -A2 'run_onchange_09_install-ai-skills'`
+Run: `chezmoi apply --dry-run --verbose 2>&1 | rg -A2 'run_onchange_07_install-ai-skills'`
 Expected: chezmoi shows the script would run; no template parse errors.
 
 - [ ] **Step 4: Commit**
 
 ```bash
-git add home/.chezmoiscripts/darwin/run_onchange_09_install-ai-skills.sh.tmpl
+git add home/.chezmoiscripts/darwin/run_onchange_07_install-ai-skills.sh.tmpl
 git commit -m "feat: DOT-43 add ai-skills run_onchange script"
 ```
 
@@ -343,8 +343,8 @@ Run: `bats --count tests/template/darwin-install-scripts.bats` and open the file
 Add two tests mirroring the file's existing pattern. Personal render includes shared plus personal skills against `claude-code`; work render excludes personal-only skills. Use the file's existing template-render helper (do not invent a new one). Example assertions:
 
 ```bash
-@test "run_onchange_09: personal render targets claude-code and includes shared+personal skills" {
-  run render_darwin_script "run_onchange_09_install-ai-skills.sh.tmpl" "personal"
+@test "run_onchange_07: personal render targets claude-code and includes shared+personal skills" {
+  run render_darwin_script "run_onchange_07_install-ai-skills.sh.tmpl" "personal"
   assert_success
   assert_output --partial 'AI_SKILL_TARGETS=('
   assert_output --partial '"claude-code"'
@@ -352,8 +352,8 @@ Add two tests mirroring the file's existing pattern. Personal render includes sh
   assert_output --partial '"schpet/linear-cli|linear-cli"'
 }
 
-@test "run_onchange_09: work render targets github-copilot and excludes personal skills" {
-  run render_darwin_script "run_onchange_09_install-ai-skills.sh.tmpl" "work"
+@test "run_onchange_07: work render targets github-copilot and excludes personal skills" {
+  run render_darwin_script "run_onchange_07_install-ai-skills.sh.tmpl" "work"
   assert_success
   assert_output --partial '"github-copilot"'
   refute_output --partial 'schpet/linear-cli|linear-cli'

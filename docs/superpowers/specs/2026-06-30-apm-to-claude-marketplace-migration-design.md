@@ -105,7 +105,7 @@ The `npx --yes` prefix auto-confirms npx's own install prompt so the non-interac
 
 Local domain skills `typescript`, `react`, and `testing` (React Testing Library guidance lives in the `testing` skill) are authored under `home/.chezmoitemplates/skills/` from the former instruction files, and install with `source: local` pointing at that path. The previously vendored `grill-me` and `junior-to-senior` copies under that directory have been removed; both install from their upstream sources.
 
-The `skills` CLI has no manifest file, so `home/.chezmoidata/ai.yaml` is the manifest. A `run_onchange_09_install-ai-skills.sh.tmpl` script gates on `darwin`, reads the active group and its target, iterates the matching skill entries, and runs the CLI. Its trigger comment hashes both `ai.yaml` and the local skill tree under `home/.chezmoitemplates/skills/`, so it re-runs when the manifest changes or when a local `SKILL.md` is edited in place (local skills install with `--copy`, so a stale copy would otherwise persist).
+The `skills` CLI has no manifest file, so `home/.chezmoidata/ai.yaml` is the manifest. A `run_onchange_07_install-ai-skills.sh.tmpl` script gates on `darwin`, reads the active group and its target, iterates the matching skill entries, and runs the CLI. Its trigger comment hashes both `ai.yaml` and the local skill tree under `home/.chezmoitemplates/skills/`, so it re-runs when the manifest changes or when a local `SKILL.md` is edited in place (local skills install with `--copy`, so a stale copy would otherwise persist).
 
 ## Plugins Design
 

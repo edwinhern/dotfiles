@@ -226,7 +226,7 @@ fi
 
 **Files:** Create `home/.chezmoiscripts/darwin/run_onchange_06_install-ai-plugins.sh.tmpl`; Modify `home/dot_claude/settings.json`.
 
-- [ ] **Step 1: Write the run script** (mirror `run_onchange_09`; no local-content hash — plugins come from external sources):
+- [ ] **Step 1: Write the run script** (mirror `run_onchange_07`; no local-content hash — plugins come from external sources):
 
 ```
 #!/usr/bin/env bash

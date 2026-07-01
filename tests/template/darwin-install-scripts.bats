@@ -9,7 +9,7 @@ EMPTY_AI_DATA='{"chezmoi":{"os":"darwin"},"personal":true,"work":false,"ai":{"ta
 PACKAGE_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_02_install-packages.sh.tmpl"
 UV_TOOLS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_03_install-uv-tools.sh.tmpl"
 GRAPHIFY_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_install-graphify-skills.sh.tmpl"
-AI_SKILLS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_09_install-ai-skills.sh.tmpl"
+AI_SKILLS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_07_install-ai-skills.sh.tmpl"
 AI_PLUGINS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_06_install-ai-plugins.sh.tmpl"
 
 @test "darwin install script templates render with bash shebang" {

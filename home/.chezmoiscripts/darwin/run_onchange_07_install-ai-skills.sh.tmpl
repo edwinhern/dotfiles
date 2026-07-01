@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# @file run_onchange_09_install-ai-skills.sh
+# @file run_onchange_07_install-ai-skills.sh
 # @brief Install cross-agent AI skills.
 # @description AI data hash: {{ include ".chezmoidata/ai.yaml" | sha256sum }}; local skills hash: {{ $h := "" }}{{ range (glob (joinPath .chezmoi.sourceDir ".chezmoitemplates" "skills" "**" "SKILL.md")) }}{{ $h = print $h (include .) }}{{ end }}{{ $h | sha256sum }}
 {{- $activeTargets := includeTemplate "lib/chezmoi/active-group-values.json.tmpl" (dict "ctx" . "valuesByGroup" .ai.targets) | fromJson -}}
