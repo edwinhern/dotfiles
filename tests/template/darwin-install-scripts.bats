@@ -11,6 +11,7 @@ UV_TOOLS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_03_in
 GRAPHIFY_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_09_install-graphify-skills.sh.tmpl"
 AI_SKILLS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_07_install-ai-skills.sh.tmpl"
 AI_PLUGINS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_06_install-ai-plugins.sh.tmpl"
+AI_MCP_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_install-ai-mcp.sh.tmpl"
 
 @test "darwin install script templates render with bash shebang" {
   for template in "$DOTFILES_ROOT"/home/.chezmoiscripts/darwin/*.tmpl; do
@@ -203,4 +204,33 @@ AI_PLUGINS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_06_
   assert_success
   refute_line 'AI_PLUGIN_TARGETS=('
   refute_line --partial 'ai_plugins_install_main'
+}
+
+@test "darwin install script templates inject AI MCP shell library" {
+  assert_file_contains "$AI_MCP_TEMPLATE" '{{ template "lib/install/ai-mcp.sh" . }}'
+}
+
+@test "darwin install script templates inject the prelude before AI MCP" {
+  local prelude
+  prelude='{{ template "lib/common/install-prelude.sh" . }}'
+  assert_file_contains "$AI_MCP_TEMPLATE" "$prelude"
+}
+
+@test "personal AI MCP template registers shared and personal servers" {
+  run render_chezmoi_template "$AI_MCP_TEMPLATE" "$DARWIN_DATA"
+  assert_success
+  assert_line --partial '"grep|http|https://mcp.grep.app"'
+  assert_line --partial '"tavily|http|https://mcp.tavily.com/mcp/"'
+}
+
+@test "work AI MCP template registers no Claude servers" {
+  run render_chezmoi_template "$AI_MCP_TEMPLATE" "$WORK_DATA"
+  assert_success
+  refute_line --partial 'lib/install/ai-mcp.sh'
+}
+
+@test "empty AI target groups render no AI MCP commands" {
+  run render_chezmoi_template "$AI_MCP_TEMPLATE" "$EMPTY_AI_DATA"
+  assert_success
+  refute_line --partial 'lib/install/ai-mcp.sh'
 }
