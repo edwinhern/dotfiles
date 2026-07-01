@@ -21,7 +21,7 @@ jobs:
     name: Lint shell scripts, markdown, and YAML
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
       - run: mise lint
 
@@ -33,7 +33,7 @@ jobs:
       matrix:
         context: [personal, work]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
       - name: Stub chezmoi config (${{ matrix.context }} context)
         uses: ./.github/actions/write-chezmoi-config
@@ -46,7 +46,7 @@ jobs:
     name: Lint GitHub Actions workflows
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: docker://rhysd/actionlint@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667 # 1.7.12
         with:
           args: -color
@@ -59,7 +59,7 @@ jobs:
       matrix:
         context: [personal, work]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
       - name: Stub chezmoi config (${{ matrix.context }} context)
         uses: ./.github/actions/write-chezmoi-config
@@ -76,6 +76,6 @@ jobs:
     name: Run bats tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
       - run: mise test

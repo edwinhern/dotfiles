@@ -18,7 +18,7 @@ jobs:
     name: Refresh APM lockfiles
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
       - name: Refresh APM lockfiles
         run: mise exec -- bash scripts/refresh-apm-locks.sh
