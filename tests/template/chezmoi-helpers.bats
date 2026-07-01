@@ -11,8 +11,8 @@ ACTIVE_GROUP_VALUES_TMPL="$DOTFILES_ROOT/home/.chezmoitemplates/lib/chezmoi/acti
 SHARED_DATA='{"chezmoi":{"os":"darwin"},"personal":false,"work":false}'
 BOTH_DATA='{"chezmoi":{"os":"darwin"},"personal":true,"work":true}'
 
-APM_VALUES_BY_GROUP='{"shared":["graphify"],"personal":["claude","agent-skills"],"work":["copilot"]}'
-APM_VALUES_SPARSE='{"shared":["graphify"]}'
+VALUES_BY_GROUP='{"shared":["graphify"],"personal":["claude","agent-skills"],"work":["copilot"]}'
+VALUES_SPARSE='{"shared":["graphify"]}'
 
 @test "active-groups returns shared and personal for personal context" {
   run render_chezmoi_template "$ACTIVE_GROUPS_TMPL" "$DARWIN_DATA"
@@ -35,9 +35,9 @@ APM_VALUES_SPARSE='{"shared":["graphify"]}'
   assert_output '["shared"]'
 }
 
-@test "active-group-values merges shared and personal apm targets for personal context" {
+@test "active-group-values merges shared and personal values for personal context" {
   local data
-  data=$(printf '{"ctx":{"personal":true,"work":false},"valuesByGroup":%s}' "$APM_VALUES_BY_GROUP")
+  data=$(printf '{"ctx":{"personal":true,"work":false},"valuesByGroup":%s}' "$VALUES_BY_GROUP")
 
   run render_chezmoi_template "$ACTIVE_GROUP_VALUES_TMPL" "$data"
 
@@ -45,9 +45,9 @@ APM_VALUES_SPARSE='{"shared":["graphify"]}'
   assert_output '["graphify","claude","agent-skills"]'
 }
 
-@test "active-group-values merges shared and work apm targets for work context" {
+@test "active-group-values merges shared and work values for work context" {
   local data
-  data=$(printf '{"ctx":{"personal":false,"work":true},"valuesByGroup":%s}' "$APM_VALUES_BY_GROUP")
+  data=$(printf '{"ctx":{"personal":false,"work":true},"valuesByGroup":%s}' "$VALUES_BY_GROUP")
 
   run render_chezmoi_template "$ACTIVE_GROUP_VALUES_TMPL" "$data"
 
@@ -55,9 +55,9 @@ APM_VALUES_SPARSE='{"shared":["graphify"]}'
   assert_output '["graphify","copilot"]'
 }
 
-@test "active-group-values returns only shared apm targets when neither personal nor work" {
+@test "active-group-values returns only shared values when neither personal nor work" {
   local data
-  data=$(printf '{"ctx":{"personal":false,"work":false},"valuesByGroup":%s}' "$APM_VALUES_BY_GROUP")
+  data=$(printf '{"ctx":{"personal":false,"work":false},"valuesByGroup":%s}' "$VALUES_BY_GROUP")
 
   run render_chezmoi_template "$ACTIVE_GROUP_VALUES_TMPL" "$data"
 
@@ -74,7 +74,7 @@ APM_VALUES_SPARSE='{"shared":["graphify"]}'
 
 @test "active-group-values silently skips groups absent from valuesByGroup" {
   local data
-  data=$(printf '{"ctx":{"personal":true,"work":false},"valuesByGroup":%s}' "$APM_VALUES_SPARSE")
+  data=$(printf '{"ctx":{"personal":true,"work":false},"valuesByGroup":%s}' "$VALUES_SPARSE")
 
   run render_chezmoi_template "$ACTIVE_GROUP_VALUES_TMPL" "$data"
 
