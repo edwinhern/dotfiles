@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# @file run_onchange_08_install-graphify-skills.sh
+# @file run_onchange_09_install-graphify-skills.sh
 # @brief Install Graphify agent skills.
 # @description AI data hash: {{ include ".chezmoidata/ai.yaml" | sha256sum }}
 {{- $activeTargets := includeTemplate "lib/chezmoi/active-group-values.json.tmpl" (dict "ctx" . "valuesByGroup" .ai.targets) | fromJson -}}

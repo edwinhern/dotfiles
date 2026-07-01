@@ -8,7 +8,7 @@ load '../test_helpers/templates.bash'
 EMPTY_AI_DATA='{"chezmoi":{"os":"darwin"},"personal":true,"work":false,"ai":{"targets":{"shared":[],"personal":[],"work":[]}}}'
 PACKAGE_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_02_install-packages.sh.tmpl"
 UV_TOOLS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_03_install-uv-tools.sh.tmpl"
-GRAPHIFY_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_install-graphify-skills.sh.tmpl"
+GRAPHIFY_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_09_install-graphify-skills.sh.tmpl"
 AI_SKILLS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_07_install-ai-skills.sh.tmpl"
 AI_PLUGINS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_06_install-ai-plugins.sh.tmpl"
 
