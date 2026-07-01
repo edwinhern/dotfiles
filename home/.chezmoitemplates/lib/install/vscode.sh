@@ -16,7 +16,7 @@ function vscode_install_extensions_main() {
 
   log_info "[vscode] Installing VS Code extensions..."
 
-  local failed=()
+  local -a failed=()
   local extension
   for extension in "${VSCODE_EXTENSIONS[@]-}"; do
     [[ -z "${extension}" ]] && continue

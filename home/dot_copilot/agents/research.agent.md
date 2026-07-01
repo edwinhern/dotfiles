@@ -65,7 +65,7 @@ Execute the research strategy. You must:
 After research, score yourself using the rubric at:
 
 ```
-@.apm/skills/deep-analysis/references/rubric.md
+@.copilot/skills/deep-analysis/references/rubric.md
 ```
 
 | Dimension                  | Weight | Self-Check                                                                                |
@@ -85,7 +85,7 @@ confidence = (earned_points / 100) × 100
 Generate a Research Summary using the template at:
 
 ```
-@.apm/skills/deep-analysis/references/research-summary-template.md
+@.copilot/skills/deep-analysis/references/research-summary-template.md
 ```
 
 Then recommend: _"Research complete. Invoke `superpowers:writing-plans` with this summary to generate the implementation plan."_

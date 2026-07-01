@@ -7,7 +7,7 @@
 #   load '../test_helpers/load.bash'      # tests/unit/foo.bats
 #   load '../../test_helpers/load.bash'   # tests/unit/lib/common/log.bats
 #
-# Then assertions like `assert_success` and `assert_output --partial` are available.
+# Then assertions like `assert_success` and `assert_line` are available.
 
 # Absolute paths to the companion libs. `load` itself resolves relative to
 # the caller's test dir, not to this file, so absolute paths are required.

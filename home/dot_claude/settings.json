@@ -28,6 +28,7 @@
       "Bash(brew:*)",
       "Bash(bun:*)",
       "Bash(cargo:*)",
+      "Bash(ctx7 *)",
       "Bash(uv:*)",
       "Bash(uvx:*)",
       "Bash(ruff:*)",

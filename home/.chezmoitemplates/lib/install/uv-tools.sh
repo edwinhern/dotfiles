@@ -14,7 +14,7 @@ set -Eeuo pipefail
 function uv_tools_install_main() {
   log_info "[uv] Installing uv tools..."
 
-  local failed=()
+  local -a failed=()
   local tool
   for tool in "${UV_TOOLS[@]-}"; do
     [[ -z "${tool}" ]] && continue

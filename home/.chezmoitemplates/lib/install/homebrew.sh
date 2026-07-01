@@ -5,6 +5,7 @@
 #   Installs Homebrew from the official installation script. This file is sourceable
 #   from bats tests and injected into chezmoi run scripts via chezmoi template
 #   rendering.
+
 set -Eeuo pipefail
 
 #
