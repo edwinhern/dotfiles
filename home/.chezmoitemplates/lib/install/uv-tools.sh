@@ -25,8 +25,7 @@ function uv_tools_install_main() {
   done
 
   if ((${#failed[@]} > 0)); then
-    log_warn "[uv] ${#failed[@]} tool(s) failed to install:"
-    printf '  - %s\n' "${failed[@]}" >&2
+    report_failures uv "tool(s) failed to install" "${failed[@]}"
   fi
 
   log_info "[uv] uv tools installed."

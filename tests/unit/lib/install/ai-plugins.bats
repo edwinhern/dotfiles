@@ -5,6 +5,7 @@
 load '../../../test_helpers/load.bash'
 
 LOG_LIB="$DOTFILES_ROOT/home/.chezmoitemplates/lib/common/log.sh"
+PRELUDE="$DOTFILES_ROOT/home/.chezmoitemplates/lib/common/install-prelude.sh"
 LIB="$DOTFILES_ROOT/home/.chezmoitemplates/lib/install/ai-plugins.sh"
 
 setup() {
@@ -30,7 +31,7 @@ NPX
 }
 
 _run_main() {
-  run bash -c "source '$LOG_LIB' && source '$LIB' && $1 && main"
+  run bash -c "source '$LOG_LIB' && source '$PRELUDE' && source '$LIB' && $1 && main"
 }
 
 @test "main: claude-code target adds marketplace and installs each plugin" {

@@ -11,29 +11,6 @@
 set -Eeuo pipefail
 
 #
-# @description True when AI_PLUGINS holds at least one non-empty entry.
-# @exitcode 0 A plugin is present.
-# @exitcode 1 No plugins.
-#
-function _ai_plugins_have_any() {
-  local entry
-  for entry in "${AI_PLUGINS[@]-}"; do
-    [[ -z "${entry}" ]] && continue
-    return 0
-  done
-  return 1
-}
-
-#
-# @description Warn about the plugins that failed to install.
-# @arg $@ string Names of the plugins that failed.
-#
-function _ai_plugins_report_failures() {
-  log_warn "[ai-plugins] ${#} plugin(s) failed to install:"
-  printf '  - %s\n' "$@" >&2
-}
-
-#
 # @description Add one plugin's marketplace and install it into Claude Code.
 # @arg $1 string Plugin name.
 # @arg $2 string Marketplace name.
@@ -76,7 +53,7 @@ function _ai_plugins_for_claude_code() {
   done
 
   if ((${#failed[@]} > 0)); then
-    _ai_plugins_report_failures "${failed[@]}"
+    report_failures ai-plugins "plugin(s) failed to install" "${failed[@]}"
   fi
 }
 
@@ -101,7 +78,7 @@ function _ai_plugins_for_copilot() {
   done
 
   if ((${#failed[@]} > 0)); then
-    _ai_plugins_report_failures "${failed[@]}"
+    report_failures ai-plugins "plugin(s) failed to install" "${failed[@]}"
   fi
 }
 
@@ -126,7 +103,7 @@ function _ai_plugins_for_target() {
 # @exitcode 1 A required CLI is missing for a requested target.
 #
 function ai_plugins_install_main() {
-  if ! _ai_plugins_have_any; then
+  if ! have_any "${AI_PLUGINS[@]-}"; then
     log_info "[ai-plugins] No plugins to install."
     return 0
   fi
@@ -158,9 +135,11 @@ function main() {
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-  # When run directly, pull in the shared log library that chezmoi otherwise
+  # When run directly, pull in the shared libraries that chezmoi otherwise
   # concatenates ahead of this file.
   # shellcheck source=/dev/null
   command -v log_info >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/log.sh"
+  # shellcheck source=/dev/null
+  command -v have_any >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/install-prelude.sh"
   main
 fi

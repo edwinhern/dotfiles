@@ -27,8 +27,7 @@ function vscode_install_extensions_main() {
   done
 
   if ((${#failed[@]} > 0)); then
-    log_warn "[vscode] ${#failed[@]} extension(s) failed to install:"
-    printf '  - %s\n' "${failed[@]}" >&2
+    report_failures vscode "extension(s) failed to install" "${failed[@]}"
   fi
 
   log_info "[vscode] VS Code extensions installed."

@@ -32,3 +32,32 @@ function require_command() {
     return 1
   }
 }
+
+#
+# @description True when any argument is a non-empty string. Pass an install
+#   array expanded with the ${arr[@]-} form so an unset array stays safe.
+# @arg $@ Candidate entries.
+# @exitcode 0 At least one non-empty entry is present.
+# @exitcode 1 Every entry is empty or absent.
+#
+function have_any() {
+  local item
+  for item in "$@"; do
+    [[ -n "${item}" ]] && return 0
+  done
+  return 1
+}
+
+#
+# @description Warn with a count summary, then list the failed items on stderr.
+#   Keeps per-library wording by taking the tag and a noun phrase from the caller.
+# @arg $1 Log tag, for example "uv".
+# @arg $2 Noun phrase, for example "tool(s) failed to install".
+# @arg $@ Remaining args: the names of the items that failed.
+#
+function report_failures() {
+  local tag="$1" summary="$2"
+  shift 2
+  log_warn "[${tag}] ${#} ${summary}:"
+  printf '  - %s\n' "$@" >&2
+}

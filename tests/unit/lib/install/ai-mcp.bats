@@ -5,6 +5,7 @@
 load '../../../test_helpers/load.bash'
 
 LOG_LIB="$DOTFILES_ROOT/home/.chezmoitemplates/lib/common/log.sh"
+PRELUDE="$DOTFILES_ROOT/home/.chezmoitemplates/lib/common/install-prelude.sh"
 LIB="$DOTFILES_ROOT/home/.chezmoitemplates/lib/install/ai-mcp.sh"
 
 setup() {
@@ -24,7 +25,7 @@ CLAUDE
 }
 
 _run_main() {
-  run bash -c "source '$LOG_LIB' && source '$LIB' && $1 && main"
+  run bash -c "source '$LOG_LIB' && source '$PRELUDE' && source '$LIB' && $1 && main"
 }
 
 @test "main: registers each server with user scope and transport" {

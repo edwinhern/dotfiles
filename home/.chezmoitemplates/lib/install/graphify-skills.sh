@@ -9,35 +9,12 @@
 set -Eeuo pipefail
 
 #
-# @description True when GRAPHIFY_PLATFORMS holds at least one non-empty entry.
-# @exitcode 0 A platform is present.
-# @exitcode 1 No platforms.
-#
-function _graphify_has_platform() {
-  local platform
-  for platform in "${GRAPHIFY_PLATFORMS[@]-}"; do
-    [[ -z "${platform}" ]] && continue
-    return 0
-  done
-  return 1
-}
-
-#
-# @description Warn about the platforms that failed to install.
-# @arg $@ string Names of the platforms that failed.
-#
-function _graphify_report_failures() {
-  log_warn "[graphify] ${#} platform(s) failed to install:"
-  printf '  - %s\n' "$@" >&2
-}
-
-#
 # @description Install Graphify skills for each selected platform.
 # @exitcode 0 Installed, or nothing to do.
 # @exitcode 1 The graphify CLI is missing.
 #
 function graphify_skills_install_main() {
-  if ! _graphify_has_platform; then
+  if ! have_any "${GRAPHIFY_PLATFORMS[@]-}"; then
     log_info "[graphify] No Graphify platforms to install."
     return 0
   fi
@@ -54,7 +31,7 @@ function graphify_skills_install_main() {
   done
 
   if ((${#failed[@]} > 0)); then
-    _graphify_report_failures "${failed[@]}"
+    report_failures graphify "platform(s) failed to install" "${failed[@]}"
   fi
 
   log_info "[graphify] Graphify agent skills installed."
