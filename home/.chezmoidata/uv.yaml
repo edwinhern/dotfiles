@@ -1,7 +1,7 @@
 uv:
   tools:
-    shared: []
-    personal:
+    shared:
       - graphifyy
+    personal:
       - tavily-cli
     work: []
