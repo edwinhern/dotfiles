@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
-  "enabledManagers": ["mise"],
+  "enabledManagers": ["mise", "github-actions"],
   "schedule": ["before 6am on friday"],
   "labels": ["dependencies"],
   "prConcurrentLimit": 3,
@@ -9,6 +9,10 @@
     {
       "matchManagers": ["mise"],
       "groupName": "mise toolchain"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "github actions"
     }
   ]
 }
