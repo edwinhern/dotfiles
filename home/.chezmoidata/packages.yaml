@@ -57,6 +57,7 @@ packages:
           - copilot-cli
           - microsoft-office
           - microsoft-teams
+          - slack
         mas:
           - name: Be Focused - Pomodoro Timer
             id: 973134470

@@ -195,7 +195,7 @@
   "autoUpdatesChannel": "latest",
   "autoMemoryEnabled": true,
   "showThinkingSummaries": true,
+  "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
-  "autoScrollEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "autoScrollEnabled": true
 }
