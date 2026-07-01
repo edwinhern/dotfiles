@@ -101,7 +101,7 @@ npx skills add <source> --skill <skill> -a <target> [-a <target>] --global --cop
 
 `--global` installs into `~/.claude/skills/` and `~/.copilot/skills/`. `--copy` writes real files rather than symlinks because Claude Code ignores symlinked skill directories. The `-a` flags come from the active group's `target` in `ai.yaml`, so a skill in `shared` installs for the machine's target, and a skill in `personal` installs for `claude-code`.
 
-Local domain skills (`typescript`, `react`, `testing`, React Testing Library) are authored under `home/.chezmoitemplates/skills/` from the existing instruction files, and installed with `source: local` pointing at that path. The vendored `grill-me` and `junior-to-senior` copies already present under that directory are removed once they install from upstream sources, unless upstream is unavailable.
+Local domain skills `typescript`, `react`, and `testing` (React Testing Library guidance lives in the `testing` skill) are authored under `home/.chezmoitemplates/skills/` from the former instruction files, and install with `source: local` pointing at that path. The previously vendored `grill-me` and `junior-to-senior` copies under that directory have been removed; both install from their upstream sources.
 
 The `skills` CLI has no manifest file, so `home/.chezmoidata/ai.yaml` is the manifest. A `run_onchange_09_install-ai-skills.sh.tmpl` script gates on `darwin`, reads the active group and its target, iterates the matching skill entries, and runs the CLI. It re-runs when the rendered data changes.
 
@@ -149,7 +149,7 @@ Each template reads the `ai.yaml` `mcp` entries for the active target and render
 
 One canonical `home/.chezmoitemplates/AGENTS.md` holds universal behavioral guidance only: AI guidance, git and pull request workflow, commit message rules, and the `gh` CLI standard. It does not assert a frontend persona. Frontend specifics live in the `typescript`, `react`, and `testing` skills.
 
-`AGENTS.md` renders to `~/.claude/CLAUDE.md` for Claude Code and to the Copilot instructions path for VS Code Copilot. GitHub MCP references and the `context7` tool mention are removed from the meta rules content; GitHub operations use `gh`. The `coding-standards` and TypeScript specifics fold into the `typescript` skill.
+`AGENTS.md` renders to `~/.claude/CLAUDE.md` for Claude Code and to the Copilot instructions path for VS Code Copilot. GitHub MCP references and the `context7` tool mention are removed from the meta rules content; GitHub operations use `gh`. The `coding-standards` foundations fold into the local domain skills, and the TypeScript specifics into the `typescript` skill.
 
 ## Commit Message Instructions
 

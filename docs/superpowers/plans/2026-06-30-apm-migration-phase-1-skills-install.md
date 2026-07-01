@@ -10,7 +10,7 @@
 
 **Spec:** `docs/superpowers/specs/2026-06-30-apm-to-claude-marketplace-migration-design.md` (sections: Group and Target Data Model, Skills Design).
 
-**Scope note:** This is Phase 1 of 7. It delivers skills install on its own. Local domain skills (`typescript`, `react`, `testing`) do not exist until Phase 5, so the library skips `source: local` skills whose directory is absent; upstream skills install normally.
+**Scope note:** This is Phase 1 of 7. It delivers skills install on its own. The local domain skills (`typescript`, `react`, `testing`) already exist under `home/.chezmoitemplates/skills/`, authored ahead of this phase, so `source: local` skills install normally. The library still skips a `source: local` skill whose directory is absent as a safety net.
 
 ---
 
@@ -384,7 +384,7 @@ git commit -m "test: DOT-43 add ai-skills template render tests"
 - **Spec coverage (Skills Design):** Library runs `npx skills add <source> --skill <skill> -a <target> --global --copy --yes` (Task 1); targets and skills resolve from `ai.yaml` via `active-group-values` (Task 2); local sources skip when absent, deferring Phase 5 (Task 1 test 5). Covered.
 - **Placeholder scan:** No TBD/TODO; every step has full code or an exact command with expected output. The one adjustable point (the template test helper name in Task 3) is called out explicitly because it depends on the existing file, and the step says to match the real helper.
 - **Type consistency:** `AI_SKILLS`, `AI_SKILL_TARGETS`, `AI_LOCAL_SKILLS_DIR`, `ai_skills_install_main`, and the `<source>|<skill>` contract are identical across the library, the run script, and the tests.
-- **Out of Phase 1 scope:** plugins install, MCP delivery, instructions, domain-skill authoring, commit wiring, and apm teardown are later phases.
+- **Out of Phase 1 scope:** plugins install, MCP delivery, instructions, and apm teardown are later phases. Domain-skill authoring and Copilot commit wiring are already done ahead of this plan.
 
 ## Remaining Phases (separate plans)
 
