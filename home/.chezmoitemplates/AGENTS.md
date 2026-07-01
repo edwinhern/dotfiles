@@ -1,25 +1,75 @@
 # Agent Guidance
 
-Guidance for AI coding agents (Claude Code, GitHub Copilot, and others). Structured around [Andrej Karpathy's observations on LLM coding pitfalls](https://x.com/karpathy/status/2015883857489522876): surface assumptions, don't overcomplicate, make surgical changes, verify before moving on.
+Behavioral guidelines for AI coding agents (Claude Code, GitHub Copilot, and others) to reduce common LLM coding mistakes, derived from [Andrej Karpathy's observations on LLM coding pitfalls](https://x.com/karpathy/status/2015883857489522876).
 
-## AI Guidance
+**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
-**Do what was asked. Nothing more, nothing less.**
+## 1. Think Before Coding
 
-Never use words like "consolidate", "modernize", "streamline", "flexible", "delve", "establish", "enhanced", "comprehensive", "optimize" or em-dashes (—) and double-hyphens (--) in docstrings, commit messages, or comments.
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
 
-- Reflect on tool results before acting. Use thinking to plan and iterate, then take the best next action.
-- Run independent operations in parallel.
-- Verify your solution before finishing.
-- Never create files unless necessary. Prefer editing. Never create docs (\*.md, README) unless explicitly asked.
-- Reuse existing code. Simplify. Make targeted changes, not sweeping ones.
-- Prefer `rg` over `grep`.
-- No defensive programming unless you state the motivation and the user approves.
-- When updating code, check related code in the same and other files for consistency.
+Before implementing:
 
-Ask yourself: "Does every change I'm making trace directly to what was asked?"
+- State your assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them, don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
 
-### GitHub CLI
+## 2. Simplicity First
+
+**Minimum code that solves the problem. Nothing speculative.**
+
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
+
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+
+## 3. Surgical Changes
+
+**Touch only what you must. Clean up only your own mess.**
+
+When editing existing code:
+
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it, don't delete it.
+
+When your changes create orphans:
+
+- Remove imports, variables, and functions that your changes made unused.
+- Don't remove pre-existing dead code unless asked.
+
+The test: every changed line should trace directly to the user's request.
+
+## 4. Goal-Driven Execution
+
+**Define success criteria. Loop until verified.**
+
+Transform tasks into verifiable goals:
+
+- "Add validation" becomes "Write tests for invalid inputs, then make them pass".
+- "Fix the bug" becomes "Write a test that reproduces it, then make it pass".
+- "Refactor X" becomes "Ensure tests pass before and after".
+
+For multi-step tasks, state a brief plan:
+
+```
+1. [Step] -> verify: [check]
+2. [Step] -> verify: [check]
+3. [Step] -> verify: [check]
+```
+
+Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+
+## Writing Style
+
+Never use words like "consolidate", "modernize", "streamline", "flexible", "delve", "establish", "enhanced", "comprehensive", or "optimize", nor em dashes or double hyphens, in docstrings, commit messages, or comments.
+
+## GitHub CLI
 
 Use `gh` CLI for all GitHub interactions. Never clone repositories to read code.
 
@@ -32,35 +82,6 @@ Use `gh` CLI for all GitHub interactions. Never clone repositories to read code.
 - **View PR comments**: `gh api repos/{owner}/{repo}/pulls/{number}/comments`
 - **List commits**: `gh api repos/{owner}/{repo}/commits --jq '.[].sha'`
 - **View issue**: `gh issue view {number} --repo {owner}/{repo}`
-
-## Git and Pull Request Workflows
-
-### Commit Messages
-
-- Format: `{type}: brief description` (max 50 chars first line)
-- Optional second line: 1 sentence with findings/motivation
-- Types: `feat`, `fix`, `refactor`, `perf`, `docs`, `style`, `test`, `build`, `chore`, `ci`
-- Simple terms, no jargon
-- ONLY analyze staged files (`git diff --cached`), ignore unstaged
-- NO test plans in commit messages
-
-### Pull Requests
-
-- PR titles: NO type prefix (unlike commits) - start with capital letter + verb
-- Analyze ALL commits with `git diff <base-branch>...HEAD`, not just latest
-- PR body: single section, no headers, 1-2 sentences + usage snippet
-- No test plans, no changed files list, no line-number links in PR body
-- Self-assign with `-a @me`
-- Find reviewers: `gh pr list --repo <owner>/<repo> --author @me --limit 5`
-
-### PR Comments and Reviews
-
-- Create pending reviews only, never auto-submit
-- Comment style: start lowercase, no em-dashes, simple terms, no end punctuation, max 1 sentence
-- Bot comment responses: few words is enough
-- Real person responses: polite, concise
-
-Ask yourself: "Would someone unfamiliar with this repo understand this commit message?"
 
 ## Graphify
 

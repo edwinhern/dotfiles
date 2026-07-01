@@ -12,7 +12,7 @@ CLAUDE_TEMPLATE="$DOTFILES_ROOT/home/dot_claude/CLAUDE.md.tmpl"
 
   assert_success
   assert_line --index 0 '# Agent Guidance'
-  assert_line --regexp '^### GitHub CLI$'
+  assert_line --regexp '^## GitHub CLI$'
   assert_line 'Use `gh` CLI for all GitHub interactions. Never clone repositories to read code.'
 }
 
