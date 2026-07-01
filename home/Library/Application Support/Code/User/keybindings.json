@@ -6,6 +6,6 @@
   },
   {
     "key": "cmd+l",
-    "command": "workbench.action.chat.open"
+    "command": "workbench.action.chat.toggle"
   }
 ]
