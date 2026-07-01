@@ -10,20 +10,6 @@
 set -Eeuo pipefail
 
 #
-# @description True when AI_SKILLS holds at least one non-empty entry.
-# @exitcode 0 A skill is present.
-# @exitcode 1 No skills.
-#
-function _ai_skills_have_any() {
-  local entry
-  for entry in "${AI_SKILLS[@]-}"; do
-    [[ -z "${entry}" ]] && continue
-    return 0
-  done
-  return 1
-}
-
-#
 # @description Resolve a skill's install source, skipping a missing local skill.
 # @arg $1 string Source token: a remote repo, or "local".
 # @arg $2 string Skill name.
@@ -50,21 +36,12 @@ function _ai_skills_source() {
 }
 
 #
-# @description Warn about the skills that failed to install.
-# @arg $@ string Names of the skills that failed.
-#
-function _ai_skills_report_failures() {
-  log_warn "[ai-skills] ${#} skill(s) failed to install:"
-  printf '  - %s\n' "$@" >&2
-}
-
-#
 # @description Install each selected skill for the active agent targets.
 # @exitcode 0 Skills installed, or nothing to do.
 # @exitcode 1 npx is not available.
 #
 function ai_skills_install_main() {
-  if ! _ai_skills_have_any; then
+  if ! have_any "${AI_SKILLS[@]-}"; then
     log_info "[ai-skills] No skills to install."
     return 0
   fi
@@ -100,7 +77,7 @@ function ai_skills_install_main() {
   done
 
   if ((${#failed[@]} > 0)); then
-    _ai_skills_report_failures "${failed[@]}"
+    report_failures ai-skills "skill(s) failed to install" "${failed[@]}"
   fi
 
   log_info "[ai-skills] Cross-agent skills installed."
@@ -114,9 +91,11 @@ function main() {
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-  # When run directly, pull in the shared log library that chezmoi otherwise
+  # When run directly, pull in the shared libraries that chezmoi otherwise
   # concatenates ahead of this file.
   # shellcheck source=/dev/null
   command -v log_info >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/log.sh"
+  # shellcheck source=/dev/null
+  command -v have_any >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/install-prelude.sh"
   main
 fi

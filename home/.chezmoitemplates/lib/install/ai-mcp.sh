@@ -11,35 +11,12 @@
 set -Eeuo pipefail
 
 #
-# @description True when AI_MCP holds at least one non-empty entry.
-# @exitcode 0 A server is present.
-# @exitcode 1 No servers.
-#
-function _ai_mcp_have_any() {
-  local entry
-  for entry in "${AI_MCP[@]-}"; do
-    [[ -z "${entry}" ]] && continue
-    return 0
-  done
-  return 1
-}
-
-#
-# @description Warn about the MCP servers that failed to register.
-# @arg $@ string Names of the servers that failed.
-#
-function _ai_mcp_report_failures() {
-  log_warn "[ai-mcp] ${#} server(s) failed to register:"
-  printf '  - %s\n' "$@" >&2
-}
-
-#
 # @description Register each MCP server on Claude Code, skipping existing ones.
 # @exitcode 0 Registered, or nothing to do.
 # @exitcode 1 The claude CLI is missing.
 #
 function ai_mcp_install_main() {
-  if ! _ai_mcp_have_any; then
+  if ! have_any "${AI_MCP[@]-}"; then
     log_info "[ai-mcp] No MCP servers to register."
     return 0
   fi
@@ -69,7 +46,7 @@ function ai_mcp_install_main() {
   done
 
   if ((${#failed[@]} > 0)); then
-    _ai_mcp_report_failures "${failed[@]}"
+    report_failures ai-mcp "server(s) failed to register" "${failed[@]}"
   fi
 
   log_info "[ai-mcp] MCP servers registered."
@@ -83,9 +60,11 @@ function main() {
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-  # When run directly, pull in the shared log library that chezmoi otherwise
+  # When run directly, pull in the shared libraries that chezmoi otherwise
   # concatenates ahead of this file.
   # shellcheck source=/dev/null
   command -v log_info >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/log.sh"
+  # shellcheck source=/dev/null
+  command -v have_any >/dev/null 2>&1 || source "$(dirname "${BASH_SOURCE[0]}")/../common/install-prelude.sh"
   main
 fi

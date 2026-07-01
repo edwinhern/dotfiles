@@ -5,6 +5,7 @@
 load '../../../test_helpers/load.bash'
 
 LOG_LIB="$DOTFILES_ROOT/home/.chezmoitemplates/lib/common/log.sh"
+PRELUDE="$DOTFILES_ROOT/home/.chezmoitemplates/lib/common/install-prelude.sh"
 LIB="$DOTFILES_ROOT/home/.chezmoitemplates/lib/install/uv-tools.sh"
 
 setup() {
@@ -23,7 +24,7 @@ UV
 }
 
 @test "uv_tools_install_main: installs each tool with upgrade flag" {
-  run bash -c "source '$LOG_LIB' && source '$LIB' && UV_TOOLS=('graphifyy' 'tavily-cli') && uv_tools_install_main"
+  run bash -c "source '$LOG_LIB' && source '$PRELUDE' && source '$LIB' && UV_TOOLS=('graphifyy' 'tavily-cli') && uv_tools_install_main"
 
   assert_success
   assert_line "[uv] Installing uv tools..."
@@ -32,7 +33,7 @@ UV
 }
 
 @test "uv_tools_install_main: skips empty tool entries" {
-  run bash -c "source '$LOG_LIB' && source '$LIB' && UV_TOOLS=('graphifyy' '' 'tavily-cli') && uv_tools_install_main"
+  run bash -c "source '$LOG_LIB' && source '$PRELUDE' && source '$LIB' && UV_TOOLS=('graphifyy' '' 'tavily-cli') && uv_tools_install_main"
 
   assert_success
   [ "$(<"$UV_ARGS_FILE")" = $'tool install --upgrade graphifyy\ntool install --upgrade tavily-cli' ]
@@ -41,7 +42,7 @@ UV
 @test "uv_tools_install_main: warns but succeeds when a tool fails" {
   export UV_FAIL_TOOL='tavily-cli'
 
-  run bash -c "source '$LOG_LIB' && source '$LIB' && UV_TOOLS=('graphifyy' 'tavily-cli') && uv_tools_install_main"
+  run bash -c "source '$LOG_LIB' && source '$PRELUDE' && source '$LIB' && UV_TOOLS=('graphifyy' 'tavily-cli') && uv_tools_install_main"
 
   assert_success
   assert_line "[uv] Installing uv tools..."
