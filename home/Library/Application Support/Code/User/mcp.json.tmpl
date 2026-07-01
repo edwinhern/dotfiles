@@ -1,0 +1,9 @@
+{{- $activeTargets := includeTemplate "lib/chezmoi/active-group-values.json.tmpl" (dict "ctx" . "valuesByGroup" .ai.targets) | fromJson -}}
+{{- $activeMcp := includeTemplate "lib/chezmoi/active-group-values.json.tmpl" (dict "ctx" . "valuesByGroup" .ai.mcp) | fromJson -}}
+{{- $servers := dict -}}
+{{- if has "github-copilot" $activeTargets -}}
+{{- range $activeMcp -}}
+{{- $_ := set $servers .name (dict "type" .transport "url" .url) -}}
+{{- end -}}
+{{- end -}}
+{{ dict "servers" $servers | toPrettyJson }}
