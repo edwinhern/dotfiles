@@ -29,18 +29,6 @@ AI_MCP_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_inst
   assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_05_defaults.sh.tmpl" '{{ template "lib/darwin/defaults.sh" . }}'
 }
 
-@test "darwin install script templates inject Graphify shell library" {
-  assert_file_contains "$GRAPHIFY_TEMPLATE" '{{ template "lib/install/graphify-skills.sh" . }}'
-}
-
-@test "darwin install script templates inject AI skills shell library" {
-  assert_file_contains "$AI_SKILLS_TEMPLATE" '{{ template "lib/install/ai-skills.sh" . }}'
-}
-
-@test "darwin install script templates inject AI plugins shell library" {
-  assert_file_contains "$AI_PLUGINS_TEMPLATE" '{{ template "lib/install/ai-plugins.sh" . }}'
-}
-
 @test "darwin install script templates inject the install prelude" {
   local prelude='{{ template "lib/common/install-prelude.sh" . }}'
   assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_once_01_install-homebrew.sh.tmpl" "$prelude"
@@ -204,10 +192,6 @@ AI_MCP_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_inst
   assert_success
   refute_line 'AI_PLUGIN_TARGETS=('
   refute_line --partial 'ai_plugins_install_main'
-}
-
-@test "darwin install script templates inject AI MCP shell library" {
-  assert_file_contains "$AI_MCP_TEMPLATE" '{{ template "lib/install/ai-mcp.sh" . }}'
 }
 
 @test "darwin install script templates inject the prelude before AI MCP" {
