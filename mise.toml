@@ -56,6 +56,35 @@ actionlint
 description = "Run all bats tests"
 run = "bats --recursive tests"
 
+[tasks.coverage]
+description = "Run the bats suite under kcov and write a coverage report to coverage/"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+# kcov drives the bats run under ptrace and records which lines of the sourced
+# shell libraries actually execute. It is not part of the mise toolchain because
+# it ships as a native package, so guard on it and point at an install hint.
+if ! command -v kcov >/dev/null 2>&1; then
+  echo "error: kcov not found." >&2
+  echo "  macOS:  brew install kcov" >&2
+  echo "  Ubuntu: sudo apt-get install -y kcov" >&2
+  exit 1
+fi
+
+out="${COVERAGE_DIR:-coverage}"
+rm -rf "$out"
+mkdir -p "$out"
+
+# Restrict accounting to first-party shell sources. Vendored bats helpers under
+# tests/test_helpers and the .bats files themselves stay out of the denominator.
+include="home/.chezmoitemplates/lib,home/dot_claude/statusline-command.sh,.github/actions/write-chezmoi-config/write-chezmoi-config.sh"
+
+kcov --clean --include-path="$include" "$out" bats --recursive tests
+
+echo "Coverage report written to $out/index.html"
+'''
+
 [tasks.check]
 description = "Run lint and tests"
 run = [{ task = "lint" }, { task = "test" }]

@@ -20,5 +20,6 @@ mise diff              # preview what apply would change
 mise format            # format shell, md, yaml, toml
 mise lint              # lint shell, md, yaml, toml
 mise test              # run bats tests
+mise coverage          # run bats under kcov, write report to coverage/ (needs kcov)
 mise check             # lint + test
 ```
