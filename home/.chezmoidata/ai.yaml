@@ -9,12 +9,8 @@ ai:
     shared:
       - source: mattpocock/skills
         skill: grill-me
-      - source: juliusbrussee/skills
-        skill: junior-to-senior
       - source: blader/humanizer
         skill: humanizer
-      - source: neolabhq/context-engineering-kit
-        skill: kaizen
       # local domain skills authored in this repo
       - source: local
         skill: typescript
@@ -29,6 +25,10 @@ ai:
         skill: interface-kit
       - source: upstash/context7
         skill: context7-cli
+      - source: local
+        skill: mcp-add
+      - source: local
+        skill: ship-pr
     work: []
   plugins:
     # copilot: how the plugin installs for the github-copilot target.
@@ -45,14 +45,8 @@ ai:
         source: obra/superpowers
         copilot: plugin
   mcp:
-    shared:
-      - name: grep
-        transport: http
-        url: https://mcp.grep.app
-    personal:
-      - name: tavily
-        transport: http
-        url: https://mcp.tavily.com/mcp/
+    shared: []
+    personal: []
     work:
       - name: figma
         transport: http

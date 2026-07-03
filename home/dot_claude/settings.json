@@ -16,7 +16,7 @@
     "DISABLE_ERROR_REPORTING": "1",
     "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1",
     "ENABLE_PROMPT_CACHING_1H": "1",
-    "MAX_MCP_OUTPUT_TOKENS": "40000"
+    "MAX_MCP_OUTPUT_TOKENS": "25000"
   },
   "includeCoAuthoredBy": false,
   "permissions": {
@@ -70,6 +70,7 @@
       "Bash(linear:*)",
       "Bash(ls:*)",
       "Bash(lsof:*)",
+      "Bash(make:*)",
       "Bash(mkdir:*)",
       "Bash(mv:*)",
       "Bash(mise:*)",
@@ -93,6 +94,7 @@
       "Bash(rustc:*)",
       "Bash(sed:*)",
       "Bash(shellcheck:*)",
+      "Bash(shfmt:*)",
       "Bash(sort:*)",
       "Bash(source:*)",
       "Bash(stat:*)",
@@ -100,6 +102,7 @@
       "Bash(tee:*)",
       "Bash(tr:*)",
       "Bash(tree:*)",
+      "Bash(treefmt:*)",
       "Bash(type:*)",
       "Bash(uname:*)",
       "Bash(uniq:*)",
@@ -165,7 +168,7 @@
     "padding": 0
   },
   "enabledPlugins": {
-    "superwhisper@superwhisper": true,
+    "superwhisper@superwhisper": false,
     "caveman@caveman": true,
     "superpowers@superpowers-dev": true
   },

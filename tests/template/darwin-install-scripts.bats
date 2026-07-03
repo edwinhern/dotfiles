@@ -202,11 +202,10 @@ AI_MCP_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_inst
   assert_file_contains "$AI_MCP_TEMPLATE" "$prelude"
 }
 
-@test "personal AI MCP template registers shared and personal servers" {
+@test "personal AI MCP template renders no servers when personal and shared lists are empty" {
   run render_chezmoi_template "$AI_MCP_TEMPLATE" "$DARWIN_DATA"
   assert_success
-  assert_line --partial '"grep|http|https://mcp.grep.app"'
-  assert_line --partial '"tavily|http|https://mcp.tavily.com/mcp/"'
+  refute_line --partial 'lib/install/ai-mcp.sh'
 }
 
 @test "work AI MCP template registers no Claude servers" {

@@ -69,6 +69,16 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 Never use words like "consolidate", "modernize", "streamline", "flexible", "delve", "establish", "enhanced", "comprehensive", or "optimize", nor em dashes or double hyphens, in docstrings, commit messages, or comments.
 
+## Subagent Models
+
+- Opus, Sonnet, and Haiku are all fine for subagents; pick by task weight.
+- Never use a Fable model for implementation or subagent work. Reserve Fable for the main conversation loop.
+
+## Environment Notes (macOS)
+
+- GNU `timeout` does not exist on macOS. Do not prefix commands with `timeout`; use the Bash tool timeout parameter instead.
+- Never poll with `sleep N && command`. Use blocking watchers instead: `gh pr checks --watch`, `gh run watch`, or the Monitor tool.
+
 ## Tooling
 
 Run independent operations in parallel when they don't depend on each other.

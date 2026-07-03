@@ -17,7 +17,6 @@ VSCODE_MCP="$DOTFILES_ROOT/home/Library/Application Support/Code/User/mcp.json.t
   run render_chezmoi_template "$COPILOT_MCP" "$WORK_DATA"
   assert_success
   assert_line --partial '"mcpServers"'
-  assert_line --partial '"grep"'
   assert_line --partial '"figma"'
   assert_line --partial '"jira"'
   assert_line --partial 'https://mcp.figma.com/mcp'
@@ -34,7 +33,6 @@ VSCODE_MCP="$DOTFILES_ROOT/home/Library/Application Support/Code/User/mcp.json.t
   run render_chezmoi_template "$VSCODE_MCP" "$WORK_DATA"
   assert_success
   assert_line --partial '"servers"'
-  assert_line --partial '"grep"'
   assert_line --partial '"jira"'
   assert_line --partial 'https://mcp.atlassian.com/v1/mcp'
   refute_line --partial '"tools"'
