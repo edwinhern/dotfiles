@@ -62,6 +62,14 @@ AI_MCP_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_inst
   refute_line --partial 'Be Focused - Pomodoro Timer'
 }
 
+@test "package template renders heredoc delimiter on its own line" {
+  run render_chezmoi_template "$PACKAGE_TEMPLATE" "$DARWIN_DATA"
+
+  assert_success
+  assert_line "HOMEBREW_BUNDLE_CONTENT=\$(cat <<'BREWFILE'"
+  refute_line --regexp "^HOMEBREW_BUNDLE_CONTENT=\\\$\\(cat <<'BREWFILE'.+"
+}
+
 @test "uv tools template renders configured tools" {
   run render_chezmoi_template "$UV_TOOLS_TEMPLATE" "$DARWIN_DATA"
 

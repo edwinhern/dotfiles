@@ -5,7 +5,7 @@
 {{ template "lib/common/log.sh" . }}
 {{ template "lib/common/install-prelude.sh" . }}
 HOMEBREW_BUNDLE_CONTENT=$(cat <<'BREWFILE'
-{{- $brew := .packages.darwin.homebrew -}}
+{{ $brew := .packages.darwin.homebrew -}}
 {{ range $brew.taps }}tap "{{ . }}"
 {{ end -}}
 {{ range $brew.formulas }}brew "{{ . }}"
