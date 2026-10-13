@@ -85,10 +85,9 @@ Run independent operations in parallel when they don't depend on each other.
 
 For searching a codebase, prefer efficient tools over defaults, in order:
 
-1. **Graphify** for structure questions such as definitions, callers, and architecture, when `graphify-out/graph.json` exists (see below).
-2. **`rg`** (ripgrep) for content and regex search; faster than `grep` and skips ignored files.
-3. **`fd`** for finding files by name; faster and simpler than `find`.
-4. `grep` and `find` only when the tools above do not fit.
+1. **`rg`** (ripgrep) for content and regex search; faster than `grep` and skips ignored files.
+2. **`fd`** for finding files by name; faster and simpler than `find`.
+3. `grep` and `find` only when the tools above do not fit.
 
 ## GitHub CLI
 
@@ -103,10 +102,3 @@ Use `gh` CLI for all GitHub interactions. Never clone repositories to read code.
 - **View PR comments**: `gh api repos/{owner}/{repo}/pulls/{number}/comments`
 - **List commits**: `gh api repos/{owner}/{repo}/commits --jq '.[].sha'`
 - **View issue**: `gh issue view {number} --repo {owner}/{repo}`
-
-## Graphify
-
-- Use the installed Graphify skill when the user invokes `/graphify`.
-- If `graphify-out/graph.json` exists, prefer `graphify query`, `graphify path`, or `graphify explain` before raw file search for codebase questions.
-- Read `GRAPH_REPORT.md` only for broad architecture review or when graph commands do not answer the question.
-- Treat `graphify-out/` as per-repo data and do not create it from a global setup script.

@@ -59,7 +59,6 @@
       "Bash(file:*)",
       "Bash(fzf:*)",
       "Bash(go:*)",
-      "Bash(graphify:*)",
       "Bash(grep:*)",
       "Bash(head:*)",
       "Bash(hostname)",

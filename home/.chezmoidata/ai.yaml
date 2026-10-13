@@ -1,44 +1,21 @@
 ai:
   targets:
-    shared: []
-    personal:
-      - claude-code
-    work:
-      - github-copilot
+    - claude-code
   skills:
-    shared:
-      - source: blader/humanizer
-        skill: humanizer
-      # local domain skills authored in this repo
-      - source: local
-        skill: testing
-    personal:
-      - source: juliusbrussee/skills
-        skill: interface-kit
-      - source: upstash/context7
-        skill: context7-cli
-    work: []
+    - source: blader/humanizer
+      skill: humanizer
+    # local domain skills authored in this repo
+    - source: local
+      skill: testing
+    - source: juliusbrussee/skills
+      skill: interface-kit
+    - source: upstash/context7
+      skill: context7-cli
   plugins:
-    # copilot: how the plugin installs for the github-copilot target.
-    #   plugin -> native `copilot plugin marketplace add/install` (Copilot CLI).
-    #   skill  -> `npx skills add <source> -a github-copilot` (no native plugin).
-    # The claude-code target always installs every entry as a native plugin.
-    shared:
-      - name: caveman
-        marketplace: caveman
-        source: JuliusBrussee/caveman
-        copilot: skill
-      - name: superpowers
-        marketplace: superpowers-dev
-        source: obra/superpowers
-        copilot: plugin
-  mcp:
-    shared: []
-    personal: []
-    work:
-      - name: figma
-        transport: http
-        url: https://mcp.figma.com/mcp
-      - name: jira
-        transport: http
-        url: https://mcp.atlassian.com/v1/mcp
+    - name: caveman
+      marketplace: caveman
+      source: JuliusBrussee/caveman
+    - name: superpowers
+      marketplace: superpowers-dev
+      source: obra/superpowers
+  mcp: []

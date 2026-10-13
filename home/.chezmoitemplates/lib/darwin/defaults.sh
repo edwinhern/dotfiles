@@ -23,9 +23,9 @@ function dock_add_app() {
 }
 
 #
-# @description Add the personal Dock app order.
+# @description Add the Dock app order.
 #
-function dock_apply_personal_layout() {
+function dock_apply_layout() {
   dock_add_app "/System/Applications/Apps.app"
   dock_add_app "/System/Applications/System Settings.app"
   dock_add_app "/System/Applications/Utilities/Activity Monitor.app"
@@ -38,39 +38,6 @@ function dock_apply_personal_layout() {
   dock_add_app "/System/Applications/Notes.app"
   dock_add_app "/System/Applications/Reminders.app"
   dock_add_app "/Applications/superwhisper.app"
-}
-
-#
-# @description Add the work Dock app order.
-#
-function dock_apply_work_layout() {
-  dock_add_app "/System/Applications/Apps.app"
-  dock_add_app "/System/Applications/System Settings.app"
-  dock_add_app "/System/Applications/Utilities/Activity Monitor.app"
-  dock_add_app "/Applications/Brave Browser.app"
-  dock_add_app "${HOME}/Applications/Brave Browser Apps.localized/YouTube Music.app"
-  dock_add_app "/Applications/Visual Studio Code.app"
-  dock_add_app "/Applications/Ghostty.app"
-  dock_add_app "/Applications/Microsoft Outlook.app"
-  dock_add_app "/Applications/Microsoft Teams.app"
-  dock_add_app "/Applications/Slack.app"
-  dock_add_app "/System/Applications/Notes.app"
-  dock_add_app "/System/Applications/Reminders.app"
-  dock_add_app "/Applications/superwhisper.app"
-}
-
-#
-# @description Add the Dock layout for the active dotfiles context.
-#
-function dock_apply_layout() {
-  case "${DOTFILES_CONTEXT:-personal}" in
-  work)
-    dock_apply_work_layout
-    ;;
-  *)
-    dock_apply_personal_layout
-    ;;
-  esac
 }
 
 #

@@ -1,21 +1,18 @@
 #!/usr/bin/env bash
-{{ $groups := includeTemplate "lib/chezmoi/active-groups.json.tmpl" . | fromJson -}}
 # packages.yaml hash: {{ include ".chezmoidata/packages.yaml" | sha256sum }}
 
 {{ if eq .chezmoi.os "darwin" }}
 {{ template "lib/common/log.sh" . }}
 {{ template "lib/common/install-prelude.sh" . }}
 HOMEBREW_BUNDLE_CONTENT=$(cat <<'BREWFILE'
-{{ range $groups }}# {{ . }}
-{{- $g := index $.packages.darwin.homebrew . }}
-{{ range $g.taps }}tap "{{ . }}"
+{{- $brew := .packages.darwin.homebrew -}}
+{{ range $brew.taps }}tap "{{ . }}"
 {{ end -}}
-{{ range $g.formulas }}brew "{{ . }}"
+{{ range $brew.formulas }}brew "{{ . }}"
 {{ end -}}
-{{ range $g.casks }}cask "{{ . }}"
+{{ range $brew.casks }}cask "{{ . }}"
 {{ end -}}
-{{ range $g.mas }}mas "{{ .name }}", id: {{ .id }}
-{{ end }}
+{{ range $brew.mas }}mas "{{ .name }}", id: {{ .id }}
 {{ end -}}
 BREWFILE
 )

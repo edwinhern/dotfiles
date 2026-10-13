@@ -10,7 +10,6 @@ export OPENCODE_ENABLE_EXA=1
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-# Personal: chezmoi decrypts ~/.secrets.local from age-encrypted source state.
-# Work: maintain ~/.secrets.local by hand on the machine; never commit it.
+# chezmoi decrypts ~/.secrets.local from age-encrypted source state; never commit it.
 # shellcheck source=/dev/null
 [[ -f ~/.secrets.local ]] && source ~/.secrets.local

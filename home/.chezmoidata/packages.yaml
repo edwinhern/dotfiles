@@ -1,63 +1,42 @@
 # packages.yaml
 # Single source of truth for all package manager declarations.
 # Referenced by run_onchange_ scripts via Chezmoi template data (.packages.*).
-#
-# Each group under darwin.homebrew has the same shape: {taps, formulas, casks, mas}.
-# `shared` always applies; `personal` or `work` is added based on host context.
 
 packages:
   darwin:
     homebrew:
-      shared:
-        taps: []
-        formulas:
-          - dockutil
-          - fastfetch
-          - gh
-          - git-delta
-          - mise
-          - mas
-          - starship
-          - tmux
-          - ripgrep
-          - zoxide
-          - fd
-          - fzf
-        casks:
-          # fonts
-          - font-monaspace
-          - font-jetbrains-mono-nerd-font
-          # apps
-          - google-chrome
-          - ghostty
-          - raycast
-          - rectangle
-          - superwhisper
-          - visual-studio-code
-        mas: []
-
-      personal:
-        taps: []
-        formulas: []
-        casks:
-          - claude-code
-          - cleanshot
-          - discord
-          - microsoft-excel
-          - synology-drive
-          - tailscale-app
-        mas:
-          - name: Klack
-            id: 6446206067
-
-      work:
-        taps: []
-        formulas: []
-        casks:
-          - copilot-cli
-          - microsoft-office
-          - microsoft-teams
-          - slack
-        mas:
-          - name: Be Focused - Pomodoro Timer
-            id: 973134470
+      taps: []
+      formulas:
+        - dockutil
+        - fastfetch
+        - gh
+        - git-delta
+        - mise
+        - mas
+        - starship
+        - tmux
+        - ripgrep
+        - zoxide
+        - fd
+        - fzf
+      casks:
+        # fonts
+        - font-monaspace
+        - font-jetbrains-mono-nerd-font
+        # apps
+        - google-chrome
+        - ghostty
+        - raycast
+        - rectangle
+        - superwhisper
+        - visual-studio-code
+        - claude-code
+        - cleanshot
+        - discord
+        - microsoft-excel
+        - synology-drive
+        - tailscale-app
+        - orca
+      mas:
+        - name: Klack
+          id: 6446206067

@@ -1,0 +1,33 @@
+# Minimum mise version compatible with this dotfiles configuration.
+# Raise this only when a configuration or tool change requires newer mise behavior.
+# Declarative system bootstrap and automatic dangling npm install repair require mise 2026.8.15 or newer.
+min_version = "2026.8.15"
+
+[tools]
+# Keep each group sorted by package name, ignoring backend prefixes and leading `@`.
+
+# Language runtimes
+node = "lts"
+python = "3.14.6"
+biome = "latest"
+uv = "latest"
+
+# CLI tools
+herdr = "0.9.3"
+
+# npm tools
+"npm:skills" = "1.5.24"
+
+[settings]
+idiomatic_version_file_enable_tools = ["node", "python", "pnpm"]
+trusted_config_paths = ["~"]
+
+# Release policy: wait before adopting new releases, except for fast-moving agent CLIs.
+minimum_release_age = "7d"
+# Keep identical to the `agent tooling` group in `.github/renovate.json`, which pins on release day.
+minimum_release_age_excludes = [
+  "herdr",
+  "aqua:anthropics/claude-code",
+  "aqua:google-antigravity/antigravity-cli",
+  "aqua:openai/codex",
+]

@@ -14,14 +14,5 @@ CLAUDE_TEMPLATE="$DOTFILES_ROOT/home/dot_claude/CLAUDE.md.tmpl"
   assert_line --index 0 '# Agent Guidance'
   assert_line --regexp '^## GitHub CLI$'
   assert_line 'Use `gh` CLI for all GitHub interactions. Never clone repositories to read code.'
-}
-
-@test "agent instruction templates render Graphify guidance" {
-  run render_chezmoi_template "$CLAUDE_TEMPLATE"
-
-  assert_success
-  assert_line '## Graphify'
-  assert_line '- Use the installed Graphify skill when the user invokes `/graphify`.'
-  assert_line --partial 'graphify query'
-  assert_line --partial 'GRAPH_REPORT.md'
+  refute_line '## Graphify'
 }

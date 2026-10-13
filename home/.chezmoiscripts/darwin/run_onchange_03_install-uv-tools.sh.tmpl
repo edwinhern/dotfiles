@@ -1,24 +1,13 @@
 #!/usr/bin/env bash
 # uv tools data hash: {{ include ".chezmoidata/uv.yaml" | sha256sum }}
-{{ $groups := includeTemplate "lib/chezmoi/active-groups.json.tmpl" . | fromJson -}}
-{{- $hasTools := false -}}
-{{- range $groups -}}
-{{- $tools := index $.uv.tools . -}}
-{{- if gt (len $tools) 0 -}}{{ $hasTools = true }}{{- end -}}
-{{- end }}
 
-{{ if and (eq .chezmoi.os "darwin") $hasTools }}
+{{ if and (eq .chezmoi.os "darwin") (gt (len .uv.tools) 0) }}
 {{ template "lib/common/log.sh" . }}
 {{ template "lib/common/install-prelude.sh" . }}
 UV_TOOLS=(
-{{ range $groups -}}
-{{ $tools := index $.uv.tools . -}}
-{{ if gt (len $tools) 0 }}  # {{ . }}
-{{ range $tools -}}
+{{ range .uv.tools -}}
   "{{ . }}"
 {{ end -}}
-{{ end -}}
-{{ end }}
 )
 {{ template "lib/install/uv-tools.sh" . }}
 {{ end }}

@@ -1,34 +1,6 @@
-
-{{/*  boolean feature flags  */}}
-{{- $personal := false -}}
-{{- $work     := false -}}
-
-{{/*  hostname — scutil workaround for darwin  */}}
-{{- $hostname := .chezmoi.hostname -}}
-{{- if eq .chezmoi.os "darwin" -}}
-{{-   $hostname = output "scutil" "--get" "LocalHostName" | trim -}}
-{{- end -}}
-
-{{/*  machine detection  */}}
-{{- if eq $hostname "edwinhern-personal-mac" -}}
-{{-   $personal = true -}}
-{{- else if eq $hostname "edwinhern-work-mac" -}}
-{{-   $work = true -}}
-{{- else if stdinIsATTY -}}
-{{-   $ctx := promptChoiceOnce . "context" (printf "Hostname '%s' unrecognized. Which context is this machine?" $hostname) (list "personal" "work") -}}
-{{-   if eq $ctx "personal" -}}{{- $personal = true -}}{{- end -}}
-{{-   if eq $ctx "work"     -}}{{- $work     = true -}}{{- end -}}
-{{- else -}}
-{{-   $personal = true -}}
-{{- end -}}
-
 sourceDir: {{ .chezmoi.sourceDir | quote }}
 
 data:
-    hostname: {{ $hostname | quote }}
-    personal: {{ $personal }}
-    work:     {{ $work }}
-
     git:
         name:  {{ promptStringOnce . "git.name"  "Git display name"  | quote }}
         email: {{ promptStringOnce . "git.email" "Git email address" | quote }}

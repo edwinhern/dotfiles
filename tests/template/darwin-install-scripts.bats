@@ -5,10 +5,9 @@
 load '../test_helpers/load.bash'
 load '../test_helpers/templates.bash'
 
-EMPTY_AI_DATA='{"chezmoi":{"os":"darwin"},"personal":true,"work":false,"ai":{"targets":{"shared":[],"personal":[],"work":[]}}}'
+EMPTY_AI_DATA='{"chezmoi":{"os":"darwin"},"ai":{"targets":[],"skills":[],"plugins":[],"mcp":[]}}'
 PACKAGE_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_02_install-packages.sh.tmpl"
 UV_TOOLS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_03_install-uv-tools.sh.tmpl"
-GRAPHIFY_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_09_install-graphify-skills.sh.tmpl"
 AI_SKILLS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_07_install-ai-skills.sh.tmpl"
 AI_PLUGINS_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_06_install-ai-plugins.sh.tmpl"
 AI_MCP_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_install-ai-mcp.sh.tmpl"
@@ -36,7 +35,6 @@ AI_MCP_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_inst
   assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_03_install-mise-tools.sh.tmpl" "$prelude"
   assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_03_install-uv-tools.sh.tmpl" "$prelude"
   assert_file_contains "$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_04_install-vscode-extensions.sh.tmpl" "$prelude"
-  assert_file_contains "$GRAPHIFY_TEMPLATE" "$prelude"
   assert_file_contains "$AI_SKILLS_TEMPLATE" "$prelude"
   assert_file_contains "$AI_PLUGINS_TEMPLATE" "$prelude"
 }
@@ -48,13 +46,14 @@ AI_MCP_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_inst
   done
 }
 
-@test "personal package template keeps personal tools and omits work apps" {
+@test "package template renders homebrew formulas, casks, and mas apps" {
   run render_chezmoi_template "$PACKAGE_TEMPLATE" "$DARWIN_DATA"
 
   assert_success
   assert_line 'brew "mas"'
   assert_line 'brew "mise"'
   assert_line 'cask "discord"'
+  assert_line 'cask "claude-code"'
   assert_line 'mas "Klack", id: 6446206067'
   refute_line 'cask "copilot-cli"'
   refute_line 'cask "microsoft-office"'
@@ -63,74 +62,17 @@ AI_MCP_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_inst
   refute_line --partial 'Be Focused - Pomodoro Timer'
 }
 
-@test "work package template renders approved work apps" {
-  run render_chezmoi_template "$PACKAGE_TEMPLATE" "$WORK_DATA"
-
-  assert_success
-  assert_line 'brew "mas"'
-  assert_line 'cask "copilot-cli"'
-  assert_line 'cask "microsoft-office"'
-  assert_line 'cask "microsoft-teams"'
-  assert_line 'cask "slack"'
-  assert_line 'mas "Be Focused - Pomodoro Timer", id: 973134470'
-  refute_line 'cask "discord"'
-  refute_line 'mas "Klack", id: 6446206067'
-  refute_line 'cask "microsoft-outlook"'
-  refute_line 'brew "java"'
-  refute_line 'brew "gradle"'
-  refute_line 'brew "maven"'
-  refute_line 'brew "kafka"'
-}
-
-@test "personal uv tools template renders Graphify and Tavily CLI tools" {
+@test "uv tools template renders configured tools" {
   run render_chezmoi_template "$UV_TOOLS_TEMPLATE" "$DARWIN_DATA"
 
   assert_success
   assert_line 'UV_TOOLS=('
-  assert_line --partial '"graphifyy"'
   assert_line --partial '"tavily-cli"'
+  refute_line --partial '"graphifyy"'
   assert_line --partial 'uv_tools_install_main'
 }
 
-@test "work uv tools template includes shared tools but omits personal tools" {
-  run render_chezmoi_template "$UV_TOOLS_TEMPLATE" "$WORK_DATA"
-
-  assert_success
-  assert_line 'UV_TOOLS=('
-  assert_line --partial '"graphifyy"'
-  refute_line --partial '"tavily-cli"'
-  assert_line --partial 'uv_tools_install_main'
-}
-
-@test "personal Graphify template renders the Claude platform" {
-  run render_chezmoi_template "$GRAPHIFY_TEMPLATE" "$DARWIN_DATA"
-
-  assert_success
-  assert_line 'GRAPHIFY_PLATFORMS=('
-  assert_line --partial '"claude"'
-  refute_line --partial '"copilot"'
-  assert_line --partial 'graphify_skills_install_main'
-}
-
-@test "work Graphify template renders the Copilot platform" {
-  run render_chezmoi_template "$GRAPHIFY_TEMPLATE" "$WORK_DATA"
-
-  assert_success
-  assert_line 'GRAPHIFY_PLATFORMS=('
-  assert_line --partial '"copilot"'
-  refute_line --partial '"claude"'
-  assert_line --partial 'graphify_skills_install_main'
-}
-
-@test "empty AI target groups render no Graphify commands" {
-  run render_chezmoi_template "$GRAPHIFY_TEMPLATE" "$EMPTY_AI_DATA"
-
-  assert_success
-  refute_line 'GRAPHIFY_PLATFORMS=('
-  refute_line --partial 'graphify_skills_install_main'
-}
-
-@test "personal AI skills template targets claude-code with shared and personal skills" {
+@test "AI skills template targets claude-code with skills" {
   run render_chezmoi_template "$AI_SKILLS_TEMPLATE" "$DARWIN_DATA"
 
   assert_success
@@ -139,21 +81,10 @@ AI_MCP_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_inst
   refute_line --partial '"github-copilot"'
   assert_line --partial 'export AI_LOCAL_SKILLS_DIR='
   assert_line --partial '.chezmoitemplates/skills'
-  assert_line --partial '"mattpocock/skills|grill-me"'
-  assert_line --partial '"local|typescript"'
-  assert_line --partial '"schpet/linear-cli|linear-cli"'
-  assert_line --partial 'ai_skills_install_main'
-}
-
-@test "work AI skills template targets github-copilot and omits personal skills" {
-  run render_chezmoi_template "$AI_SKILLS_TEMPLATE" "$WORK_DATA"
-
-  assert_success
-  assert_line 'AI_SKILL_TARGETS=('
-  assert_line --partial '"github-copilot"'
-  refute_line --partial '"claude-code"'
-  assert_line --partial '"mattpocock/skills|grill-me"'
-  refute_line --partial '"schpet/linear-cli|linear-cli"'
+  assert_line --partial '"blader/humanizer|humanizer"'
+  assert_line --partial '"local|testing"'
+  assert_line --partial '"juliusbrussee/skills|interface-kit"'
+  assert_line --partial '"upstash/context7|context7-cli"'
   assert_line --partial 'ai_skills_install_main'
 }
 
@@ -165,26 +96,15 @@ AI_MCP_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_inst
   refute_line --partial 'ai_skills_install_main'
 }
 
-@test "personal AI plugins template targets claude-code and includes both plugins" {
+@test "AI plugins template targets claude-code and includes plugins" {
   run render_chezmoi_template "$AI_PLUGINS_TEMPLATE" "$DARWIN_DATA"
 
   assert_success
   assert_line 'AI_PLUGIN_TARGETS=('
   assert_line --partial '"claude-code"'
   refute_line --partial '"github-copilot"'
-  assert_line --partial '"caveman|caveman|JuliusBrussee/caveman|skill"'
-  assert_line --partial '"superpowers|superpowers-dev|obra/superpowers|plugin"'
-  assert_line --partial 'ai_plugins_install_main'
-}
-
-@test "work AI plugins template targets github-copilot" {
-  run render_chezmoi_template "$AI_PLUGINS_TEMPLATE" "$WORK_DATA"
-
-  assert_success
-  assert_line 'AI_PLUGIN_TARGETS=('
-  assert_line --partial '"github-copilot"'
-  refute_line --partial '"claude-code"'
-  assert_line --partial '"caveman|caveman|JuliusBrussee/caveman|skill"'
+  assert_line --partial '"caveman|caveman|JuliusBrussee/caveman|"'
+  assert_line --partial '"superpowers|superpowers-dev|obra/superpowers|"'
   assert_line --partial 'ai_plugins_install_main'
 }
 
@@ -202,14 +122,8 @@ AI_MCP_TEMPLATE="$DOTFILES_ROOT/home/.chezmoiscripts/darwin/run_onchange_08_inst
   assert_file_contains "$AI_MCP_TEMPLATE" "$prelude"
 }
 
-@test "personal AI MCP template renders no servers when personal and shared lists are empty" {
+@test "AI MCP template renders no servers when MCP list is empty" {
   run render_chezmoi_template "$AI_MCP_TEMPLATE" "$DARWIN_DATA"
-  assert_success
-  refute_line --partial 'lib/install/ai-mcp.sh'
-}
-
-@test "work AI MCP template registers no Claude servers" {
-  run render_chezmoi_template "$AI_MCP_TEMPLATE" "$WORK_DATA"
   assert_success
   refute_line --partial 'lib/install/ai-mcp.sh'
 }

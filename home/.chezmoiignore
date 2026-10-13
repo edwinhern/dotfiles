@@ -1,4 +1,0 @@
-{{- /* GitHub Copilot config is a work-only target (see .chezmoidata/ai.yaml). */ -}}
-{{- if not .work }}
-.copilot
-{{- end }}

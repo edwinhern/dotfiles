@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 # vscode.yaml hash: {{ include ".chezmoidata/vscode.yaml" | sha256sum }}
-{{- $extensions := includeTemplate "lib/chezmoi/active-group-values.json.tmpl" (dict "ctx" . "valuesByGroup" .vscode) | fromJson -}}
 
 {{ if eq .chezmoi.os "darwin" }}
 {{ template "lib/common/log.sh" . }}
 {{ template "lib/common/install-prelude.sh" . }}
 VSCODE_EXTENSIONS=(
-{{ range $extensions -}}
+{{ range .vscode -}}
   "{{ . }}"
 {{ end -}}
 )

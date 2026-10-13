@@ -6,7 +6,7 @@ load '../test_helpers/load.bash'
 
 SOURCE_DIR="$DOTFILES_ROOT/home"
 SETTINGS_TEMPLATE="$DOTFILES_ROOT/home/Library/Application Support/Code/User/settings.json"
-PERSONAL_DATA='{"chezmoi":{"os":"darwin"},"personal":true,"work":false}'
+DARWIN_DATA='{"chezmoi":{"os":"darwin"}}'
 
 render_settings() {
   local data="$1"
@@ -14,9 +14,8 @@ render_settings() {
   mise exec -- chezmoi execute-template --source "$SOURCE_DIR" --override-data "$data" <"$SETTINGS_TEMPLATE"
 }
 
-
 @test "vscode settings keep extension and schema preferences" {
-  run render_settings "$PERSONAL_DATA"
+  run render_settings "$DARWIN_DATA"
 
   assert_success
   assert_line '  "extensions.ignoreRecommendations": true,'
