@@ -13,7 +13,7 @@
 set -Eeuo pipefail
 
 #
-# @description Add one plugin's marketplace and install it into Claude Code.
+# @description Add one plugin's marketplace, install, and update it in Claude Code.
 # @arg $1 string Plugin name.
 # @arg $2 string Marketplace name.
 # @arg $3 string Marketplace source repo.
@@ -21,7 +21,9 @@ set -Eeuo pipefail
 function _ai_plugins_add_to_claude() {
   local name="$1" marketplace="$2" src="$3"
   claude plugin marketplace add "${src}" &&
-    claude plugin install "${name}@${marketplace}"
+    claude plugin marketplace update "${marketplace}" &&
+    claude plugin install "${name}@${marketplace}" &&
+    claude plugin update -y "${name}@${marketplace}"
 }
 
 #

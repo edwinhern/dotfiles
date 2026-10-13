@@ -57,9 +57,13 @@ _run_main() {
   assert_line "[ai-plugins] Installing AI plugins..."
   assert_line "[ai-plugins] AI plugins installed."
   assert_line "plugin marketplace add JuliusBrussee/caveman"
+  assert_line "plugin marketplace update caveman"
   assert_line "plugin install caveman@caveman"
+  assert_line "plugin update -y caveman@caveman"
   assert_line "plugin marketplace add obra/superpowers"
+  assert_line "plugin marketplace update superpowers-dev"
   assert_line "plugin install superpowers@superpowers-dev"
+  assert_line "plugin update -y superpowers@superpowers-dev"
   # Claude uses the claude CLI only; copilot/npx are untouched.
   [ ! -s "$NPX_ARGS_FILE" ]
   [ ! -s "$COPILOT_ARGS_FILE" ]
@@ -127,7 +131,7 @@ _run_main() {
   assert_success
   assert_line "plugin install caveman@caveman"
   assert_line "plugin install superpowers@superpowers-dev"
-  [ "$(wc -l <"$CLAUDE_ARGS_FILE")" -eq 4 ]
+  [ "$(wc -l <"$CLAUDE_ARGS_FILE")" -eq 8 ]
 }
 
 @test "skips empty target entries" {
@@ -135,7 +139,7 @@ _run_main() {
 
   assert_success
   assert_line "plugin install caveman@caveman"
-  [ "$(wc -l <"$CLAUDE_ARGS_FILE")" -eq 2 ]
+  [ "$(wc -l <"$CLAUDE_ARGS_FILE")" -eq 4 ]
 }
 
 @test "warns but succeeds when a plugin fails" {

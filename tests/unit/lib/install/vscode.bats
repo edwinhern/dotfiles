@@ -23,13 +23,13 @@ CODE
   export PATH="$BATS_TEST_TMPDIR/bin:$PATH"
 }
 
-@test "vscode_install_extensions_main: installs each extension with force" {
+@test "vscode_install_extensions_main: installs each extension without forcing overwrite" {
   run bash -c "source '$LOG_LIB' && source '$PRELUDE' && source '$LIB' && VSCODE_EXTENSIONS=('one.ext' 'two.ext') && vscode_install_extensions_main"
 
   assert_success
   assert_line "[vscode] Installing VS Code extensions..."
   assert_line "[vscode] VS Code extensions installed."
-  [ "$(<"$CODE_ARGS_FILE")" = $'--install-extension one.ext --force\n--install-extension two.ext --force' ]
+  [ "$(<"$CODE_ARGS_FILE")" = $'--install-extension one.ext\n--install-extension two.ext' ]
 }
 
 @test "vscode_install_extensions_main: warns but succeeds when an extension fails" {

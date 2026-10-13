@@ -21,7 +21,7 @@ function vscode_install_extensions_main() {
   for extension in "${VSCODE_EXTENSIONS[@]-}"; do
     [[ -z "${extension}" ]] && continue
 
-    if ! code --install-extension "${extension}" --force; then
+    if ! code --install-extension "${extension}"; then
       failed+=("${extension}")
     fi
   done
