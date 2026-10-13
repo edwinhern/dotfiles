@@ -7,28 +7,16 @@ ai:
       - github-copilot
   skills:
     shared:
-      - source: mattpocock/skills
-        skill: grill-me
       - source: blader/humanizer
         skill: humanizer
       # local domain skills authored in this repo
       - source: local
-        skill: typescript
-      - source: local
-        skill: react
-      - source: local
         skill: testing
     personal:
-      - source: schpet/linear-cli
-        skill: linear-cli
       - source: juliusbrussee/skills
         skill: interface-kit
       - source: upstash/context7
         skill: context7-cli
-      - source: local
-        skill: mcp-add
-      - source: local
-        skill: ship-pr
     work: []
   plugins:
     # copilot: how the plugin installs for the github-copilot target.

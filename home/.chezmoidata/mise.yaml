@@ -1,8 +1,6 @@
 mise:
   tools:
     shared:
-      - name: github:microsoft/apm
-        version: latest
       - name: node
         version: lts
       - name: pnpm
@@ -12,8 +10,6 @@ mise:
 
     personal:
       - name: biome
-        version: latest
-      - name: npm:@schpet/linear-cli
         version: latest
       - name: uv
         version: latest

@@ -28,7 +28,7 @@ packages:
           - font-monaspace
           - font-jetbrains-mono-nerd-font
           # apps
-          - brave-browser
+          - google-chrome
           - ghostty
           - raycast
           - rectangle

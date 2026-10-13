@@ -11,8 +11,8 @@
 
   // Workbench Settings
   "workbench.activityBar.compact": true,
-  "workbench.colorTheme": "Fadetouched",
-  "workbench.iconTheme": "catppuccin-latte",
+  "workbench.colorTheme": "Catppuccin Mocha",
+  "workbench.iconTheme": "catppuccin-mocha",
   "workbench.sideBar.location": "right",
 
   // Editor Settings
