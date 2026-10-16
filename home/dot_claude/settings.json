@@ -168,8 +168,8 @@
   },
   "enabledPlugins": {
     "superwhisper@superwhisper": false,
-    "caveman@caveman": true,
-    "superpowers@superpowers-dev": true
+    "caveman@caveman": false,
+    "superpowers@superpowers-dev": false
   },
   "extraKnownMarketplaces": {
     "superwhisper": {
@@ -191,7 +191,7 @@
       }
     }
   },
-  "outputStyle": "Explanatory",
+  "outputStyle": "default",
   "spinnerTipsEnabled": false,
   "alwaysThinkingEnabled": true,
   "autoUpdatesChannel": "latest",
