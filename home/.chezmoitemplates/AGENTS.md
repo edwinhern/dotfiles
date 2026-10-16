@@ -1,7 +1,5 @@
 # Agent Guidance
 
-Behavioral guidelines for AI coding agents (Claude Code, GitHub Copilot, and others) to reduce common LLM coding mistakes, derived from [Andrej Karpathy's observations on LLM coding pitfalls](https://x.com/karpathy/status/2015883857489522876).
-
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
 ## 1. Think Before Coding
