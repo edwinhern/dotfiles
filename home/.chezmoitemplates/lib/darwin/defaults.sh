@@ -29,7 +29,7 @@ function dock_apply_layout() {
   dock_add_app "/System/Applications/Apps.app"
   dock_add_app "/System/Applications/System Settings.app"
   dock_add_app "/System/Applications/Utilities/Activity Monitor.app"
-  dock_add_app "/Applications/Brave Browser.app"
+  dock_add_app "/Applications/Google Chrome.app"
   dock_add_app "${HOME}/Applications/Brave Browser Apps.localized/YouTube Music.app"
   dock_add_app "/Applications/Visual Studio Code.app"
   dock_add_app "/Applications/Ghostty.app"
@@ -37,7 +37,6 @@ function dock_apply_layout() {
   dock_add_app "/System/Applications/Mail.app"
   dock_add_app "/System/Applications/Notes.app"
   dock_add_app "/System/Applications/Reminders.app"
-  dock_add_app "/Applications/superwhisper.app"
 }
 
 #

@@ -14,7 +14,6 @@ packages:
         - mise
         - mas
         - starship
-        - tmux
         - ripgrep
         - zoxide
         - fd
@@ -33,10 +32,8 @@ packages:
         - claude-code
         - cleanshot
         - discord
-        - microsoft-excel
         - synology-drive
         - tailscale-app
-        - orca
       mas:
         - name: Klack
           id: 6446206067
