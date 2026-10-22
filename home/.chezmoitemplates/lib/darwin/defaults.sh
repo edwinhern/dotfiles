@@ -30,7 +30,7 @@ function dock_apply_layout() {
   dock_add_app "/System/Applications/System Settings.app"
   dock_add_app "/System/Applications/Utilities/Activity Monitor.app"
   dock_add_app "/Applications/Google Chrome.app"
-  dock_add_app "${HOME}/Applications/Brave Browser Apps.localized/YouTube Music.app"
+  dock_add_app "/Applications/Spotify.app"
   dock_add_app "/Applications/Visual Studio Code.app"
   dock_add_app "/Applications/Ghostty.app"
   dock_add_app "/Applications/Discord.app"
@@ -103,7 +103,7 @@ function macos_defaults_main() {
   if ! defaults read com.apple.LaunchServices/com.apple.launchservices.secure 2>/dev/null |
     grep -q '"LSHandlerRoleAll" = "com\.brave\.browser"'; then
     # Best-effort; open exits non-zero when Brave is not installed.
-    open -a "Brave Browser" --args --make-default-browser || true
+    open -a "Google Chrome" --args --make-default-browser || true
   fi
 
   log_info "[defaults] macOS defaults applied."
