@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-{{ if eq .chezmoi.os "darwin" }}
-{{ template "lib/common/log.sh" . }}
-{{ template "lib/darwin/defaults.sh" . }}
-{{ end }}

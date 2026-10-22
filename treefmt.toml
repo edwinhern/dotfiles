@@ -9,7 +9,7 @@
 [formatter.shfmt]
 command = "shfmt"
 options = ["-w"]
-includes = ["*.sh", "*.zsh", ".zshrc", ".bashrc"]
+includes = ["*.sh", "*.zsh", ".zshrc"]
 excludes = ["*.tmpl"]
 
 [formatter.prettier]

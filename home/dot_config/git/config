@@ -1,6 +1,6 @@
 [user]
-	name = "{{ .git.name }}"
-	email = "{{ .git.email }}"
+	name = "Edwin Hernandez"
+	email = "edwinhern.16@gmail.com"
 [core]
     editor = code --wait
     pager = delta
@@ -46,5 +46,3 @@
     file-style = bold yellow ul
     file-decoration-style = none
     hunk-header-decoration-style = yellow box
-[hub]
-	protocol = https

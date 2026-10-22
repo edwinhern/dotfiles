@@ -61,15 +61,11 @@
   ],
 
   // AI Code Settings
-  "chat.disableAIFeatures": false,
   "gitlens.gitkraken.mcp.autoEnabled": false,
   "json.schemaDownload.trustedDomains": {
     "https://developer.microsoft.com/json-schemas/": true,
     "https://json-schema.org/": true,
     "https://json.schemastore.org/": true,
-    "https://opencode.ai": true,
-    "https://r2.better-t-stack.dev": true,
-    "https://raw.githubusercontent.com/devcontainers/spec/": true,
     "https://raw.githubusercontent.com/microsoft/vscode/": true
   }
 }

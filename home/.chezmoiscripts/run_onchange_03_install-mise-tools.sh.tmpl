@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# @file run_onchange_03_install-mise-tools.sh
+# @brief Install tools declared in the mise config.
+# @description mise config hash: {{ include "dot_config/mise/config.toml" | sha256sum }}
+set -euo pipefail
+
+command -v mise >/dev/null 2>&1 || { echo "error: mise not found" >&2; exit 1; }
+
+mise install --yes

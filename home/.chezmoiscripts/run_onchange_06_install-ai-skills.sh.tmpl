@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# @file run_onchange_06_install-ai-skills.sh
+# @brief Install Claude Code skills with the skills CLI.
+# @description ai.yaml hash: {{ include ".chezmoidata/ai.yaml" | sha256sum }}
+set -uo pipefail
+
+command -v npx >/dev/null 2>&1 || { echo "error: npx not found" >&2; exit 1; }
+
+{{ range .ai.skills -}}
+npx --yes skills add "{{ .source }}" --skill "{{ .skill }}" -a claude-code --global --copy --yes || echo "warn: failed to install {{ .skill }}" >&2
+{{ end -}}

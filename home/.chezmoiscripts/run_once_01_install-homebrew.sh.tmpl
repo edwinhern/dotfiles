@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# @file run_once_01_install-homebrew.sh
+# @brief Install Homebrew when missing.
+set -euo pipefail
+
+if command -v brew >/dev/null 2>&1; then
+  echo "[homebrew] already installed, skipping."
+  exit 0
+fi
+
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"

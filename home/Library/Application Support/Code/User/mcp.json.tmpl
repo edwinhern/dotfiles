@@ -1,5 +1,0 @@
-{{- $servers := dict -}}
-{{- range .ai.mcp -}}
-{{- $_ := set $servers .name (dict "type" .transport "url" .url) -}}
-{{- end -}}
-{{ dict "servers" $servers | toPrettyJson }}

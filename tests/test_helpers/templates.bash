@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 # @file templates.bash
 # @brief Shared chezmoi template-rendering helpers for tests/template/*.bats.
-#        Provides the source dir, the common override-data payloads,
-#        and a single render function so individual test files stop redefining
-#        their own copies.
+#        Provides the source dir and a single render function.
 #
 # Load AFTER load.bash so DOTFILES_ROOT is already exported:
 #   load '../test_helpers/load.bash'
@@ -12,10 +10,6 @@
 # Chezmoi source directory shared by every template test.
 SOURCE_DIR="$DOTFILES_ROOT/home"
 export SOURCE_DIR
-
-# Override-data payloads passed to `chezmoi execute-template`.
-DARWIN_DATA='{"chezmoi":{"os":"darwin"}}'
-export DARWIN_DATA
 
 # @description Render a chezmoi template from SOURCE_DIR.
 # @arg $1 string Absolute path to the template file.

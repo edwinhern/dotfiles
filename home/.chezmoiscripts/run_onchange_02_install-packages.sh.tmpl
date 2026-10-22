@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# @file run_onchange_02_install-packages.sh
+# @brief Install Homebrew formulas, casks, and Mac App Store apps.
+# @description packages.yaml hash: {{ include ".chezmoidata/packages.yaml" | sha256sum }}
+set -euo pipefail
+
+command -v brew >/dev/null 2>&1 || { echo "error: brew not found" >&2; exit 1; }
+
+brew update
+brew bundle --file=/dev/stdin <<'BREWFILE'
+{{ range .packages.homebrew.formulas }}brew "{{ . }}"
+{{ end -}}
+{{ range .packages.homebrew.casks }}cask "{{ . }}"
+{{ end -}}
+{{ range .packages.homebrew.mas }}mas "{{ .name }}", id: {{ .id }}
+{{ end -}}
+BREWFILE

@@ -1,6 +1,0 @@
-sourceDir: {{ .chezmoi.sourceDir | quote }}
-
-data:
-    git:
-        name:  {{ promptStringOnce . "git.name"  "Git display name"  | quote }}
-        email: {{ promptStringOnce . "git.email" "Git email address" | quote }}
