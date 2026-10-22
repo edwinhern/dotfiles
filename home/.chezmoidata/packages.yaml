@@ -3,38 +3,36 @@
 # Referenced by run_onchange_ scripts via Chezmoi template data (.packages.*).
 
 packages:
-  darwin:
-    homebrew:
-      taps: []
-      formulas:
-        - dockutil
-        - fastfetch
-        - gh
-        - git-delta
-        - mise
-        - mas
-        - starship
-        - ripgrep
-        - zoxide
-        - fd
-        - fzf
-      casks:
-        # fonts
-        - font-monaspace
-        - font-jetbrains-mono-nerd-font
-        # apps
-        - google-chrome
-        - ghostty
-        - raycast
-        - rectangle
-        - superwhisper
-        - visual-studio-code
-        - claude-code
-        - cleanshot
-        - discord
-        - synology-drive
-        - tailscale-app
-        - spotify
-      mas:
-        - name: Klack
-          id: 6446206067
+  homebrew:
+    formulas:
+      - dockutil
+      - fastfetch
+      - gh
+      - git-delta
+      - mise
+      - mas
+      - starship
+      - ripgrep
+      - zoxide
+      - fd
+      - fzf
+    casks:
+      # fonts
+      - font-monaspace
+      - font-jetbrains-mono-nerd-font
+      # apps
+      - google-chrome
+      - ghostty
+      - raycast
+      - rectangle
+      - superwhisper
+      - visual-studio-code
+      - claude-code
+      - cleanshot
+      - discord
+      - synology-drive
+      - tailscale-app
+      - spotify
+    mas:
+      - name: Klack
+        id: 6446206067

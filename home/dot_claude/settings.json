@@ -21,13 +21,11 @@
   "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
-      "Bash(apm:*)",
       "Bash(awk:*)",
       "Bash(bat:*)",
       "Bash(bats:*)",
       "Bash(brew:*)",
       "Bash(bun:*)",
-      "Bash(cargo:*)",
       "Bash(ctx7 *)",
       "Bash(uv:*)",
       "Bash(uvx:*)",
@@ -38,7 +36,6 @@
       "Bash(chezmoi:*)",
       "Bash(claude config get)",
       "Bash(claude mcp:*)",
-      "Bash(cmake:*)",
       "Bash(column:*)",
       "Bash(comm:*)",
       "Bash(cp:*)",
@@ -58,7 +55,6 @@
       "Bash(find:*)",
       "Bash(file:*)",
       "Bash(fzf:*)",
-      "Bash(go:*)",
       "Bash(grep:*)",
       "Bash(head:*)",
       "Bash(hostname)",
@@ -66,7 +62,6 @@
       "Bash(id)",
       "Bash(jj:*)",
       "Bash(jq:*)",
-      "Bash(linear:*)",
       "Bash(ls:*)",
       "Bash(lsof:*)",
       "Bash(make:*)",
@@ -90,7 +85,6 @@
       "Bash(python:*)",
       "Bash(python3:*)",
       "Bash(rg:*)",
-      "Bash(rustc:*)",
       "Bash(sed:*)",
       "Bash(shellcheck:*)",
       "Bash(shfmt:*)",
@@ -109,7 +103,6 @@
       "Bash(wget:*)",
       "Bash(which:*)",
       "Bash(whoami)",
-      "Bash(wrangler:*)",
       "Bash(xargs:*)",
       "mcp__ide__getDiagnostics",
       "WebFetch(domain:docs.anthropic.com)",
@@ -165,31 +158,6 @@
     "type": "command",
     "command": "sh ~/.claude/statusline-command.sh",
     "padding": 0
-  },
-  "enabledPlugins": {
-    "superwhisper@superwhisper": false,
-    "caveman@caveman": false,
-    "superpowers@superpowers-dev": false
-  },
-  "extraKnownMarketplaces": {
-    "superwhisper": {
-      "source": {
-        "source": "github",
-        "repo": "superultrainc/superwhisper-claude-code"
-      }
-    },
-    "caveman": {
-      "source": {
-        "source": "github",
-        "repo": "JuliusBrussee/caveman"
-      }
-    },
-    "superpowers-dev": {
-      "source": {
-        "source": "github",
-        "repo": "obra/superpowers"
-      }
-    }
   },
   "outputStyle": "default",
   "spinnerTipsEnabled": false,

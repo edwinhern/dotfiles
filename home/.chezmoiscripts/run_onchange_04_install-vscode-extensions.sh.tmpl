@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# @file run_onchange_04_install-vscode-extensions.sh
+# @brief Install VS Code extensions.
+# @description vscode.yaml hash: {{ include ".chezmoidata/vscode.yaml" | sha256sum }}
+set -uo pipefail
+
+command -v code >/dev/null 2>&1 || { echo "error: code not found. Run 'Shell Command: Install code command in PATH' in VS Code." >&2; exit 1; }
+
+failed=()
+for extension in {{ range .vscode }}"{{ . }}" {{ end }}; do
+  code --install-extension "${extension}" || failed+=("${extension}")
+done
+
+if ((${#failed[@]} > 0)); then
+  printf 'warn: failed to install: %s\n' "${failed[*]}" >&2
+fi

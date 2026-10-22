@@ -8,16 +8,13 @@ vscode:
   - adpyke.codesnap
   - edwinhuish.better-comments-next
   - fosshaas.fontsize-shortcuts
+  - LeonardSSH.vscord
   # Themes
   - Catppuccin.catppuccin-vsc-icons
   - Catppuccin.catppuccin-vsc
-  - raunofreiberg.vesper
   # markdown
   - shd101wyy.markdown-preview-enhanced
-  - LeonardSSH.vscord
   # frontend
   - biomejs.biome
   - bradlc.vscode-tailwindcss
   - csstools.postcss
-  # latex
-  - james-yu.latex-workshop

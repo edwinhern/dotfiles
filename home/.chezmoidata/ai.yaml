@@ -1,21 +1,8 @@
 ai:
-  targets:
-    - claude-code
   skills:
     - source: blader/humanizer
       skill: humanizer
-    # local domain skills authored in this repo
-    - source: local
-      skill: testing
     - source: juliusbrussee/skills
       skill: interface-kit
     - source: upstash/context7
       skill: context7-cli
-  plugins:
-    - name: caveman
-      marketplace: caveman
-      source: JuliusBrussee/caveman
-    - name: superpowers
-      marketplace: superpowers-dev
-      source: obra/superpowers
-  mcp: []

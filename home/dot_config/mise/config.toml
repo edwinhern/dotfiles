@@ -15,19 +15,16 @@ uv = "latest"
 # CLI tools
 herdr = "0.9.3"
 
+# pipx tools
+"pipx:tavily-cli" = "0.1.8"
+
 # npm tools
 "npm:skills" = "1.5.24"
 
 [settings]
-idiomatic_version_file_enable_tools = ["node", "python", "pnpm"]
+idiomatic_version_file_enable_tools = ["node", "python"]
 trusted_config_paths = ["~"]
 
-# Release policy: wait before adopting new releases, except for fast-moving agent CLIs.
+# Release policy: wait before adopting new releases, except for herdr.
 minimum_release_age = "7d"
-# Keep identical to the `agent tooling` group in `.github/renovate.json`, which pins on release day.
-minimum_release_age_excludes = [
-  "herdr",
-  "aqua:anthropics/claude-code",
-  "aqua:google-antigravity/antigravity-cli",
-  "aqua:openai/codex",
-]
+minimum_release_age_excludes = ["herdr"]
